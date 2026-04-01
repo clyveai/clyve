@@ -2,7 +2,7 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === Root Variables === */
+/* === Root Variables Updated to Pitch Black (#000000) === */
 :root {
   --font-geist-sans: system-ui, -apple-system, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
   --font-geist-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "Courier New", monospace;
@@ -10,11 +10,18 @@
   --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
   --radius: 8px;
   --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  --bg-primary: #0f1419;
-  --bg-secondary: #1a1f29;
-  --fg-primary: #f0f1f3;
-  --fg-secondary: #b0b3ba;
-  --border-color: #2a3142;
+
+  /* Black Theme Palette */
+  --bg-primary: #000000;
+  /* Hitam pekat */
+  --bg-secondary: #0a0a0a;
+  /* Hitam sedikit terang untuk layer */
+  --fg-primary: #ffffff;
+  /* Putih bersih */
+  --fg-secondary: #a1a1aa;
+  /* Abu-abu mute */
+  --border-color: #1a1a1a;
+  /* Border halus agar tidak 'menghilang' */
 }
 
 * {
@@ -23,6 +30,7 @@
 
 html {
   scroll-behavior: smooth;
+  background: var(--bg-primary);
 }
 
 body {
@@ -30,7 +38,7 @@ body {
   color: var(--fg-primary);
   font-family: var(--font-sans);
   font-feature-settings: "rlig" 1, "calt" 1;
-  font-variation-settings: normal;
+  -webkit-font-smoothing: antialiased;
 }
 
 @layer base {
@@ -42,7 +50,8 @@ body {
   h5,
   h6 {
     font-weight: 700;
-    letter-spacing: -0.015em;
+    letter-spacing: -0.02em;
+    color: var(--fg-primary);
   }
 
   h1 {
@@ -50,16 +59,10 @@ body {
     line-height: 1.1;
   }
 
-  h2 {
-    font-size: clamp(2rem, 4vw, 3rem);
-  }
-
-  h3 {
-    font-size: clamp(1.5rem, 3vw, 2.25rem);
-  }
-
   a {
     transition: color var(--transition);
+    color: inherit;
+    text-decoration: none;
   }
 
   button {
@@ -68,22 +71,24 @@ body {
 }
 
 @layer components {
+
+  /* Glass effect yang lebih subtle untuk background hitam */
   .glass {
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    background: rgba(255, 255, 255, 0.03);
+    backdrop-filter: blur(16px);
+    -webkit-backdrop-filter: blur(16px);
+    border: 1px solid rgba(255, 255, 255, 0.08);
   }
 
   .glass-dark {
-    background: rgba(0, 0, 0, 0.3);
-    backdrop-filter: blur(12px);
-    -webkit-backdrop-filter: blur(12px);
+    background: rgba(0, 0, 0, 0.5);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
     border: 1px solid rgba(255, 255, 255, 0.05);
   }
 
   .gradient-text {
-    background: linear-gradient(to right, #ffffff, #d1d5db, #9ca3af);
+    background: linear-gradient(to bottom right, #ffffff, #a1a1aa);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
@@ -91,29 +96,29 @@ body {
 
   .btn-primary {
     padding: 0.75rem 1.5rem;
-    background: white;
-    color: black;
+    background: #ffffff;
+    color: #000000;
     font-weight: 600;
     border-radius: 0.5rem;
-    transition: all var(--transition);
   }
 
   .btn-primary:hover {
-    background: #f3f4f6;
+    background: #e4e4e7;
+    transform: translateY(-1px);
   }
 
   .btn-secondary {
     padding: 0.75rem 1.5rem;
-    background: rgba(255, 255, 255, 0.05);
+    background: transparent;
     color: white;
     font-weight: 500;
     border-radius: 0.5rem;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    transition: all var(--transition);
+    border: 1px solid #27272a;
   }
 
   .btn-secondary:hover {
-    background: rgba(255, 255, 255, 0.1);
+    background: #18181b;
+    border-color: #3f3f46;
   }
 }
 
@@ -125,40 +130,28 @@ body {
   .text-pretty {
     text-wrap: pretty;
   }
-
-  .safe-zone {
-    padding-left: max(1.5rem, env(safe-area-inset-left));
-    padding-right: max(1.5rem, env(safe-area-inset-right));
-  }
 }
 
-/* === Scrollbar Styling === */
+/* === Scrollbar Styling (Deep Dark) === */
 ::-webkit-scrollbar {
-  width: 8px;
-  height: 8px;
+  width: 6px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #0f1419;
+  background: #000000;
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #2a3142;
-  border-radius: 4px;
+  background: #27272a;
+  border-radius: 10px;
 }
 
 ::-webkit-scrollbar-thumb:hover {
-  background: #3a4555;
-}
-
-/* === Focus States === */
-:focus-visible {
-  outline: 2px solid rgba(255, 255, 255, 0.2);
-  outline-offset: 2px;
+  background: #3f3f46;
 }
 
 /* === Selection === */
 ::selection {
-  background-color: rgba(255, 255, 255, 0.1);
-  color: #f0f1f3;
+  background-color: #ffffff;
+  color: #000000;
 }
