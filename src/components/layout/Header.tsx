@@ -52,7 +52,7 @@ export default function Header() {
                                 className="object-contain"
                             />
                         </div>
-                        <span className="text-[14px] font-bold text-white tracking-tight">ClyveAI</span>
+                        <span className="text-[14px] font-bold text-white tracking-tight">Clyve</span>
                     </Link>
 
                     {/* Desktop Navigation - High Contrast Typography */}
@@ -75,7 +75,7 @@ export default function Header() {
                     <div className="flex items-center gap-1.5 ml-auto md:ml-0">
                         <Link
                             href="/start"
-                            className="hidden md:flex items-center gap-1.5 py-2.5 px-6 bg-[#8b5cf6] border border-black/5 text-black text-[13.5px] font-bold rounded-full hover:bg-[#ebebed] active:scale-95 transition-all shadow-sm"
+                            className="hidden md:flex items-center gap-1.5 py-2.5 px-6 bg-[#e4e4e7] border border-black/5 text-black text-[13.5px] font-bold rounded-full hover:bg-[#8b5cf6] active:scale-95 transition-all shadow-sm"
                         >
                             Get Started
                             <ChevronRight className="w-3.5 h-3.5 opacity-60" />
