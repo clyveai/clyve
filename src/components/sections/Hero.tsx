@@ -45,7 +45,7 @@ export default function Hero() {
                 >
                     <motion.div animate={float(0)} className="w-full h-full relative">
                         <Image
-                            src="/assets/assets1.jpg" // Ganti dengan asset Anda
+                            src="/assets/assets1.png" // Ganti dengan asset Anda
                             alt="Campaign image 1"
                             fill
                             className="object-cover"
@@ -63,7 +63,7 @@ export default function Hero() {
                 >
                     <motion.div animate={float(1)} className="w-full h-full relative">
                         <Image
-                            src="/assets/assets2.jpg" // Ganti dengan asset Anda
+                            src="/assets/assets2.png" // Ganti dengan asset Anda
                             alt="Campaign image 2"
                             fill
                             className="object-cover"
@@ -81,7 +81,7 @@ export default function Hero() {
                 >
                     <motion.div animate={float(0.5)} className="w-full h-full relative">
                         <Image
-                            src="/assets/assets3.jpg" // Ganti dengan asset Anda
+                            src="/assets/assets3.png" // Ganti dengan asset Anda
                             alt="Campaign image 3"
                             fill
                             className="object-cover"
@@ -99,7 +99,7 @@ export default function Hero() {
                 >
                     <motion.div animate={float(1.5)} className="w-full h-full relative">
                         <Image
-                            src="/assets/assets4.jpg" // Ganti dengan asset Anda
+                            src="/assets/assets4.png" // Ganti dengan asset Anda
                             alt="Campaign image 4"
                             fill
                             className="object-cover"

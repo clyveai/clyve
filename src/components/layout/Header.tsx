@@ -20,8 +20,8 @@ export default function Header() {
 
     // Tambahkan properti 'external: true' untuk link Instagram
     const navLinks = [
-        { name: 'Feature', href: '#feature' },
-        { name: 'Pricing', href: '#pricing' },
+        { name: 'Feature', href: 'feature' },
+        { name: 'Pricing', href: 'pricing' },
         { name: 'Community', href: 'https://www.instagram.com/clyveai/', external: true },
     ];
 
