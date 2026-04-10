@@ -4,7 +4,8 @@ import { motion } from "framer-motion";
 
 export default function TermsPage() {
     return (
-        <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-white selection:text-black py-12 md:py-20">
+        /* REVISI: Menggunakan pt-32 agar sinkron dengan section pricing kamu */
+        <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-white selection:text-black pt-32 pb-24">
             <div className="max-w-4xl mx-auto px-6">
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
@@ -12,11 +13,14 @@ export default function TermsPage() {
                     transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
                 >
                     <header className="mb-12">
-                        <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-bold tracking-tight mb-2">Terms of Service</h1>
+                        <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-bold tracking-tight mb-2 text-white">
+                            Terms of Service
+                        </h1>
                         <p className="text-zinc-500 font-medium">Last Updated: April 2, 2026</p>
                     </header>
 
-                    <div className="glass-dark p-6 md:p-10 rounded-[32px] border border-white/5 space-y-10 leading-relaxed text-zinc-400 text-sm md:text-base">
+                    {/* Menggunakan class glass-dark agar konsisten dengan desain pricing */}
+                    <div className="glass-dark p-6 md:p-10 rounded-[2rem] border border-white/5 space-y-10 leading-relaxed text-zinc-400 text-sm md:text-base">
 
                         <section>
                             <h2 className="text-xl font-semibold text-white mb-4">1. Acceptance of Agreement</h2>
@@ -25,7 +29,7 @@ export default function TermsPage() {
                             </p>
                         </section>
 
-                        {/* MANDATORY SAFETY SECTION */}
+                        {/* SAFETY SECTION */}
                         <section className="p-6 bg-red-500/[0.03] border border-red-500/10 rounded-2xl">
                             <h2 className="text-lg font-bold text-red-500 mb-3 uppercase tracking-wider">2. Zero-Tolerance Safety Policy</h2>
                             <p className="text-zinc-200 mb-4 font-medium">
