@@ -11,8 +11,11 @@ const config: Config = {
     theme: {
         extend: {
             fontFamily: {
-                sans: ["var(--font-geist-sans)"],
-                mono: ["var(--font-geist-mono)"],
+                // Geist Sans sebagai font utama (sans)
+                // Ditambahkan fallback system font untuk stabilitas layout
+                sans: ["var(--font-geist-sans)", "ui-sans-serif", "system-ui", "sans-serif"],
+                // Geist Mono untuk data angka/market intelligence
+                mono: ["var(--font-geist-mono)", "ui-monospace", "SFMono-Regular", "monospace"],
             },
             colors: {
                 // Dark Monochrome Palette (TradingView-inspired)

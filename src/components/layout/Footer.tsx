@@ -58,12 +58,12 @@ export default function Footer() {
             <div className="relative z-20 flex flex-col md:flex-row items-center justify-between w-full max-w-7xl px-6 mt-10 text-sm font-medium text-[#71717a]">
 
                 <div className="flex items-center gap-6 mb-4 md:mb-0">
-                    <Link href="/terms" className="hover:text-white transition-colors duration-200">
-                        Terms
-                    </Link>
-                    <span className="w-[1px] h-3 bg-[#27272a]" />
                     <Link href="/privacy" className="hover:text-white transition-colors duration-200">
                         Privacy
+                    </Link>
+                    <span className="w-[1px] h-3 bg-[#27272a]" />
+                    <Link href="/terms" className="hover:text-white transition-colors duration-200">
+                        Terms
                     </Link>
                 </div>
 

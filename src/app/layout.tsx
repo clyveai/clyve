@@ -6,6 +6,7 @@ import { cn } from "@/lib/utils"
 import Header from "@/components/layout/Header"
 import Footer from "@/components/layout/Footer"
 
+// Inisialisasi Font
 const geistSans = Geist({
   subsets: ["latin"],
   variable: "--font-geist-sans",
@@ -88,7 +89,8 @@ export default function RootLayout({
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          "min-h-screen bg-background-DEFAULT text-foreground-DEFAULT antialiased"
+          // font-sans memastikan Geist Sans jadi font utama di seluruh project
+          "min-h-screen bg-background-DEFAULT text-foreground-DEFAULT antialiased font-sans"
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
