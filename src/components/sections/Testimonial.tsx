@@ -1,38 +1,34 @@
 'use client';
 
 import { useState, useRef, useEffect } from 'react';
-import { motion, useAnimationFrame, useMotionValue } from 'framer-motion';
+import { motion, useAnimationFrame, useMotionValue, useSpring } from 'framer-motion';
 import Image from 'next/image';
 import { cn } from '@/lib/utils';
 
 const testimonialsData = [
     {
-        quote: 'Clyve AI transformed how I analyze the market. The real-time intelligence for NVIDIA and BTC is unparalleled for my portfolio.',
-        name: 'Adrian Chen',
-        title: 'Quantitative Trader',
-        // Bored Ape NFT style
-        avatar: 'https://img.freepik.com/free-vector/hand-drawn-nft-style-ape-illustration_23-2149622021.jpg',
+        quote: "The prompt engineering here is next level. I use it to synthesize complex medical research into concise study guides in seconds.",
+        name: 'Rukaya',
+        title: 'Med Student',
+        avatar: '/avatars/avatar1.png',
     },
     {
-        quote: 'Finally, an institutional-grade agent that actually understands market sentiment. It saves me hours of manual data scraping.',
-        name: 'Elena Rodriguez',
-        title: 'Hedge Fund Analyst',
-        // Anime/Azuki NFT style
-        avatar: 'https://img.freepik.com/free-vector/hand-drawn-nft-style-ape-illustration_23-2149611030.jpg',
+        quote: "Built to eliminate shallow AI responses. Clyve is about engineering deep reasoning into every professional workflow.",
+        name: 'Zain',
+        title: 'Software Engineer',
+        avatar: '/avatars/avatar2.png',
     },
     {
-        quote: 'The precision of Clyve AI in identifying trend reversals is insane. It is like having a Bloomberg Terminal in my pocket.',
-        name: 'Marcus Thorne',
-        title: 'Crypto Strategist',
-        // Doodles/Abstract NFT style
-        avatar: 'https://img.freepik.com/free-vector/hand-drawn-nft-style-ape-illustration_23-2149622024.jpg',
+        quote: "Clyve AI's prompts give me a strategic edge. It's like having a high level consultant helping me refine my pitch decks and business models.",
+        name: 'Ibarhim',
+        title: 'Entrepreneur',
+        avatar: '/avatars/avatar3.png',
     },
     {
-        quote: 'As a builder, I appreciate the clean logic behind Clyve. It provides actionable insights that simplified my entire investment thesis.',
-        name: 'Sarah Jenkins',
-        title: 'FinTech Founder',
-        // Cyberpunk NFT style
-        avatar: 'https://img.freepik.com/free-vector/hand-drawn-nft-style-ape-illustration_23-2149629742.jpg',
+        quote: "I use Clyve to break down dense behavioral theories. It helps me structure my thesis with a level of clarity I couldn't achieve before.",
+        name: 'Sarah',
+        title: 'Psychology Student',
+        avatar: '/avatars/avatar4.png',
     },
 ];
 
@@ -40,30 +36,35 @@ const totalTestimonials = [...testimonialsData, ...testimonialsData, ...testimon
 
 const TestimonialCard = ({ testimonial }: { testimonial: typeof testimonialsData[0] }) => (
     <div className={cn(
-        "flex flex-col justify-between p-6 md:p-7 rounded-[22px] flex-shrink-0 relative overflow-hidden",
-        "w-[320px] h-[170px] md:w-[400px] md:h-[190px]",
-        "bg-gradient-to-b from-white/[0.08] via-[#050505] to-black",
-        "backdrop-blur-[20px] shadow-2xl",
-        "transition-all duration-500"
+        "group flex flex-col p-5 md:p-6 rounded-[22px] flex-shrink-0 relative overflow-hidden",
+        "w-[280px] md:w-[380px] h-auto",
+        "bg-[#050505] border border-white/[0.06]",
+        "transition-all duration-500 hover:border-white/[0.12]"
     )}>
-        <p className="text-[#8e9196] text-[13px] md:text-[15px] leading-relaxed font-sans font-medium relative z-20">
-            {testimonial.quote}
+        <div className="absolute top-0 left-0 right-0 h-[1px] bg-gradient-to-r from-transparent via-white/[0.15] to-transparent opacity-50" />
+        <div className="absolute inset-0 bg-gradient-to-b from-white/[0.02] to-transparent pointer-events-none" />
+
+        <p className="text-[#a1a1a1] text-[14px] md:text-[15px] leading-[1.5] font-sans font-normal relative z-10 mb-5">
+            "{testimonial.quote}"
         </p>
 
-        <div className="flex items-center gap-3 mt-4 relative z-20">
-            {/* Avatar Container with subtle NFT-glow */}
-            <div className="relative w-9 h-9 md:w-10 md:h-10 rounded-full overflow-hidden border border-white/10 shadow-[0_0_10px_rgba(255,255,255,0.05)] flex-shrink-0">
+        <div className="flex items-center gap-3 relative z-10">
+            <div className="relative w-8 h-8 rounded-full overflow-hidden flex-shrink-0 ring-1 ring-white/10">
                 <Image
                     src={testimonial.avatar}
                     alt={testimonial.name}
                     fill
-                    className="object-cover scale-110" // Zoom sedikit agar karakter NFT lebih fokus
+                    className="object-cover grayscale-[0.2] group-hover:grayscale-0 transition-all duration-500"
                     unoptimized
                 />
             </div>
-            <div className="flex flex-col">
-                <span className="text-white text-[13px] md:text-[15px] font-sans font-semibold tracking-tight">{testimonial.name}</span>
-                <span className="text-[#5c5f66] text-[11px] md:text-[12px] font-mono uppercase tracking-wider">{testimonial.title}</span>
+            <div className="flex flex-col -space-y-0.5">
+                <span className="text-white text-[13px] md:text-[14px] font-sans font-medium tracking-tight">
+                    {testimonial.name}
+                </span>
+                <span className="text-[#525252] text-[12px] md:text-[13px] font-sans font-normal">
+                    {testimonial.title}
+                </span>
             </div>
         </div>
     </div>
@@ -75,37 +76,40 @@ const Testimonial = () => {
     const [contentWidth, setContentWidth] = useState(0);
     const baseX = useMotionValue(0);
 
+    const smoothVelocity = useSpring(-30, {
+        damping: 60,
+        stiffness: 400,
+    });
+
     useEffect(() => {
         if (containerRef.current) {
             setContentWidth(containerRef.current.scrollWidth / 4);
         }
     }, []);
 
+    useEffect(() => {
+        smoothVelocity.set(isHovered ? -8 : -30);
+    }, [isHovered, smoothVelocity]);
+
     useAnimationFrame((time, delta) => {
         if (!contentWidth) return;
-
-        const baseVelocity = -50;
-        const hoverVelocity = -10;
-
-        const velocity = isHovered ? hoverVelocity : baseVelocity;
-        const moveBy = velocity * (delta / 1000);
+        const moveBy = smoothVelocity.get() * (delta / 1000);
         let newX = baseX.get() + moveBy;
 
         if (newX <= -contentWidth) {
-            newX = 0;
+            newX += contentWidth;
         }
-
         baseX.set(newX);
     });
 
     return (
-        <section className="bg-black py-12 md:py-24 px-0 flex flex-col items-center overflow-hidden">
-            <div className="text-center mb-10 md:mb-16 px-6 max-w-2xl">
-                <h2 className="text-3xl md:text-5xl font-sans font-bold text-white tracking-tight mb-4 leading-tight">
-                    Trusted by elite traders & market makers.
+        <section className="bg-black py-20 px-0 flex flex-col items-center overflow-hidden">
+            <div className="text-center mb-12 px-6 max-w-2xl">
+                <h2 className="text-3xl md:text-5xl font-sans font-bold text-white tracking-tighter mb-4">
+                    See what they have to say!
                 </h2>
-                <p className="text-base md:text-lg text-[#5c5f66] font-sans">
-                    Master the markets. Command your capital.
+                <p className="text-base md:text-lg text-[#666666] font-sans leading-relaxed">
+                    Trusted by elite students, creators & entrepreneurs.
                 </p>
             </div>
 
@@ -114,12 +118,16 @@ const Testimonial = () => {
                 onMouseEnter={() => setIsHovered(true)}
                 onMouseLeave={() => setIsHovered(false)}
             >
-                <div className="absolute left-0 top-0 bottom-0 w-16 md:w-72 z-10 bg-gradient-to-r from-black via-black/40 to-transparent pointer-events-none" />
-                <div className="absolute right-0 top-0 bottom-0 w-16 md:w-72 z-10 bg-gradient-to-l from-black via-black/40 to-transparent pointer-events-none" />
+                {/* Vignettes: 
+                   Mobile -> w-12 & via-black/40 (lebih tipis)
+                   Desktop -> md:w-64 & via-black/90 (lebih pekat)
+                */}
+                <div className="absolute left-0 top-0 bottom-0 w-12 md:w-64 z-20 bg-gradient-to-r from-black via-black/40 md:via-black/90 to-transparent pointer-events-none" />
+                <div className="absolute right-0 top-0 bottom-0 w-12 md:w-64 z-20 bg-gradient-to-l from-black via-black/40 md:via-black/90 to-transparent pointer-events-none" />
 
                 <motion.div
                     ref={containerRef}
-                    className="flex gap-4 md:gap-6 w-max px-4"
+                    className="flex gap-4 w-max px-4 will-change-transform"
                     style={{ x: baseX }}
                 >
                     {totalTestimonials.map((testimonial, index) => (
