@@ -1,67 +1,96 @@
 "use client";
 
 import { motion } from "framer-motion";
+import { CalendarPlus } from "lucide-react";
 
 export default function TermsPage() {
     return (
-        /* REVISI: Menggunakan pt-32 agar sinkron dengan section pricing kamu */
-        <main className="min-h-screen bg-[#000000] text-white font-sans selection:bg-white selection:text-black pt-32 pb-24">
-            <div className="max-w-4xl mx-auto px-6">
+        <main className="min-h-screen bg-black text-white font-sans selection:bg-zinc-800 selection:text-white pt-24 pb-20 scroll-smooth">
+            <div className="max-w-3xl mx-auto px-8">
                 <motion.div
-                    initial={{ opacity: 0, y: 20 }}
+                    initial={{ opacity: 0, y: 15 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.8, ease: [0.21, 0.47, 0.32, 0.98] }}
                 >
-                    <header className="mb-12">
-                        <h1 className="text-[clamp(2rem,5vw,3.5rem)] font-bold tracking-tight mb-2 text-white">
-                            Terms of Service
+                    {/* Header Area */}
+                    <header className="mb-10">
+                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-4">
+                            Terms & Conditions
                         </h1>
-                        <p className="text-zinc-500 font-medium">Last Updated: April 2, 2026</p>
+                        <p className="text-zinc-400 text-base leading-relaxed max-w-2xl">
+                            These Terms & Conditions ("Terms") govern your use of <span className="text-white font-medium">Clyve AI</span>. By accessing our platform or purchasing our smart prompts, you agree to be bound by these Terms.
+                        </p>
+
+                        {/* Last Updated with Icon */}
+                        <div className="mt-4 flex items-center gap-2 text-[10px] font-medium text-zinc-600 uppercase tracking-[0.2em]">
+                            <CalendarPlus size={12} strokeWidth={2.5} className="text-zinc-700" />
+                            <span>Last updated: April 20, 2026</span>
+                        </div>
                     </header>
 
-                    {/* Menggunakan class glass-dark agar konsisten dengan desain pricing */}
-                    <div className="glass-dark p-6 md:p-10 rounded-[2rem] border border-white/5 space-y-10 leading-relaxed text-zinc-400 text-sm md:text-base">
+                    {/* Content Sections - Tight & Balanced Spacing */}
+                    <div className="space-y-8 text-zinc-400 leading-relaxed text-sm md:text-base">
 
                         <section>
-                            <h2 className="text-xl font-semibold text-white mb-4">1. Acceptance of Agreement</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">About Clyve AI</h2>
                             <p>
-                                By accessing Clyve, you enter into a legally binding agreement. Our platform provides high-fidelity AI generation and workflow automation for professional content campaigns. Unauthorized use of the service is strictly prohibited.
+                                Clyve AI is a specialized platform providing advanced <span className="text-white">Smart Prompts</span>. Our products are engineered to significantly upgrade the reasoning, creativity, and efficiency of Large Language Models (LLMs) like Claude for professional-grade output.
                             </p>
                         </section>
 
-                        {/* SAFETY SECTION */}
-                        <section className="p-6 bg-red-500/[0.03] border border-red-500/10 rounded-2xl">
-                            <h2 className="text-lg font-bold text-red-500 mb-3 uppercase tracking-wider">2. Zero-Tolerance Safety Policy</h2>
-                            <p className="text-zinc-200 mb-4 font-medium">
-                                Clyve enforces a strict policy regarding human likeness and privacy:
+                        <section>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Accounts</h2>
+                            <p>
+                                Access to our services is provided via Google or Apple ID authentication. You are solely responsible for maintaining the security of your account credentials and for all activities that occur under your identity.
                             </p>
-                            <ul className="list-disc pl-5 space-y-3 text-zinc-300">
-                                <li><span className="text-white font-semibold">Consent:</span> You must not upload images or data of any individual without their explicit, verifiable legal consent.</li>
-                                <li><span className="text-white font-semibold">Prohibited Content:</span> Generation of non-consensual sexual imagery (NCII), deepfakes, or misleading political content is strictly forbidden.</li>
-                                <li><span className="text-white font-semibold">Public Figures:</span> The use of public figures for commercial campaign generation without licensing is at the user&apos;s own legal risk and may result in account termination.</li>
+                        </section>
+
+                        <section>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Smart Prompts & Usage</h2>
+                            <p className="mb-2">
+                                Purchasing a product grants you a non-transferable, personal-use license. Given the proprietary nature of our digital assets, you agree:
+                            </p>
+                            <ul className="space-y-1">
+                                <li className="flex gap-2 items-start">
+                                    <span className="text-zinc-700">•</span>
+                                    <span>Not to redistribute, leak, or resell Clyve AI prompt formulas to any third party.</span>
+                                </li>
+                                <li className="flex gap-2 items-start">
+                                    <span className="text-zinc-700">•</span>
+                                    <span>Not to use our prompts for illegal activities or in violation of AI safety guidelines.</span>
+                                </li>
                             </ul>
                         </section>
 
                         <section>
-                            <h2 className="text-xl font-semibold text-white mb-4">3. User Obligations & Conduct</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Payments & Refunds</h2>
                             <p>
-                                Users are responsible for all activity under their account. You agree not to bypass any security measures or use the output of Clyve to infringe upon the intellectual property of others.
+                                All transactions are final. Since our products consist of digital intellectual property that is instantly accessible and replicable, we do not offer refunds once access to the prompt content has been granted.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-xl font-semibold text-white mb-4">4. Intellectual Property</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Intellectual Property</h2>
                             <p>
-                                While users retain rights to the specific outputs generated via their prompts (subject to third-party rights), Clyve maintains all rights, titles, and interests in the platform architecture, UI/UX design, and proprietary AI workflow logic.
+                                All instruction architectures, prompt logic, and interface designs are the exclusive property of Clyve Labs. Reverse-engineering our delivery systems or prompt structures is strictly prohibited.
                             </p>
                         </section>
 
-                        <section>
-                            <h2 className="text-xl font-semibold text-white mb-4">5. Limitation of Liability</h2>
+                        {/* Footer with Linked Instagram Accent */}
+                        <footer className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4 text-[10px] text-zinc-600 uppercase tracking-widest font-medium">
+                            <p>© 2026 Clyve Labs Pte. Ltd.</p>
                             <p>
-                                Clyve and its affiliates shall not be held liable for any damages resulting from the misuse of AI-generated content. We provide the tools; the legal responsibility for the campaign content lies solely with the user.
+                                Contact:{" "}
+                                <a
+                                    href="https://instagram.com/clyveai"
+                                    target="_blank"
+                                    rel="noopener noreferrer"
+                                    className="text-violet-500 font-bold hover:text-violet-400 transition-colors"
+                                >
+                                    @clyveai
+                                </a>
                             </p>
-                        </section>
+                        </footer>
 
                     </div>
                 </motion.div>
