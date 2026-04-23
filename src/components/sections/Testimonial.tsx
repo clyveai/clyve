@@ -8,7 +8,7 @@ import { cn } from '@/lib/utils';
 const testimonialsData = [
     {
         quote: "The prompt engineering here is next level. I use it to synthesize complex medical research into concise study guides in seconds.",
-        name: 'Rukaya',
+        name: 'Mayra',
         title: 'Med Student',
         avatar: '/avatars/avatar1.png',
     },
@@ -20,7 +20,7 @@ const testimonialsData = [
     },
     {
         quote: "Clyve AI's prompts give me a strategic edge. It's like having a high level consultant helping me refine my pitch decks and business models.",
-        name: 'Ibarhim',
+        name: 'Ibrahim',
         title: 'Entrepreneur',
         avatar: '/avatars/avatar3.png',
     },
