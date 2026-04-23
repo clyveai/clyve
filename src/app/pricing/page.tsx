@@ -1,200 +1,174 @@
 'use client';
 
-import React, { useState } from 'react';
+import React from 'react';
 import { motion } from 'framer-motion';
-import { Check, Sparkles } from 'lucide-react';
+import { Check, Sparkles, Zap, ShieldCheck } from 'lucide-react';
 
 const tiers = [
     {
-        name: 'Starter',
-        id: 'tier-starter',
-        description: 'Perfect for exploring AI capabilities and individual projects.',
-        monthlyPrice: 149000,
-        annualTotal: 1490000,
+        name: 'Student',
+        id: 'tier-student',
+        description: 'Optimal logic for high school and university academic excellence.',
+        price: 79000,
+        href: 'http://lynk.id/clyveai/lgdgrpzyld8l/checkout', // Ganti dengan link kamu
         features: [
-            'Basic AI generation tools',
-            'Up to 50 campaigns per month',
-            'Standard response speed',
-            'Community access',
+            'Academic Thesis & Research Logic',
+            'Siswa & Mahasiswa Smart Prompts',
+            'Claude Context Optimization',
+            'Step-by-Step Learning Frameworks',
+            'Basic Community Support',
         ],
         mostPopular: false,
-        ctaText: 'Start Trial',
+        ctaText: 'Start Learning',
     },
     {
         name: 'Creator',
         id: 'tier-creator',
-        description: 'Ideal for professionals scaling their content creation.',
-        monthlyPrice: 349000,
-        annualTotal: 3490000,
+        description: 'Advanced reasoning for content creators and personal branding.',
+        price: 99000,
+        href: 'http://lynk.id/clyveai/ggnl986g9e0k/checkout', // Ganti dengan link kamu
         features: [
-            'Advanced AI agent access',
-            'Unlimited campaign generation',
-            'Priority processing speed',
-            'Custom workflow templates',
-            'Premium email support',
+            'Viral Affiliate Content Ideas',
+            'Personal Branding Blueprints',
+            'Smart Creative Prompts',
+            'Advanced Content Optimizer',
+            'Monthly Creative Updates',
         ],
         mostPopular: true,
-        ctaText: 'Upgrade to Creator',
+        ctaText: 'Start Creating',
     },
     {
-        name: 'Scale',
-        id: 'tier-scale',
-        description: 'For teams requiring custom integrations and max performance.',
-        monthlyPrice: 1490000,
-        annualTotal: 14900000,
+        name: 'Professional',
+        id: 'tier-pro',
+        description: 'Institutional grade AI for market analysis and business scaling.',
+        price: 149000,
+        href: 'http://lynk.id/clyveai/8l6rpw3dv9e9/checkout', // Ganti dengan link kamu
         features: [
-            'Everything in Creator, plus:',
-            'Custom AI model fine-tuning',
-            'API access & Webhooks',
-            'Dedicated account manager',
-            '99.9% uptime SLA',
+            'Stock & Crypto Analysis Skills',
+            'Market Research Logic Pro',
+            'Institutional Analysis Frameworks',
+            'Full Commercial License',
+            'Master Pass: Full Student & Creator Access',
         ],
         mostPopular: false,
-        ctaText: 'Contact Sales',
+        ctaText: 'Go Professional',
     },
 ];
 
 export default function Pricing() {
-    const [isAnnual, setIsAnnual] = useState(true);
-
     const formatPrice = (price: number) => {
         return `IDR ${price.toLocaleString('id-ID')}`;
     };
 
     return (
-        <section id="pricing" className="relative pt-32 pb-24 bg-[var(--bg-primary)] overflow-hidden">
+        <section id="pricing" className="relative pt-32 pb-32 bg-[var(--bg-primary)] overflow-hidden font-sans text-[var(--fg-primary)]">
             <div className="absolute inset-0 w-full h-full pointer-events-none">
-                <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-white/[0.02] blur-[120px] rounded-full" />
+                <div className="absolute top-[-5%] left-1/2 -translate-x-1/2 w-full max-w-[800px] h-[400px] bg-white/[0.03] blur-[120px] rounded-full" />
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="text-center max-w-2xl mx-auto mb-16">
+            <div className="relative max-w-6xl mx-auto px-6">
+                <div className="text-center max-w-2xl mx-auto mb-20">
                     <motion.h2
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-bold tracking-tight text-[var(--fg-primary)] mb-4 text-balance"
+                        className="text-4xl md:text-6xl font-bold tracking-tighter mb-6"
                     >
-                        Simple, transparent pricing.
+                        Invest once. <span className="gradient-text">Build forever.</span>
                     </motion.h2>
 
-                    <motion.div
+                    <motion.p
                         initial={{ opacity: 0, y: 20 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
                         transition={{ delay: 0.1 }}
-                        className="text-lg text-[var(--fg-secondary)] mb-8 text-pretty space-y-1"
+                        className="text-[var(--fg-secondary)] opacity-70 text-base md:text-lg"
                     >
-                        <p>Choose the tier that matches your production scale.</p>
-                        <p className="text-sm opacity-80">Credits never expire. No hidden fees.</p>
-                    </motion.div>
-
-                    {/* Toggle */}
-                    <div className="flex flex-col items-center gap-4 mt-8">
-                        <motion.div
-                            initial={{ opacity: 0, scale: 0.95 }}
-                            whileInView={{ opacity: 1, scale: 1 }}
-                            viewport={{ once: true }}
-                            transition={{ delay: 0.2 }}
-                            className="relative flex items-center p-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-full w-fit mx-auto"
-                        >
-                            <button
-                                onClick={() => setIsAnnual(false)}
-                                className={`relative px-6 py-2 text-sm font-semibold rounded-full z-10 transition-all ${!isAnnual ? 'text-[var(--bg-primary)]' : 'text-[var(--fg-secondary)] hover:text-[var(--fg-primary)]'}`}
-                            >
-                                Monthly
-                            </button>
-                            <button
-                                onClick={() => setIsAnnual(true)}
-                                className={`relative px-6 py-2 text-sm font-semibold rounded-full z-10 transition-all ${isAnnual ? 'text-[var(--bg-primary)]' : 'text-[var(--fg-secondary)] hover:text-[var(--fg-primary)]'}`}
-                            >
-                                Annually
-                            </button>
-
-                            <div className="absolute inset-1 pointer-events-none">
-                                <motion.div
-                                    className="w-1/2 h-full bg-[var(--fg-primary)] rounded-full shadow-sm"
-                                    layout
-                                    transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                                    animate={{ x: isAnnual ? '100%' : '0%' }}
-                                />
-                            </div>
-                        </motion.div>
-
-                        {/* Saving Badge with subtle pulse */}
-                        <div className="h-6">
-                            {isAnnual && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]"
-                                >
-                                    Save up to 17% Yearly
-                                </motion.div>
-                            )}
-                        </div>
-                    </div>
+                        Stop paying monthly. Get the engineering logic that scales Clyve AI with a single lifetime payment.
+                    </motion.p>
                 </div>
 
-                <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
-                    {tiers.map((tier, index) => {
-                        const displayPrice = isAnnual ? (tier.annualTotal / 12) : tier.monthlyPrice;
+                <div className="grid md:grid-cols-3 gap-6 items-center">
+                    {tiers.map((tier, index) => (
+                        <motion.div
+                            key={tier.id}
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: true }}
+                            transition={{ delay: index * 0.1 }}
+                            className={`relative flex flex-col p-8 rounded-[2.5rem] bg-[var(--bg-secondary)] border transition-all duration-500 ${tier.mostPopular
+                                ? 'border-white/20 shadow-[0_40px_100px_rgba(0,0,0,0.8)] scale-105 z-10'
+                                : 'border-white/5 opacity-90'
+                                }`}
+                        >
+                            {tier.mostPopular && (
+                                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-5 py-1.5 bg-[var(--fg-primary)] text-[var(--bg-primary)] text-[10px] font-black uppercase tracking-[0.2em] rounded-full flex items-center gap-2 shadow-2xl">
+                                    <Zap size={12} fill="currentColor" />
+                                    Most Popular
+                                </div>
+                            )}
 
-                        return (
-                            <motion.div
-                                key={tier.id}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: true }}
-                                transition={{ delay: 0.2 + index * 0.1 }}
-                                className={`relative flex flex-col p-8 rounded-[2rem] glass transition-all duration-500 ${tier.mostPopular ? 'border-white/20 ring-1 ring-white/10 md:-mt-8 py-12' : ''}`}
+                            <div className="mb-8">
+                                <h3 className="text-xl font-bold mb-2">{tier.name}</h3>
+                                <p className="text-xs text-[var(--fg-secondary)] opacity-60 leading-relaxed min-h-[40px]">
+                                    {tier.description}
+                                </p>
+                            </div>
+
+                            <div className="mb-10 flex flex-col">
+                                <div className="flex items-baseline gap-2">
+                                    <span className="text-4xl font-black tracking-tighter">
+                                        {formatPrice(tier.price)}
+                                    </span>
+                                    <span className="text-[10px] font-bold uppercase tracking-widest opacity-30">
+                                        / Life
+                                    </span>
+                                </div>
+                                <p className="text-[9px] font-bold text-[var(--fg-secondary)] uppercase tracking-widest mt-2 opacity-40">
+                                    No hidden subscriptions
+                                </p>
+                            </div>
+
+                            <ul className="flex-1 space-y-4 mb-12">
+                                {tier.features.map((feature) => (
+                                    <li key={feature} className="flex items-center gap-3 text-xs md:text-sm text-[var(--fg-secondary)]">
+                                        <div className="flex-shrink-0 bg-white/5 p-1 rounded-full border border-white/10">
+                                            <Check className="w-3.5 h-3.5 text-[var(--fg-primary)]" />
+                                        </div>
+                                        <span className="opacity-80">{feature}</span>
+                                    </li>
+                                ))}
+                            </ul>
+
+                            {/* Tombol diganti menjadi anchor tag (a) untuk link eksternal */}
+                            <motion.a
+                                href={tier.href}
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                whileHover={{ scale: 1.02 }}
+                                whileTap={{ scale: 0.98 }}
+                                className={`w-full py-4 rounded-2xl font-black text-[10px] text-center uppercase tracking-[0.2em] transition-all ${tier.mostPopular
+                                    ? 'bg-[var(--fg-primary)] text-[var(--bg-primary)] hover:opacity-90 shadow-xl shadow-white/5'
+                                    : 'bg-white/5 text-[var(--fg-primary)] border border-white/10 hover:bg-white/10'
+                                    }`}
                             >
-                                {tier.mostPopular && (
-                                    <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-[var(--fg-primary)] text-[var(--bg-primary)] text-[10px] font-bold uppercase tracking-[0.1em] rounded-full flex items-center gap-1.5 shadow-xl">
-                                        <Sparkles className="w-3 h-3" />
-                                        Most Popular
-                                    </div>
-                                )}
+                                {tier.ctaText}
+                            </motion.a>
+                        </motion.div>
+                    ))}
+                </div>
 
-                                <div className="mb-8">
-                                    <h3 className="text-xl font-bold text-[var(--fg-primary)] mb-2 tracking-tight">{tier.name}</h3>
-                                    <p className="text-sm text-[var(--fg-secondary)] leading-relaxed">{tier.description}</p>
-                                </div>
-
-                                <div className="mb-8 flex flex-col">
-                                    <div className="flex items-baseline text-[var(--fg-primary)]">
-                                        <span className="text-3xl font-bold tracking-tighter">
-                                            {formatPrice(displayPrice)}
-                                        </span>
-                                        <span className="text-sm text-[var(--fg-secondary)] ml-2 font-medium">/mo</span>
-                                    </div>
-
-                                    {isAnnual && (
-                                        <span className="text-[11px] text-[var(--fg-secondary)] mt-2 font-medium italic opacity-80">
-                                            Billed as {formatPrice(tier.annualTotal)} / year
-                                        </span>
-                                    )}
-                                </div>
-
-                                <ul className="flex-1 space-y-4 mb-10">
-                                    {tier.features.map((feature) => (
-                                        <li key={feature} className="flex items-start gap-3 text-sm text-[var(--fg-secondary)]">
-                                            <div className="mt-1 bg-white/10 rounded-full p-0.5">
-                                                <Check className="w-3.5 h-3.5 text-[var(--fg-primary)]" />
-                                            </div>
-                                            <span>{feature}</span>
-                                        </li>
-                                    ))}
-                                </ul>
-
-                                <button
-                                    className={`w-full !rounded-full !py-4 transition-transform active:scale-95 font-bold text-sm tracking-wide ${tier.mostPopular ? 'btn-primary' : 'btn-secondary'}`}
-                                >
-                                    {tier.ctaText}
-                                </button>
-                            </motion.div>
-                        );
-                    })}
+                <div className="mt-20 flex flex-col items-center gap-6 opacity-40">
+                    <div className="flex gap-8 items-center text-[var(--fg-secondary)]">
+                        <div className="flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-default">
+                            <ShieldCheck size={16} />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Secure Checkout</span>
+                        </div>
+                        <div className="flex items-center gap-2 grayscale hover:grayscale-0 transition-all cursor-default">
+                            <Sparkles size={16} />
+                            <span className="text-[10px] font-bold uppercase tracking-widest">Instant Delivery</span>
+                        </div>
+                    </div>
                 </div>
             </div>
         </section>

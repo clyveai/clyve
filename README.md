@@ -1,22 +1,22 @@
 <div align="center">
 
-# **Portfolio Website** 🚀
+# **Clyve AI** 🪐
 
-![Next.js](https://img.shields.io/badge/Next.js-15.3.4-black?logo=next.js)
+![Next.js](https://img.shields.io/badge/Next.js-16.0.10-black?logo=next.js)
 ![TypeScript](https://img.shields.io/badge/TypeScript-5.6-blue?logo=typescript)
+![React](https://img.shields.io/badge/React-19.2.3-61DAFB?logo=react)
 ![TailwindCSS](https://img.shields.io/badge/TailwindCSS-3.4.14-skyblue?logo=tailwind-css)
-![pnpm](https://img.shields.io/badge/pnpm-8.0-purple?logo=pnpm)
 ![Framer Motion](https://img.shields.io/badge/Framer%20Motion-12.19.3-violet?logo=framer)
 
 ---
 
-### A clean and modern portfolio that highlights clarity, motion, and detail.  
-Built for performance with smooth visuals and thoughtful design.
+### **The Neural Blueprint for High-Precision AI Workflows.**
+Clyve AI is a specialized orchestrator focused on **Smart Prompt Engineering, Complex Logic Processing, and Context Optimization.** Built for builders who demand institutional-grade clarity from LLMs.
 
 ---
 
-## 🌐 Live Preview  
-👉 [iamzeiyn.com](https://iamzeiyn.vercel.app)
+## 🌌 Core Focus
+**Smart Prompting** · **Logic Reasoning** · **Context Injection**
 
 ---
 
@@ -24,32 +24,42 @@ Built for performance with smooth visuals and thoughtful design.
 
 ## 🧩 Tech Stack
 
-| Category        | Tools & Libraries                                                                 |
-|-----------------|------------------------------------------------------------------------------------|
-| Framework       | [Next.js](https://nextjs.org/) — App Router, Static Rendering                      |
-| Language        | [TypeScript](https://www.typescriptlang.org/)                                      |
-| Styling         | [TailwindCSS](https://tailwindcss.com/) with custom tokens & utilities              |
-| Animations      | [Framer Motion](https://www.framer.com/motion/) — fluid motion & subtle glitch      |
-| Icons           | [Lucide React](https://lucide.dev/) · [Tabler Icons](https://tabler-icons.io/)     |
-| Utilities       | `clsx`, `tailwind-merge`, `react-wrap-balancer`                                   |
-| Themes & SEO    | [Next Themes](https://github.com/pacocoursey/next-themes), [Next SEO](https://github.com/garmeeh/next-seo), [Next Sitemap](https://github.com/iamvishnusankar/next-sitemap) |
+| Category         | Tools & Libraries                                                                  |
+|------------------|------------------------------------------------------------------------------------|
+| **Framework** | [Next.js 16](https://nextjs.org/) — App Router, Turbo Engine                       |
+| **Language** | [TypeScript](https://www.typescriptlang.org/) — Type-safe logic & schemas          |
+| **UI Components**| [Shadcn UI](https://ui.shadcn.com/) · [Radix UI](https://www.radix-ui.com/)        |
+| **Styling** | [TailwindCSS](https://tailwindcss.com/) with `tailwindcss-animate`                |
+| **Animations** | [Framer Motion](https://www.framer.com/motion/) — Cinematic & fluid transitions    |
+| **Typography** | [Geist Sans](https://vercel.com/font) — Clean, professional developer aesthetic    |
+| **Icons** | [Lucide React](https://lucide.dev/) · [Tabler Icons](https://tabler-icons.io/)     |
+| **SEO & Ops** | `Next Themes`, `Next SEO`, `Vercel Analytics`                                      |
 
-**Development Stack**
-- Linting: ESLint (`eslint-config-next`)  
-- Post-processing: PostCSS + Autoprefixer  
-- Optional Tailwind plugins for enhanced layout control  
+**Internal Architecture**
+- **Logic Engine:** Optimized for prompt chaining and context window management.
+- **Visuals:** High-contrast dark luxury interface using `glassmorphism` and custom motion tokens.
+- **Utility:** Integrated with `class-variance-authority` and `tailwind-merge` for modular UI scaling.
+
+---
+
+## 🚀 Optimization Features
+
+* **Smart Prompt Templates:** Pre-engineered structures for high-level reasoning.
+* **Logic Overrides:** Fine-tuned controls for adjusting AI temperature and output consistency.
+* **Context Layering:** Advanced data injection to ensure the AI "understands" the deeper intent.
+* **Performance:** Leveraging Next.js 16 `--turbo` for ultra-fast development and cold starts.
 
 ---
 
 ## ⚡ Quick Start
 
 ```bash
-# Clone the repository
-git clone https://github.com/zeiynz/zain.git
-cd zain
+# Clone the neural core
+git clone [https://github.com/zeiynz/clyveai.git](https://github.com/zeiynz/clyveai.git)
+cd clyveai
 
 # Install dependencies
 pnpm install
 
-# Run development server
+# Launch the development environment
 pnpm dev

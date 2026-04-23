@@ -1,6 +1,7 @@
 "use client";
 
 import { motion, Easing } from "framer-motion";
+import { Moon } from "lucide-react";
 import Link from "next/link";
 
 export default function Footer() {
@@ -9,6 +10,51 @@ export default function Footer() {
 
     return (
         <footer className="relative w-full bg-[#000000] pt-12 pb-8 overflow-hidden flex flex-col items-center z-10 font-sans">
+
+            {/* === App Logo & Button Section === */}
+            <motion.div
+                initial={{ opacity: 0, y: 40 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 1.2, ease: smoothEase }}
+                className="flex flex-col items-center mb-16 z-20"
+            >
+                {/* Logo Container with Hover Effect */}
+                <div className="relative group cursor-pointer mb-6">
+
+                    {/* App Icon Base (Glassmorphism Dark) */}
+                    <div className="relative w-24 h-24 bg-gradient-to-b from-white/5 to-transparent border border-white/10 rounded-[2rem] flex items-center justify-center overflow-hidden shadow-2xl transition-transform duration-500 ease-out group-hover:scale-[1.05] group-hover:border-white/20 backdrop-blur-xl">
+
+                        {/* Subtle Starry/Dust Background */}
+                        <div className="absolute inset-0 opacity-40 bg-[radial-gradient(ellipse_at_center,_var(--tw-gradient-stops))] from-white/10 via-transparent to-transparent" />
+
+                        {/* Logo.svg implementation */}
+                        <div className="relative w-16 h-16 transition-transform duration-500 group-hover:scale-110">
+                            <img
+                                src="/logo.svg"
+                                alt="Logo"
+                            />
+                        </div>
+                    </div>
+                </div>
+
+                {/* App Title */}
+                <h2 className="text-[32px] font-semibold text-white tracking-tight mb-6">
+                    Clyve AI
+                </h2>
+
+                {/* CTA Button */}
+                <button className="relative group cursor-pointer">
+                    {/* Button Glow Behind */}
+                    <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-500 rounded-full blur-md opacity-40 group-hover:opacity-70 transition duration-500" />
+
+                    {/* Button Body */}
+                    <div className="relative flex items-center gap-2.5 bg-gradient-to-b from-[#FF5100] to-[#E63E00] hover:from-[#FF611A] hover:to-[#FF4500] text-white px-7 py-2.5 rounded-full font-medium transition-all duration-300 shadow-inner shadow-white/20">
+                        <span className="text-[15px] tracking-wide">Try It Now</span>
+                        <Moon className="w-[18px] h-[18px] fill-white mb-[2px]" />
+                    </div>
+                </button>
+            </motion.div>
 
             {/* === Giant Aesthetic Typography (CLYVE) === */}
             <motion.div
