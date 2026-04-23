@@ -55,7 +55,8 @@ Clyve AI is a specialized orchestrator focused on **Smart Prompt Engineering, Co
 
 ```bash
 # Clone the neural core
-git clone [https://github.com/zeiynz/clyveai.git](https://github.com/zeiynz/clyveai.git)
+git clone: https://github.com/clyveai/clyve.git
+
 cd clyveai
 
 # Install dependencies
