@@ -1,0 +1,26 @@
+"use client";
+
+import { usePathname } from "next/navigation";
+import Header from "@/components/layout/Header";
+import Footer from "@/components/layout/Footer";
+
+const noMarketingChromePrefixes = ["/login", "/register", "/dashboard", "/settings"];
+
+export default function AppShell({ children }: { children: React.ReactNode }) {
+  const pathname = usePathname();
+  const hideMarketingChrome = noMarketingChromePrefixes.some(
+    (prefix) => pathname === prefix || pathname.startsWith(`${prefix}/`),
+  );
+
+  if (hideMarketingChrome) {
+    return <main className="min-h-screen">{children}</main>;
+  }
+
+  return (
+    <div className="flex min-h-screen flex-col">
+      <Header />
+      <main className="flex-1">{children}</main>
+      <Footer />
+    </div>
+  );
+}

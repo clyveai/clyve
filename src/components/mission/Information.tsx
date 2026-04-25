@@ -28,7 +28,7 @@ export default function Information() {
                 {/* Header - Ukuran teks disesuaikan dengan foto web */}
                 <div className="text-center mb-16 space-y-4">
                     <h2 className="text-white text-4xl md:text-[56px] font-bold tracking-tight leading-[1.1]">
-                        Time To WIn
+                        Time To Win
                     </h2>
                     <p className="text-[#a1a1aa] text-base md:text-lg max-w-lg mx-auto opacity-80">
                         The weapon for the top 1% of the population who's built to win.

@@ -3,8 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { ThemeProvider } from "next-themes"
 import { Geist, Geist_Mono } from "next/font/google"
 import { cn } from "@/lib/utils"
-import Header from "@/components/layout/Header"
-import Footer from "@/components/layout/Footer"
+import AppShell from "@/components/layout/AppShell"
 
 // Inisialisasi Font
 const geistSans = Geist({
@@ -94,11 +93,7 @@ export default function RootLayout({
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>
-          <div className="flex flex-col min-h-screen">
-            <Header />
-            <main className="flex-1">{children}</main>
-            <Footer />
-          </div>
+          <AppShell>{children}</AppShell>
         </ThemeProvider>
       </body>
     </html>

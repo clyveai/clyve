@@ -71,7 +71,7 @@ export default function Header() {
                     {/* Action Area */}
                     <div className="flex items-center gap-1 ml-auto md:ml-0">
                         <Link
-                            href="/start"
+                            href="/login"
                             className="hidden md:flex items-center gap-1.5 py-2.5 px-6 bg-[#e4e4e7] border border-black/5 text-black text-[13.5px] font-bold rounded-full hover:bg-black hover:text-white active:scale-95 transition-all shadow-sm"
                         >
                             Get Started
@@ -131,7 +131,7 @@ export default function Header() {
                             className="mt-auto"
                         >
                             <Link
-                                href="/start"
+                                href="/register"
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className="flex w-full h-14 items-center justify-center gap-2 text-[15px] font-bold bg-[#121110] text-white rounded-2xl active:scale-[0.97] transition-all"
                             >
