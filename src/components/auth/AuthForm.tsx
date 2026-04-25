@@ -149,7 +149,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
       <p className="mt-6 text-center text-sm text-zinc-400">
         {isLogin ? "No account yet?" : "Already have an account?"}{" "}
-        <Link href={isLogin ? "/register" : "/login"} className="font-medium text-white underline underline-offset-4">
+        <Link href={isLogin ? "/register" : "/login"} className="font-medium text-white">
           {isLogin ? "Register" : "Sign in"}
         </Link>
       </p>

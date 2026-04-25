@@ -45,14 +45,16 @@ export default function Footer() {
 
                 {/* CTA Button */}
                 <button className="relative group cursor-pointer">
-                    {/* Button Glow Behind */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-500 rounded-full blur-md opacity-40 group-hover:opacity-70 transition duration-500" />
+                    <Link href="/pricing" className="relative group inline-block cursor-pointer">
+                        {/* Button Glow Behind */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-500 rounded-full blur-md opacity-40 group-hover:opacity-70 transition duration-500" />
 
-                    {/* Button Body */}
-                    <div className="relative flex items-center gap-2.5 bg-gradient-to-b from-[#FF5100] to-[#E63E00] hover:from-[#FF611A] hover:to-[#FF4500] text-white px-7 py-2.5 rounded-full font-medium transition-all duration-300 shadow-inner shadow-white/20">
-                        <span className="text-[15px] tracking-wide">Try It Now</span>
-                        <Moon className="w-[18px] h-[18px] fill-white mb-[2px]" />
-                    </div>
+                        {/* Button Body */}
+                        <div className="relative flex items-center gap-2.5 bg-gradient-to-b from-[#FF5100] to-[#E63E00] hover:from-[#FF611A] hover:to-[#FF4500] text-white px-7 py-2.5 rounded-full font-medium transition-all duration-300 shadow-inner shadow-white/20">
+                            <span className="text-[15px] tracking-wide">Try It Now</span>
+                            <Moon className="w-[18px] h-[18px] fill-white mb-[2px]" />
+                        </div>
+                    </Link>
                 </button>
             </motion.div>
 
