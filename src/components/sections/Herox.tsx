@@ -132,9 +132,9 @@ function CardHeader() {
     return (
         <div className="relative z-10 flex justify-between items-start text-black">
             <div>
-                <h3 className="text-xl font-bold tracking-tight text-black/100">New</h3>
-                <p className="text-sm font-medium text-black/100">Smart Prompts</p>
-                <p className="text-xs font-medium text-black/100 mt-6">Try it now</p>
+                <h3 className="text-xl font-bold tracking-tight text-black/100">Time to win</h3>
+                <p className="text-sm font-medium text-black/100">Unlock your skills</p>
+                <p className="text-xs font-medium text-black/100 mt-6">Try it now!</p>
             </div>
             <div className="flex flex-col items-end">
                 <div className="flex -space-x-2">
