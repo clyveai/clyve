@@ -7,27 +7,27 @@ import { cn } from '@/lib/utils';
 
 const testimonialsData = [
     {
-        quote: "The prompt engineering here is next level. I use it to synthesize complex medical research into concise study guides in seconds.",
+        quote: "The sentiment analysis is surprisingly sharp. It caught a bearish shift on NVIDIA hours before the mainstream news cycle even picked it up.",
         name: 'Mayra',
-        title: 'Med Student',
+        title: 'Retail Trader',
         avatar: '/avatars/avatar1.png',
     },
     {
-        quote: "Built to eliminate shallow AI responses. Clyve is about engineering deep reasoning into every professional workflow.",
+        quote: "Finally, an AI that doesn't just hallucinate numbers. Clyve actually deconstructs market data into structured, logical reports that I can trust.",
         name: 'Zain',
-        title: 'Software Engineer',
+        title: 'Entrepreneur',
         avatar: '/avatars/avatar2.png',
     },
     {
-        quote: "Clyve AI's prompts give me a strategic edge. It's like having a high level consultant helping me refine my pitch decks and business models.",
+        quote: "I use Clyve to synthesize global macro trends. It's like having a high-level research team helping me spot opportunities without the noise.",
         name: 'Ibrahim',
         title: 'Entrepreneur',
         avatar: '/avatars/avatar3.png',
     },
     {
-        quote: "I use Clyve to break down dense behavioral theories. It helps me structure my thesis with a level of clarity I couldn't achieve before.",
+        quote: "The way it breaks down dense financial filings is a game changer. I can now extract key risk factors from a 10-K report in seconds.",
         name: 'Sarah',
-        title: 'Psychology Student',
+        title: 'Investor',
         avatar: '/avatars/avatar4.png',
     },
 ];
@@ -109,7 +109,7 @@ const Testimonial = () => {
                     See what they have to say!
                 </h2>
                 <p className="text-base md:text-lg text-[#666666] font-sans leading-relaxed">
-                    Trusted by elite students, creators & entrepreneurs.
+                    Trusted by retail traders, investors, and entrepreneurs.
                 </p>
             </div>
 

@@ -2,43 +2,46 @@
 @tailwind components;
 @tailwind utilities;
 
-/* === Root Variables Updated to Pitch Black (#000000) === */
 :root {
-  --font-geist-sans: system-ui, -apple-system, sans-serif, "Apple Color Emoji", "Segoe UI Emoji";
-  --font-geist-mono: ui-monospace, "Cascadia Code", "Source Code Pro", Menlo, Consolas, "Courier New", monospace;
-  --font-sans: system-ui, -apple-system, sans-serif;
-  --font-mono: ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
-  --radius: 8px;
-  --transition: 0.2s cubic-bezier(0.4, 0, 0.2, 1);
+  /* Mengambil variabel dari Geist Font di Layout */
+  --font-sans: var(--font-geist-sans), system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-geist-mono), ui-monospace, monospace;
 
-  /* Black Theme Palette */
+  /* Precision Radius & Transitions */
+  --radius: 10px;
+  --transition: 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+
+  /* Batman Theme Palette (Pure Black Focus) */
   --bg-primary: #000000;
-  /* Hitam pekat */
-  --bg-secondary: #0a0a0a;
-  /* Hitam sedikit terang untuk layer */
+  --bg-secondary: #080808;
   --fg-primary: #ffffff;
-  /* Putih bersih */
   --fg-secondary: #a1a1aa;
-  /* Abu-abu mute */
   --border-color: #1a1a1a;
-  /* Border halus agar tidak 'menghilang' */
+  --accent-color: #ffffff;
 }
 
+/* === Reset & Base Styling === */
 * {
   border-color: var(--border-color);
+  -webkit-tap-highlight-color: transparent;
 }
 
 html {
   scroll-behavior: smooth;
   background: var(--bg-primary);
+  /* Mencegah pergeseran layout saat scrollbar muncul */
+  scrollbar-gutter: stable;
 }
 
 body {
   background: var(--bg-primary);
   color: var(--fg-primary);
   font-family: var(--font-sans);
-  font-feature-settings: "rlig" 1, "calt" 1;
   -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow-x: hidden;
+  /* Letter spacing sedikit lebih rapat agar terlihat premium seperti Geist */
+  letter-spacing: -0.015em;
 }
 
 @layer base {
@@ -49,108 +52,107 @@ body {
   h4,
   h5,
   h6 {
-    font-weight: 700;
-    letter-spacing: -0.02em;
     color: var(--fg-primary);
+    letter-spacing: -0.04em;
+    /* Lebih rapat untuk heading agar gagah */
+    font-weight: 700;
   }
 
-  h1 {
-    font-size: clamp(2.5rem, 6vw, 4.5rem);
-    line-height: 1.1;
-  }
-
-  a {
-    transition: color var(--transition);
-    color: inherit;
-    text-decoration: none;
-  }
-
-  button {
-    transition: all var(--transition);
+  input:focus {
+    outline: none;
   }
 }
 
+/* === Optimized Components (Zero-Lag) === */
 @layer components {
-
-  /* Glass effect yang lebih subtle untuk background hitam */
-  .glass {
-    background: rgba(255, 255, 255, 0.03);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    border: 1px solid rgba(255, 255, 255, 0.08);
-  }
-
-  .glass-dark {
-    background: rgba(0, 0, 0, 0.5);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.05);
+  .card-solid {
+    background-color: var(--bg-secondary);
+    border: 1px solid var(--border-color);
+    transition: transform var(--transition);
   }
 
   .gradient-text {
-    background: linear-gradient(to bottom right, #ffffff, #a1a1aa);
+    background: linear-gradient(180deg, #FFFFFF 0%, #71717a 100%);
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
     background-clip: text;
   }
 
-  .btn-primary {
-    padding: 0.75rem 1.5rem;
-    background: #ffffff;
-    color: #000000;
-    font-weight: 600;
-    border-radius: 0.5rem;
+  .input-dark {
+    background-color: #050505;
+    border: 1px solid var(--border-color);
+    color: var(--fg-primary);
+    transition: border-color var(--transition), background-color var(--transition);
+    font-size: 0.875rem;
   }
 
-  .btn-primary:hover {
-    background: #e4e4e7;
-    transform: translateY(-1px);
+  .input-dark:focus {
+    border-color: #3f3f46;
+    background-color: #000000;
+  }
+
+  .btn-primary {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: var(--fg-primary);
+    color: var(--bg-primary);
+    font-weight: 600;
+    border-radius: var(--radius);
+    transition: opacity var(--transition), transform var(--transition);
+    cursor: pointer;
+  }
+
+  .btn-primary:active {
+    transform: scale(0.97);
+    opacity: 0.9;
   }
 
   .btn-secondary {
-    padding: 0.75rem 1.5rem;
-    background: transparent;
-    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: transparent;
+    color: var(--fg-primary);
+    border: 1px solid var(--border-color);
     font-weight: 500;
-    border-radius: 0.5rem;
-    border: 1px solid #27272a;
+    border-radius: var(--radius);
+    transition: background-color var(--transition), border-color var(--transition), transform var(--transition);
+    cursor: pointer;
   }
 
   .btn-secondary:hover {
-    background: #18181b;
-    border-color: #3f3f46;
+    background-color: #0a0a0a;
+    border-color: #27272a;
+  }
+
+  .btn-secondary:active {
+    transform: scale(0.97);
   }
 }
 
+/* === Utilities & Performance === */
 @layer utilities {
-  .text-balance {
-    text-wrap: balance;
-  }
-
-  .text-pretty {
-    text-wrap: pretty;
+  .gpu-boost {
+    transform: translateZ(0);
+    backface-visibility: hidden;
   }
 }
 
-/* === Scrollbar Styling (Deep Dark) === */
+/* === Stealth Scrollbar === */
 ::-webkit-scrollbar {
-  width: 6px;
+  width: 4px;
 }
 
 ::-webkit-scrollbar-track {
-  background: #000000;
+  background: var(--bg-primary);
 }
 
 ::-webkit-scrollbar-thumb {
-  background: #27272a;
+  background: #1a1a1a;
   border-radius: 10px;
 }
 
-::-webkit-scrollbar-thumb:hover {
-  background: #3f3f46;
-}
-
-/* === Selection === */
 ::selection {
   background-color: #ffffff;
   color: #000000;

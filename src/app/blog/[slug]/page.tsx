@@ -23,8 +23,6 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
 
   if (slug === "pro-80880") {
     categories.professional = EXCLUSIVE_CONTENT["pro-80880"]
-    categories.student = EXCLUSIVE_CONTENT["student-10125"]
-    categories.creator = EXCLUSIVE_CONTENT["creator-36924"]
   } else {
     categories.current = EXCLUSIVE_CONTENT[slug]
   }

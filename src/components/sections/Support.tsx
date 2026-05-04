@@ -4,45 +4,45 @@ import React, { useState } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import {
     X,
-    MessageCircle,
-    HelpCircle,
-    CreditCard,
     Zap,
+    Target,
+    BarChart3,
     ShieldCheck,
-    Target
+    HelpCircle,
+    MessageCircle
 } from "lucide-react";
-import { cn } from "@/lib/utils"; // Pastikan utilitas ini ada dari instalasi shadcn
+import { cn } from "@/lib/utils";
 
 const faqs = [
     {
         id: 1,
-        icon: <HelpCircle className="w-5 h-5 text-yellow-400" />,
+        icon: <HelpCircle className="w-5 h-5 text-blue-400" />,
         question: "What exactly is Clyve AI?",
-        answer: "Clyve AI is the tactical logic layer between raw intent and absolute precision. It is an engineering blueprint designed to strip away AI noise and command high-performance results through cold, calculated structural power."
+        answer: "Clyve AI is a precision intelligence layer designed to deconstruct complex market data into actionable insights. It serves as a tactical bridge between raw financial noise and high-fidelity predictive analysis, engineered for absolute market clarity."
     },
     {
         id: 2,
-        icon: <Zap className="w-5 h-5 text-red-500" />,
-        question: "How does 'Smart Prompt Logic' work?",
-        answer: "Unlike standard prompts that yield generic results, our logic frameworks act as a neural blueprint. It forces the AI to reason through complex tasks with structured context, eliminating hallucinations and ensuring institutional-grade excellence."
+        icon: <Zap className="w-5 h-5 text-amber-500" />,
+        question: "How does the Predictive Sentiment engine work?",
+        answer: "Our engine utilizes advanced Natural Language Processing (NLP) to synthesize global market sentiment. By quantifying psychological shifts in the market, Clyve AI provides an objective scoring system that minimizes bias and enhances strategic decision-making."
     },
     {
         id: 3,
-        icon: <ShieldCheck className="w-5 h-5 text-green-500" />,
-        question: "Is my data and input secure?",
-        answer: "Absolutely. Clyve AI operates as a local-first logic layer. We do not store, track, or sell your private prompts or business data. Your engineering intelligence remains entirely yours."
+        icon: <ShieldCheck className="w-5 h-5 text-emerald-500" />,
+        question: "How secure is my proprietary analysis?",
+        answer: "Security is foundational to our architecture. Clyve AI employs industry-standard encryption for all queries. We do not store your private analysis history or sell your data to third parties. Your financial intelligence remains exclusively under your control."
     },
     {
         id: 4,
         icon: <Target className="w-5 h-5 text-violet-500" />,
-        question: "Who is the Professional tier for?",
-        answer: "It is engineered for founders, leaders, and high-level builders. This tier includes a full commercial license and advanced frameworks designed to scale business operations and automate high-stakes decision-making."
+        question: "Who is the Enterprise tier engineered for?",
+        answer: "The Enterprise tier is built for professional traders, fund managers, and institutional-level builders. This tier provides expanded credit limits, deeper data synthesis, and advanced modeling frameworks designed for high-stakes market environments."
     },
     {
         id: 5,
-        icon: <CreditCard className="w-5 h-5 text-zinc-200" />,
-        question: "Is this really a lifetime deal?",
-        answer: "Yes. Invest once, build forever. No hidden subscriptions or monthly fees. You get permanent access to the Clyve AI logic ecosystem and future updates with a single lifetime payment."
+        icon: <BarChart3 className="w-5 h-5 text-zinc-300" />,
+        question: "How does the Credit System function?",
+        answer: "Clyve AI operates on a transparent, subscription-based credit system. Each analysis request utilizes computational credits based on the depth of research and data processing required, ensuring you only pay for the intelligence you consume."
     }
 ];
 

@@ -19,7 +19,7 @@ export default function Header() {
     }, [isMobileMenuOpen]);
 
     const navLinks = [
-        { name: 'Mission', href: 'mission' },
+        { name: 'Blog', href: 'blog' },
         { name: 'Pricing', href: 'pricing' },
         { name: 'Community', href: 'https://www.instagram.com/clyveai/', external: true },
     ];
@@ -45,8 +45,8 @@ export default function Header() {
                             <Image
                                 src="/logo.svg"
                                 alt="Clyve AI Logo"
-                                width={16}
-                                height={16}
+                                width={22}
+                                height={22}
                                 className="object-contain"
                             />
                         </div>
@@ -131,7 +131,7 @@ export default function Header() {
                             className="mt-auto"
                         >
                             <Link
-                                href="/register"
+                                href="/login"
                                 onClick={() => setIsMobileMenuOpen(false)}
                                 className="flex w-full h-14 items-center justify-center gap-2 text-[15px] font-bold bg-[#121110] text-white rounded-2xl active:scale-[0.97] transition-all"
                             >

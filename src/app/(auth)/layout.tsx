@@ -6,23 +6,37 @@ export default function AuthLayout({ children }: { children: React.ReactNode }) 
   const shouldReduceMotion = useReducedMotion();
 
   return (
-    <div className="relative min-h-screen overflow-hidden bg-[#121110]">
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-500/20 blur-[130px]"
-        animate={shouldReduceMotion ? undefined : { opacity: [0.3, 0.6, 0.35], scale: [1, 1.08, 1] }}
-        transition={{ duration: 9, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
-      <motion.div
-        aria-hidden
-        className="pointer-events-none absolute -bottom-28 -right-24 h-96 w-96 rounded-full bg-amber-400/10 blur-[140px]"
-        animate={shouldReduceMotion ? undefined : { opacity: [0.2, 0.45, 0.25], scale: [1, 1.05, 1] }}
-        transition={{ duration: 11, repeat: Number.POSITIVE_INFINITY, ease: "easeInOut" }}
-      />
+    // Menggunakan bg-black murni agar pixel OLED mati total (hemat baterai & super smooth)
+    <div className="relative min-h-screen overflow-hidden bg-black selection:bg-white selection:text-black">
 
-      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-20 sm:px-6 sm:py-24">
-        {children}
-      </div>
+      {/* 
+        Elemen dekoratif di bawah ini telah disederhanakan:
+        - Blur dihapus karena menyebabkan lag GPU di mobile.
+        - Menggunakan opacity statis atau animasi transform-gpu yang sangat ringan.
+      */}
+      {!shouldReduceMotion && (
+        <>
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -left-24 -top-24 h-80 w-80 rounded-full bg-blue-900/5 transform-gpu"
+            animate={{ opacity: [0.1, 0.2, 0.1] }}
+            transition={{ duration: 8, repeat: Infinity, ease: "easeInOut" }}
+          />
+          <motion.div
+            aria-hidden
+            className="pointer-events-none absolute -bottom-28 -right-24 h-96 w-96 rounded-full bg-zinc-900/10 transform-gpu"
+            animate={{ opacity: [0.1, 0.15, 0.1] }}
+            transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
+          />
+        </>
+      )}
+
+      {/* Main Content Container */}
+      <main className="relative z-10 mx-auto flex min-h-screen w-full max-w-6xl items-center justify-center px-4 py-12 sm:px-6">
+        <div className="w-full flex justify-center">
+          {children}
+        </div>
+      </main>
     </div>
   );
 }

@@ -35,7 +35,7 @@ export const metadata: Metadata = {
     "Financial Automation",
     "Trading AI",
   ],
-  authors: [{ name: "Clyve AI Team", url: "https://clyve.ai" }],
+  authors: [{ name: "Clyve AI Team", url: "https://clyveai.com" }],
   creator: "Clyve AI",
   icons: {
     icon: "/logo.svg",
@@ -43,7 +43,7 @@ export const metadata: Metadata = {
   openGraph: {
     title: "Clyve AI | Professional Market Intelligence",
     description: "AI-powered market analysis for stocks and crypto",
-    url: "https://clyve.ai",
+    url: "https://clyveai.com",
     siteName: "Clyve AI",
     type: "website",
   },
@@ -52,6 +52,9 @@ export const metadata: Metadata = {
     title: "Clyve AI",
     description: "Professional-grade AI agent platform for market intelligence",
     creator: "@clyveai",
+  },
+  other: {
+    "preconnect": "https://fonts.googleapis.com",
   },
 }
 
@@ -88,8 +91,7 @@ export default function RootLayout({
         className={cn(
           geistSans.variable,
           geistMono.variable,
-          // font-sans memastikan Geist Sans jadi font utama di seluruh project
-          "min-h-screen bg-background-DEFAULT text-foreground-DEFAULT antialiased font-sans"
+          "min-h-screen bg-black text-white antialiased font-sans"
         )}
       >
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem>

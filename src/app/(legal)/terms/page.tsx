@@ -18,74 +18,80 @@ export default function TermsPage() {
                             Terms & Conditions
                         </h1>
                         <p className="text-zinc-400 text-base leading-relaxed max-w-2xl">
-                            These Terms & Conditions ("Terms") govern your use of <span className="text-white font-medium">Clyve AI</span>. By accessing our platform or purchasing our smart prompts, you agree to be bound by these Terms.
+                            These Terms & Conditions ("Terms") govern the professional use of <span className="text-white font-medium">Clyve AI</span>. By accessing our platform or utilizing our proprietary analytical tools, you agree to be bound by these formal protocols.
                         </p>
 
-                        {/* Last Updated with Icon */}
                         <div className="mt-4 flex items-center gap-2 text-[10px] font-medium text-zinc-600 uppercase tracking-[0.2em]">
                             <CalendarPlus size={12} strokeWidth={2.5} className="text-zinc-700" />
-                            <span>Last updated: April 20, 2026</span>
+                            <span>Effective Date: April 20, 2026</span>
                         </div>
                     </header>
 
-                    {/* Content Sections - Tight & Balanced Spacing */}
+                    {/* Content Sections */}
                     <div className="space-y-8 text-zinc-400 leading-relaxed text-sm md:text-base">
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">About Clyve AI</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. Scope of Service</h2>
                             <p>
-                                Clyve AI is a specialized platform providing advanced <span className="text-white">Smart Prompts</span>. Our products are engineered to significantly upgrade the reasoning, creativity, and efficiency of Large Language Models (LLMs) like Claude for professional-grade output.
+                                Clyve AI is a financial intelligence platform providing market sentiment analysis and predictive data modeling. All outputs are generated through advanced Large Language Models (LLMs) and structured datasets to support quantitative and qualitative research.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Accounts</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Financial Liability Disclaimer</h2>
                             <p>
-                                Access to our services is provided via Google or Apple ID authentication. You are solely responsible for maintaining the security of your account credentials and for all activities that occur under your identity.
+                                Clyve AI does not provide financial, investment, or legal advice. All data generated is for informational and educational purposes only. Users are solely responsible for their investment decisions. Clyve AI shall not be held liable for any financial losses or damages resulting from the use of the platform's analytical data.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Smart Prompts & Usage</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. Subscription & Resource Allocation</h2>
                             <p className="mb-2">
-                                Purchasing a product grants you a non-transferable, personal-use license. Given the proprietary nature of our digital assets, you agree:
+                                Access to Clyve AI is governed by a subscription-based credit system. Credits are utilized to process real-time market data and generate high-fidelity reports.
                             </p>
                             <ul className="space-y-1">
                                 <li className="flex gap-2 items-start">
                                     <span className="text-zinc-700">•</span>
-                                    <span>Not to redistribute, leak, or resell Clyve AI prompt formulas to any third party.</span>
+                                    <span>User accounts are strictly personal and non-transferable.</span>
                                 </li>
                                 <li className="flex gap-2 items-start">
                                     <span className="text-zinc-700">•</span>
-                                    <span>Not to use our prompts for illegal activities or in violation of AI safety guidelines.</span>
+                                    <span>Automated extraction (scraping) of Clyve AI’s proprietary data or interface is strictly prohibited.</span>
                                 </li>
                             </ul>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Payments & Refunds</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. Intellectual Property Rights</h2>
                             <p>
-                                All transactions are final. Since our products consist of digital intellectual property that is instantly accessible and replicable, we do not offer refunds once access to the prompt content has been granted.
+                                All analytical frameworks, system architectures, and interface designs are the exclusive intellectual property of Clyve AI. Unauthorized reproduction, reverse-engineering, or redistribution of the platform's internal logic is a direct violation of these Terms.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">Intellectual Property</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">5. Billing & Refund Policy</h2>
                             <p>
-                                All instruction architectures, prompt logic, and interface designs are the exclusive property of Clyve Labs. Reverse-engineering our delivery systems or prompt structures is strictly prohibited.
+                                Due to the immediate allocation of computational resources and the digital nature of the services provided, all transactions are final. Subscriptions can be managed or canceled at any time to avoid future billing cycles, but no refunds will be issued for processed payments.
                             </p>
                         </section>
 
-                        {/* Footer with Linked Instagram Accent */}
+                        <section>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">6. Compliance</h2>
+                            <p>
+                                Users agree to utilize Clyve AI in accordance with international financial regulations and AI safety guidelines. Any misuse that compromises the integrity of our infrastructure will result in immediate account termination.
+                            </p>
+                        </section>
+
+                        {/* Footer Section */}
                         <footer className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4 text-[10px] text-zinc-600 uppercase tracking-widest font-medium">
-                            <p>© 2026 Clyve Labs Pte. Ltd.</p>
+                            <p>© 2026 Clyve AI</p>
                             <p>
                                 Contact:{" "}
                                 <a
                                     href="https://instagram.com/clyveai"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-violet-500 font-bold hover:text-violet-400 transition-colors"
+                                    className="text-white font-bold hover:text-zinc-300 transition-colors"
                                 >
                                     @clyveai
                                 </a>

@@ -18,7 +18,7 @@ export default function PrivacyPage() {
                             Privacy Policy
                         </h1>
                         <p className="text-zinc-400 text-base leading-relaxed max-w-2xl">
-                            At <span className="text-white font-medium">Clyve AI</span>, we recognize that your prompts are your competitive advantage. This policy details our commitment to protecting your data and the strategic integrity of your workflows.
+                            At <span className="text-white font-medium">Clyve AI</span>, we recognize that your market analysis and trade queries are sensitive strategic assets. This policy details our commitment to securing your financial intelligence and the integrity of your data.
                         </p>
 
                         {/* Effective Date with Icon */}
@@ -28,54 +28,54 @@ export default function PrivacyPage() {
                         </div>
                     </header>
 
-                    {/* Content Sections - Tight & Balanced Spacing */}
+                    {/* Content Sections */}
                     <div className="space-y-8 text-zinc-400 leading-relaxed text-sm md:text-base">
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. Data Minimization</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. Data Minimization & Integrity</h2>
                             <p>
-                                We operate on a principle of data minimization. We only collect essential information required for account authentication (email via Google/Apple) and secure payment processing. Clyve AI does not have access to, nor do we store, the proprietary data you input into third-party AI models.
+                                We operate on a strict principle of data minimization. We only collect essential information for account authentication and secure subscription management. Clyve AI does not store the specific financial datasets or proprietary ticker symbols you analyze beyond the duration of your active session unless explicitly requested for your history.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Prompt Confidentiality</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Query Confidentiality</h2>
                             <p>
-                                Your creative and technical application of our <span className="text-white">Smart Prompts</span> is strictly confidential. We do not monitor, log, or train internal models on the specific results or modifications you make to the prompts within your local environment.
+                                Your market inquiries and the resulting <span className="text-white">Predictive Insights</span> are strictly confidential. We do not monitor, sell, or train our internal models on your individual search patterns or sentiment queries. Your strategic "edge" remains exclusively yours.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. Protection of Strategic Assets</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. Protection of Financial Intelligence</h2>
                             <p>
-                                We understand that how you use AI is part of your professional "know-how." All account-related data is encrypted using industry-standard protocols. Our infrastructure is built to ensure that your purchase history and account details remain inaccessible to unauthorized entities.
+                                We understand that market research is part of your professional know-how. All interaction data is encrypted using industry-standard AES-256 protocols. Our infrastructure ensures that your analysis history and account tier details remain inaccessible to unauthorized third parties.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. Third-Party Ecosystems</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. AI Engine Ecosystem</h2>
                             <p>
-                                Clyve AI provides the "logic" (prompts), but the "engine" (LLMs like Claude or GPT) is provided by third parties. Your interactions with these engines are subject to their respective privacy policies. We recommend reviewing the data retention settings of the AI providers you utilize.
+                                Clyve AI serves as the intelligence layer, while the underlying processing is powered by secure Large Language Models (LLMs). Your data is passed through encrypted APIs to these engines for real-time synthesis. We ensure that our enterprise-grade API agreements prevent your data from being used for generic model training by third-party providers.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">5. Control & Erasure</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">5. Sovereignty & Deletion</h2>
                             <p>
-                                You maintain absolute ownership of your account data. You may request a full export or permanent deletion of your account at any time. Upon request, all associated data will be purged from our active systems within 30 days.
+                                You maintain absolute sovereignty over your account data. You may request a full export of your analysis history or permanent deletion of your profile at any time. Upon execution, all associated records will be purged from our active high-security servers within 30 days.
                             </p>
                         </section>
 
-                        {/* Footer with Linked Instagram Accent */}
+                        {/* Footer Section */}
                         <footer className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4 text-[10px] text-zinc-600 uppercase tracking-widest font-medium">
-                            <p>© 2026 Clyve Labs Pte. Ltd.</p>
+                            <p>© 2026 Clyve AI</p>
                             <p>
                                 Contact:{" "}
                                 <a
                                     href="https://instagram.com/clyveai"
                                     target="_blank"
                                     rel="noopener noreferrer"
-                                    className="text-violet-500 font-bold hover:text-violet-400 transition-colors"
+                                    className="text-white font-bold hover:text-zinc-300 transition-colors"
                                 >
                                     @clyveai
                                 </a>
