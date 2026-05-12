@@ -136,7 +136,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             value={email}
             onChange={(event) => setEmail(event.target.value)}
             placeholder="Email address"
-            className="h-11 w-full rounded-xl border border-transparent bg-white/[0.02] px-4 text-sm text-white placeholder:text-zinc-500 outline-none ring-1 ring-white/10 transition will-change-transform focus:bg-white/[0.03] focus:ring-2 focus:ring-[#72a7ff] focus:shadow-[0_0_26px_rgba(95,157,255,0.24)]"
+            className="h-11 w-full rounded-xl border border-transparent bg-white/[0.02] px-4 text-sm text-white placeholder:text-zinc-500 outline-none ring-1 ring-white/10 transition will-change-transform focus:bg-white/[0.03] focus:ring-2 focus:ring-white/80 focus:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
           />
           <input
             type="password"
@@ -145,7 +145,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
             value={password}
             onChange={(event) => setPassword(event.target.value)}
             placeholder="Password"
-            className="h-11 w-full rounded-xl border border-transparent bg-white/[0.02] px-4 text-sm text-white placeholder:text-zinc-500 outline-none ring-1 ring-white/10 transition will-change-transform focus:bg-white/[0.03] focus:ring-2 focus:ring-[#72a7ff] focus:shadow-[0_0_26px_rgba(95,157,255,0.24)]"
+            className="h-11 w-full rounded-xl border border-transparent bg-white/[0.02] px-4 text-sm text-white placeholder:text-zinc-500 outline-none ring-1 ring-white/10 transition will-change-transform focus:bg-white/[0.03] focus:ring-2 focus:ring-white/80 focus:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
           />
 
           {errorMessage ? <p className="text-sm text-red-300">{errorMessage}</p> : null}
