@@ -2,8 +2,8 @@
 
 import { useState } from "react"
 import { AnimatePresence, motion, type Variants } from "framer-motion"
-import { Check, Copy } from "lucide-react"
-import { type ExclusiveCategory, UNIVERSAL_PREFERENCE_PROMPT } from "@/constants/blog-data"
+import { Check, Copy, Settings } from "lucide-react"
+import { type ExclusiveCategory, UNIVERSAL_PREFERENCE_PROMPT } from "@/constants/skills-data"
 
 interface ExclusiveBlogClientProps {
   categories: Record<string, ExclusiveCategory>
@@ -70,7 +70,7 @@ function PromptBlock({
   return (
     <div className="space-y-3">
       <h3 className="text-sm font-medium text-zinc-400">{label}</h3>
-      
+
       <div className="group relative rounded-xl border border-white/10 bg-[#0a0a0a] p-4 md:p-5 transition-colors hover:border-white/20">
         <div className="absolute right-3 top-3">
           <CopyButton
@@ -80,7 +80,7 @@ function PromptBlock({
             onCopy={handleCopy}
           />
         </div>
-        
+
         {/* pr-20 agar teks tidak tertimpa tombol copy */}
         <p className="whitespace-pre-wrap break-words font-mono text-sm leading-relaxed text-zinc-300 selection:bg-zinc-800 selection:text-white pr-20 mt-6 md:mt-0">
           {content}
@@ -114,9 +114,6 @@ export default function ExclusiveBlogClient({ categories }: ExclusiveBlogClientP
     <section className="mx-auto w-full max-w-4xl px-6 pb-24 pt-32 md:pt-40 font-sans selection:bg-white/20">
       {hasMultiAccess && (
         <div className="mb-8 flex flex-col gap-3 md:mb-10 md:flex-row md:items-center md:justify-between">
-          <p className="text-center text-xs uppercase tracking-[0.2em] text-zinc-500 md:text-left">
-            Professional Access Scope
-          </p>
           <div className="relative w-full md:w-auto">
             <div className="pointer-events-none absolute inset-0 overflow-hidden rounded-2xl">
               <AnimatePresence mode="wait">
@@ -157,47 +154,46 @@ export default function ExclusiveBlogClient({ categories }: ExclusiveBlogClientP
             </div>
 
             <div className="glass-dark hide-scrollbar relative flex w-full items-center gap-1 overflow-x-auto rounded-2xl border border-[var(--border-color)] p-1 md:w-auto md:rounded-full">
-            {categoryKeys.map((key) => {
-              const item = categories[key]
-              const isActive = key === activeCategoryKey
+              {categoryKeys.map((key) => {
+                const item = categories[key]
+                const isActive = key === activeCategoryKey
 
-              return (
-                <button
-                  key={key}
-                  type="button"
-                  onClick={() => {
-                    if (key !== activeCategoryKey) {
-                      setActiveCategoryKey(key)
-                      setSwitchPulse((current) => current + 1)
-                    }
-                  }}
-                  className={`relative min-w-[112px] rounded-xl px-4 py-2.5 text-xs font-medium uppercase tracking-[0.12em] transition md:min-w-[124px] md:rounded-full ${
-                    isActive ? "text-black" : "text-zinc-400 hover:text-white"
-                  }`}
-                >
-                  {isActive && (
-                    <motion.span
-                      layoutId="active-category-bubble"
-                      transition={{ type: "spring", stiffness: 360, damping: 30, mass: 0.7 }}
-                      className="absolute inset-0 rounded-xl bg-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] md:rounded-full"
-                    />
-                  )}
-                  <span className="relative z-10">{item.title}</span>
-                </button>
-              )
-            })}
+                return (
+                  <button
+                    key={key}
+                    type="button"
+                    onClick={() => {
+                      if (key !== activeCategoryKey) {
+                        setActiveCategoryKey(key)
+                        setSwitchPulse((current) => current + 1)
+                      }
+                    }}
+                    className={`relative min-w-[112px] rounded-xl px-4 py-2.5 text-xs font-medium uppercase tracking-[0.12em] transition md:min-w-[124px] md:rounded-full ${isActive ? "text-black" : "text-zinc-400 hover:text-white"
+                      }`}
+                  >
+                    {isActive && (
+                      <motion.span
+                        layoutId="active-category-bubble"
+                        transition={{ type: "spring", stiffness: 360, damping: 30, mass: 0.7 }}
+                        className="absolute inset-0 rounded-xl bg-white shadow-[0_0_0_1px_rgba(255,255,255,0.18)] md:rounded-full"
+                      />
+                    )}
+                    <span className="relative z-10">{item.title}</span>
+                  </button>
+                )
+              })}
             </div>
           </div>
         </div>
       )}
-      
+
       {/* Header Section */}
       <div className="mb-12 border-b border-white/10 pb-8 text-center md:text-left">
         <p className="mb-4 text-xs font-bold uppercase tracking-[0.2em] text-zinc-500">
           Welcome to
         </p>
         <h1 className="text-4xl font-bold tracking-tighter text-white md:text-6xl">
-          {category.title} <span className="text-zinc-600 font-light italic">Portal.</span>
+          Claude Skills <span className="text-zinc-600 font-light italic">Portal.</span>
         </h1>
       </div>
 
@@ -210,24 +206,29 @@ export default function ExclusiveBlogClient({ categories }: ExclusiveBlogClientP
         {/* Settings 1 */}
         <div>
           <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-4 border-b border-white/5 pb-4">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-mono text-zinc-400">01</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-mono text-zinc-400"><Settings /></span>
             Settings 1
           </h3>
           <div className="space-y-8 pl-0 md:pl-12">
-            <p className="text-sm text-zinc-400">
-              Bagian di bawah ini ada di: <span className="font-bold text-zinc-300 bg-white/5 px-2 py-1 rounded">account → settings → general</span>
+            <p className="text-sm text-zinc-400 leading-relaxed flex flex-wrap items-center gap-2">
+              Follow these steps, go to:
+              <span className="font-medium text-zinc-200">Account</span>
+              <span>→</span>
+              <span className="font-medium text-zinc-200">Settings</span>
+              <span>→</span>
+              <span className="font-medium text-zinc-200">General</span>
             </p>
-            
+
             <div className="space-y-3">
-              <p className="text-base font-medium text-white">What best describes your work?</p>
+              <p className="text-base font-medium text-zinc-200">What best describes your work?</p>
               <p className="text-sm text-zinc-400">
-                Pilih <strong className="text-white">Other</strong> atau sesuaikan dengan <strong className="text-white">Profesi</strong> kalian.
+                Select <strong className="text-zinc-200">Other</strong> or choose the option that best matches your <strong className="text-zinc-200">Profession</strong>
               </p>
             </div>
 
             <div className="space-y-4">
-              <p className="text-base font-medium text-white">What personal preferences should Claude consider in responses?</p>
-              <PromptBlock 
+              <p className="text-base font-medium text-zinc-200">What personal preferences should Claude consider in responses?</p>
+              <PromptBlock
                 label="Use this smart prompt"
                 content={UNIVERSAL_PREFERENCE_PROMPT}
                 blockId="universal-prompt"
@@ -241,21 +242,31 @@ export default function ExclusiveBlogClient({ categories }: ExclusiveBlogClientP
         {/* Settings 2 */}
         <div>
           <h3 className="text-xl font-semibold text-white mb-6 flex items-center gap-4 border-b border-white/5 pb-4">
-            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-mono text-zinc-400">02</span>
+            <span className="flex h-8 w-8 items-center justify-center rounded-full border border-white/10 bg-white/5 text-xs font-mono text-zinc-400"><Settings /></span>
             Settings 2
           </h3>
           <div className="space-y-4 pl-0 md:pl-12">
-            <p className="text-sm text-zinc-400 leading-relaxed">
-              Masuk ke → <span className="font-bold text-zinc-300 bg-white/5 px-2 py-1 rounded">settings → capabilities</span> → scroll paling bawah lalu pilih → <span className="font-bold text-zinc-300 bg-white/5 px-2 py-1 rounded">skills → go to customize.</span>
+            <p className="text-sm text-zinc-400 leading-relaxed flex flex-wrap items-center gap-2">
+              Go to
+              <span>→</span>
+              <span className="font-medium text-zinc-200">Settings</span>
+              <span>→</span>
+              <span className="font-medium text-zinc-200">Capabilities</span>
+              <span>→</span>
+              <span className="font-medium text-zinc-200">Scroll to the bottom and Select</span>
+              <span>→</span>
+              <span className="font-medium text-zinc-200">Skills</span>
+              <span>→</span>
+              <span className="font-medium text-zinc-200">Then Customize</span>
             </p>
 
-            <p className="text-sm text-zinc-400 leading-relaxed flex flex-wrap items-center gap-2"> Setelah itu pilih icon <span className="flex h-6 w-6 items-center justify-center rounded border border-white/20 bg-white/5 text-white font-bold">+</span> 
-            <span>→</span> <span className="font-medium text-zinc-200">Create skill</span> 
-            <span>→</span> <span className="font-medium text-zinc-200">Write skill instructions</span>
+            <p className="text-sm text-zinc-400 leading-relaxed flex flex-wrap items-center gap-2"> Then select the icon <span className="flex h-6 w-6 items-center justify-center rounded border border-white/20 bg-white/5 text-white font-bold">+</span>
+              <span>→</span> <span className="font-medium text-zinc-200">Create skill</span>
+              <span>→</span> <span className="font-medium text-zinc-200">Write skill instructions</span>
             </p>
 
             <p className="text-sm text-zinc-500 italic">
-              *Copy dan paste masing-masing bagian Skill di bawah ini ke form yang tersedia.
+              *Copy and paste each section of the Skills below into the form provided.
             </p>
           </div>
         </div>
@@ -278,11 +289,11 @@ export default function ExclusiveBlogClient({ categories }: ExclusiveBlogClientP
               className="relative"
             >
               {/* Skill Module Identifier */}
-              <div className="mb-8 flex items-start md:items-center gap-4">
-                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-violet-500/10 text-violet-500 font-mono text-sm font-bold">
+              <div className="mb-8 flex items-center gap-4">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-zinc-500/10 text-zinc-400 font-mono text-sm font-bold border border-white/5">
                   {number}
                 </span>
-                <h2 className="text-xl font-semibold tracking-widest uppercase text-white opacity-80">
+                <h2 className="text-medium font-semibold tracking-widest uppercase text-white opacity-80 leading-none">
                   Skill Module
                 </h2>
               </div>

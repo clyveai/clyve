@@ -1,7 +1,7 @@
 'use client';
 
 import React, { useState } from 'react';
-import { motion } from 'framer-motion';
+import { motion, AnimatePresence } from 'framer-motion';
 import { Check, Sparkles } from 'lucide-react';
 
 const tiers = [
@@ -11,6 +11,7 @@ const tiers = [
         description: 'Essential market intelligence for individual traders and analysts.',
         monthlyPrice: 199000,
         annualTotal: 1990000,
+        annualMonthlyPromo: 149000,
         features: [
             'Real-time market sentiment analysis',
             'Basic predictive signal alerts',
@@ -27,6 +28,7 @@ const tiers = [
         description: 'Advanced predictive tools for professional market execution.',
         monthlyPrice: 599000,
         annualTotal: 5990000,
+        annualMonthlyPromo: 249000,
         features: [
             'Full LLM-driven financial insights',
             'Unlimited asset monitoring',
@@ -66,6 +68,7 @@ export default function Pricing() {
 
     return (
         <section id="pricing" className="relative pt-32 pb-24 bg-[var(--bg-primary)] overflow-hidden">
+            {/* Ambient Background Effect */}
             <div className="absolute inset-0 w-full h-full pointer-events-none">
                 <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-white/[0.02] blur-[120px] rounded-full" />
             </div>
@@ -92,7 +95,7 @@ export default function Pricing() {
                         <p className="text-sm opacity-80">Credits never expire. No hidden fees.</p>
                     </motion.div>
 
-                    {/* Toggle */}
+                    {/* Toggle Switch */}
                     <div className="flex flex-col items-center gap-4 mt-8">
                         <motion.div
                             initial={{ opacity: 0, scale: 0.95 }}
@@ -124,24 +127,30 @@ export default function Pricing() {
                             </div>
                         </motion.div>
 
-                        {/* Saving Badge with subtle pulse */}
                         <div className="h-6">
-                            {isAnnual && (
-                                <motion.div
-                                    initial={{ opacity: 0, y: -10 }}
-                                    animate={{ opacity: 1, y: 0 }}
-                                    className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]"
-                                >
-                                    Save up to 17% Yearly
-                                </motion.div>
-                            )}
+                            <AnimatePresence mode="wait">
+                                {isAnnual && (
+                                    <motion.div
+                                        key="promo-badge"
+                                        initial={{ opacity: 0, y: -10 }}
+                                        animate={{ opacity: 1, y: 0 }}
+                                        exit={{ opacity: 0, y: -10 }}
+                                        className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]"
+                                    >
+                                        Save up to 25% Yearly
+                                    </motion.div>
+                                )}
+                            </AnimatePresence>
                         </div>
                     </div>
                 </div>
 
+                {/* Pricing Grid */}
                 <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
                     {tiers.map((tier, index) => {
-                        const displayPrice = isAnnual ? (tier.annualTotal / 12) : tier.monthlyPrice;
+                        const displayPrice = isAnnual && tier.annualMonthlyPromo
+                            ? tier.annualMonthlyPromo
+                            : tier.monthlyPrice;
 
                         return (
                             <motion.div
@@ -165,36 +174,54 @@ export default function Pricing() {
                                 </div>
 
                                 <div className="mb-8 flex flex-col">
-                                    <div className="flex items-baseline text-[var(--fg-primary)]">
+                                    {/* tabular-nums mencegah layout shift saat angka berganti */}
+                                    <div className="flex items-baseline text-[var(--fg-primary)] tabular-nums">
                                         <span className="text-3xl font-bold tracking-tighter">
-                                            {formatPrice(displayPrice)}
+                                            {tier.id === 'tier-enterprise' ? 'Custom' : formatPrice(displayPrice)}
                                         </span>
-                                        <span className="text-sm text-[var(--fg-secondary)] ml-2 font-medium">/mo</span>
+                                        {tier.id !== 'tier-enterprise' && (
+                                            <span className="text-sm text-[var(--fg-secondary)] ml-2 font-medium">/mo</span>
+                                        )}
                                     </div>
 
-                                    {isAnnual && (
-                                        <span className="text-[11px] text-[var(--fg-secondary)] mt-2 font-medium italic opacity-80">
-                                            Billed as {formatPrice(tier.annualTotal)} / year
-                                        </span>
+                                    {isAnnual && tier.id !== 'tier-enterprise' && (
+                                        <motion.span
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 0.6 }}
+                                            className="text-[11px] text-[var(--fg-secondary)] mt-2 font-medium italic"
+                                        >
+                                            Billed annually at {formatPrice(tier.annualTotal)}
+                                        </motion.span>
                                     )}
                                 </div>
 
                                 <ul className="flex-1 space-y-4 mb-10">
                                     {tier.features.map((feature) => (
                                         <li key={feature} className="flex items-start gap-3 text-sm text-[var(--fg-secondary)]">
-                                            <div className="mt-1 bg-white/10 rounded-full p-0.5">
+                                            <div className="mt-1 bg-white/10 rounded-full p-0.5 flex-shrink-0">
                                                 <Check className="w-3.5 h-3.5 text-[var(--fg-primary)]" />
                                             </div>
-                                            <span>{feature}</span>
+                                            <span className="leading-tight">{feature}</span>
                                         </li>
                                     ))}
                                 </ul>
 
-                                <button
-                                    className={`w-full !rounded-full !py-4 transition-transform active:scale-95 font-bold text-sm tracking-wide ${tier.mostPopular ? 'btn-primary' : 'btn-secondary'}`}
-                                >
-                                    {tier.ctaText}
-                                </button>
+                                {/* Action Button with Overlay */}
+                                <div className="relative group overflow-hidden rounded-full">
+                                    <button
+                                        type="button"
+                                        className={`w-full py-4 font-bold text-sm tracking-wide transition-all opacity-40 cursor-default ${tier.mostPopular ? 'btn-primary' : 'btn-secondary'}`}
+                                    >
+                                        {tier.ctaText}
+                                    </button>
+
+                                    {/* Hover Overlay: Mengomunikasikan status waitlist secara visual */}
+                                    <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
+                                        <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white bg-white/10 border border-white/20 px-4 py-1.5 rounded-full shadow-2xl">
+                                            Join Waitlist
+                                        </span>
+                                    </div>
+                                </div>
                             </motion.div>
                         );
                     })}

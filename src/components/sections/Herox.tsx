@@ -2,12 +2,19 @@
 
 import { motion } from "framer-motion";
 import Link from "next/link";
+import { DottedSurface } from "@/components/ui/dotted-surface";
 
 const navLinks = ["Explore", "Collections", "Activity", "Features", "Community"];
 
 export default function Herox() {
     return (
         <section className="relative min-h-screen w-full bg-[#030303] text-white overflow-hidden selection:bg-white/20">
+
+            {/* 1. Dotted Surface Background Layer */}
+            <div className="absolute inset-0 z-0">
+                <DottedSurface />
+            </div>
+
             {/* Background Wavy Lines & Gradient Glow */}
             <div className="absolute inset-0 z-0 pointer-events-none">
                 <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-[500px] bg-[radial-gradient(ellipse_at_top,_var(--tw-gradient-stops))] from-white/[0.05] via-transparent to-transparent" />
@@ -77,20 +84,20 @@ export default function Herox() {
                     The Intelligence Layer <br /> for Traders.
                 </motion.h1>
 
-                {/* CTA Button - Ditambahkan dengan style rounded (rounded-full) */}
-                <Link href="/pricing">
+                {/* CTA Button */}
+                <Link href="/register">
                     <motion.button
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
-                        transition={{ duration: 0.8, delay: 0.2, ease: "easeOut" }}
-                        className="mt-20 px-10 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-all active:scale-95 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.1)]"
+                        transition={{ duration: 0.5, delay: 0.2, ease: "easeOut" }}
+                        className="mt-10 px-10 py-4 bg-white text-black font-bold rounded-full hover:bg-gray-200 transition-all active:scale-95 cursor-pointer shadow-[0_0_20px_rgba(255,255,255,0.1)]"
                     >
-                        Get Access
+                        Join Waitlist
                     </motion.button>
                 </Link>
 
                 {/* NFT Cards Presentation */}
-                <div className="relative mt-24 flex justify-center items-end h-[500px] w-full max-w-4xl">
+                <div className="relative mt-10 flex justify-center items-end h-[450px] w-full max-w-4xl">
 
                     {/* Card 1 (Left) */}
                     <motion.div
@@ -101,9 +108,14 @@ export default function Herox() {
                             rotate: -5,
                             y: 10,
                             zIndex: 50,
-                            transition: { type: "spring", stiffness: 300, damping: 20 }
                         }}
-                        transition={{ duration: 0.8, delay: 0.2, type: "spring" }}
+                        // Transisi spring yang lebih cepat & ringan
+                        transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 30,
+                            mass: 0.8
+                        }}
                         className="absolute z-10 w-[300px] h-[400px] rounded-[2rem] p-6 bg-gradient-to-br from-[#70d6ff] to-[#000000] shadow-2xl flex flex-col justify-between overflow-hidden group cursor-pointer"
                     >
                         <CardHeader />
@@ -120,9 +132,13 @@ export default function Herox() {
                             scale: 1.05,
                             y: -20,
                             zIndex: 50,
-                            transition: { type: "spring", stiffness: 300, damping: 20 }
                         }}
-                        transition={{ duration: 0.8, delay: 0.4, type: "spring" }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 30,
+                            mass: 0.8
+                        }}
                         className="relative z-30 w-[320px] h-[440px] rounded-[2rem] p-6 bg-gradient-to-b from-[#ffffff] via-[#ffe5d9] to-[#000000] shadow-[0_30px_60px_rgba(0,0,0,0.5)] flex flex-col justify-between overflow-hidden group cursor-pointer"
                     >
                         <CardHeader />
@@ -139,9 +155,13 @@ export default function Herox() {
                             rotate: 5,
                             y: -10,
                             zIndex: 50,
-                            transition: { type: "spring", stiffness: 300, damping: 20 }
                         }}
-                        transition={{ duration: 0.8, delay: 0.3, type: "spring" }}
+                        transition={{
+                            type: "spring",
+                            stiffness: 400,
+                            damping: 30,
+                            mass: 0.8
+                        }}
                         className="absolute z-20 w-[300px] h-[400px] rounded-[2rem] p-6 bg-gradient-to-br from-[#8338ec] to-[#000000] shadow-2xl flex flex-col justify-between overflow-hidden group cursor-pointer"
                     >
                         <CardHeader />
@@ -149,7 +169,6 @@ export default function Herox() {
                         <div className="absolute bottom-0 left-1/2 -translate-x-1/2 w-48 h-48 bg-black-400/60 rounded-full blur-xl group-hover:scale-110 transition-transform duration-500" />
                         <img src="/assets/vrtn.png" alt="3d avatar" className="absolute bottom-0 left-1/2 -translate-x-1/2 w-56 h-56 object-cover mix-blend-overlay rounded-full" />
                     </motion.div>
-
                 </div>
             </div>
         </section>

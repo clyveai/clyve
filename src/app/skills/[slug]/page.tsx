@@ -1,8 +1,8 @@
 import { notFound } from "next/navigation"
-import ExclusiveBlogClient from "@/components/blog/ExclusiveBlogClient"
-import { EXCLUSIVE_CONTENT, type SecretSlug } from "@/constants/blog-data"
+import ExclusiveSkillsClient from "@/components/skills/ExclusiveSkillsClient"
+import { EXCLUSIVE_CONTENT, type SecretSlug } from "@/constants/skills-data"
 
-interface BlogSlugPageProps {
+interface SkillsSlugPageProps {
   params: Promise<{
     slug: string
   }>
@@ -12,7 +12,7 @@ function isSecretSlug(slug: string): slug is SecretSlug {
   return slug in EXCLUSIVE_CONTENT
 }
 
-export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
+export default async function SkillsSlugPage({ params }: SkillsSlugPageProps) {
   const { slug } = await params
 
   if (!isSecretSlug(slug)) {
@@ -27,5 +27,5 @@ export default async function BlogSlugPage({ params }: BlogSlugPageProps) {
     categories.current = EXCLUSIVE_CONTENT[slug]
   }
 
-  return <ExclusiveBlogClient categories={categories} />
+  return <ExclusiveSkillsClient categories={categories} />
 }

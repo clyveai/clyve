@@ -21,7 +21,7 @@ export default function Header() {
     }, [isMobileMenuOpen]);
 
     const navLinks = [
-        { name: 'Blog', href: 'blog' },
+        { name: 'Skills', href: 'skills' },
         { name: 'Pricing', href: 'pricing' },
         { name: 'Community', href: 'https://www.instagram.com/iamzeiyn/', external: true },
     ];
@@ -50,6 +50,9 @@ export default function Header() {
                             <Link
                                 key={link.name}
                                 href={link.href}
+                                // Tambahkan baris di bawah ini
+                                target={link.external ? "_blank" : undefined}
+                                rel={link.external ? "noopener noreferrer" : undefined}
                                 className="text-[13.5px] font-bold text-[#45403a] hover:text-black px-5 py-2 rounded-full hover:bg-black/5 transition-all"
                             >
                                 {link.name}
