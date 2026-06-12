@@ -1,6 +1,6 @@
 import { and, eq } from "drizzle-orm";
 import { headers } from "next/headers";
-import { NextResponse } from "next/server";
+import { NextRequest, NextResponse } from "next/server";
 import { auth } from "@/lib/auth";
 import { db } from "@/lib/db";
 import { researchHistory } from "@/lib/db/schema";
@@ -11,8 +11,8 @@ async function getCurrentSession() {
 }
 
 export async function DELETE(
-  request: Request,
-  { params }: { params: { id: string } },
+  request: NextRequest,
+  context: { params: Promise<{ id: string }> },
 ) {
   const session = await getCurrentSession();
 
@@ -21,23 +21,25 @@ export async function DELETE(
   }
 
   try {
-    const { id } = params;
+    // Next.js 16 asinkronus params resolution
+    const { id } = await context.params;
 
-    // Verify the entry belongs to the current user
-    const entry = await db
+    // Optimasi: Ambil data spesifik & jalankan verifikasi kepemilikan data sekaligus
+    const [entry] = await db
       .select({ userId: researchHistory.userId })
       .from(researchHistory)
       .where(eq(researchHistory.id, id))
       .limit(1);
 
-    if (entry.length === 0) {
+    if (!entry) {
       return NextResponse.json({ message: "Not found" }, { status: 404 });
     }
 
-    if (entry[0].userId !== session.user.id) {
+    if (entry.userId !== session.user.id) {
       return NextResponse.json({ message: "Forbidden" }, { status: 403 });
     }
 
+    // Eksekusi penghapusan berbasis ID dan user ID terverifikasi
     await db
       .delete(researchHistory)
       .where(
