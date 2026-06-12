@@ -8,6 +8,13 @@
       "when": 1777112649582,
       "tag": "0000_absurd_warlock",
       "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "7",
+      "when": 1780758733082,
+      "tag": "0001_cloudy_eternity",
+      "breakpoints": true
     }
   ]
 }

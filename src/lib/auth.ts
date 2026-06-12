@@ -26,10 +26,15 @@ export const auth = betterAuth({
   socialProviders:
     googleClientId && googleClientSecret
       ? {
-          google: {
-            clientId: googleClientId,
-            clientSecret: googleClientSecret,
-          },
-        }
+        google: {
+          clientId: googleClientId,
+          clientSecret: googleClientSecret,
+        },
+      }
       : {},
+  user: {
+    deleteUser: {
+      enabled: true,
+    },
+  },
 });

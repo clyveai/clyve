@@ -2,7 +2,7 @@ import { getSessionCookie } from "better-auth/cookies";
 import { NextResponse, type NextRequest } from "next/server";
 
 const protectedPrefixes = ["/dashboard"];
-const authOnlyPages = new Set(["/login", "/register"]);
+const authOnlyPages = new Set(["/login", "/signup"]);
 
 export function middleware(request: NextRequest) {
   const { pathname } = request.nextUrl;
@@ -26,5 +26,5 @@ export function middleware(request: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*", "/login", "/register"],
+  matcher: ["/dashboard/:path*", "/login", "/signup"],
 };

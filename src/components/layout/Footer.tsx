@@ -45,16 +45,16 @@ export default function Footer() {
 
                 {/* CTA Button */}
                 <button className="relative group cursor-pointer">
-                    {/* <Link href="/dashboard" className="relative group inline-block cursor-pointer"> */}
-                    {/* Button Glow Behind */}
-                    <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-500 rounded-full blur-md opacity-40 group-hover:opacity-70 transition duration-500" />
+                    <Link href="/dashboard" className="relative group inline-block cursor-pointer">
+                        {/* Button Glow Behind */}
+                        <div className="absolute -inset-1 bg-gradient-to-r from-orange-600 to-red-500 rounded-full blur-md opacity-40 group-hover:opacity-70 transition duration-500" />
 
-                    {/* Button Body */}
-                    <div className="relative flex items-center gap-2.5 bg-gradient-to-b from-[#FF5100] to-[#E63E00] hover:from-[#FF611A] hover:to-[#FF4500] text-white px-7 py-2.5 rounded-full font-medium transition-all duration-300 shadow-inner shadow-white/20">
-                        <span className="text-[15px] tracking-wide">Try It Now</span>
-                        <Moon className="w-[18px] h-[18px] fill-white mb-[2px]" />
-                    </div>
-                    {/* </Link> */}
+                        {/* Button Body */}
+                        <div className="relative flex items-center gap-2.5 bg-gradient-to-b from-[#FF5100] to-[#E63E00] hover:from-[#FF611A] hover:to-[#FF4500] text-white px-7 py-2.5 rounded-full font-medium transition-all duration-300 shadow-inner shadow-white/20">
+                            <span className="text-[15px] tracking-wide">Try It Now</span>
+                            <Moon className="w-[18px] h-[18px] fill-white mb-[2px]" />
+                        </div>
+                    </Link>
                 </button>
             </motion.div>
 
@@ -77,8 +77,10 @@ export default function Footer() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-transparent to-transparent z-10" />
             </motion.div>
 
-            {/* === Bottom Links & Copyright (Static - No Animation) === */}
+            {/* === Bottom Links, Socials & Copyright (Static - No Animation) === */}
             <div className="relative z-20 flex flex-col md:flex-row items-center justify-between w-full max-w-7xl px-6 mt-10 text-sm font-medium text-[#71717a]">
+
+                {/* Legal Links */}
                 <div className="flex items-center gap-6 mb-4 md:mb-0">
                     <Link href="/privacy" className="hover:text-white transition-colors duration-300">
                         Privacy
@@ -89,6 +91,23 @@ export default function Footer() {
                     </Link>
                 </div>
 
+                {/* Social Media Links */}
+                <div className="flex items-center gap-6 mb-4 md:mb-0">
+                    <Link href="https://www.threads.com/@clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
+                        Threads
+                    </Link>
+                    <Link href="https://instagram.com/clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
+                        Instagram
+                    </Link>
+                    <Link href="https://linkedin.com/company/clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
+                        LinkedIn
+                    </Link>
+                    <Link href="https://youtube.com/@clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
+                        YouTube
+                    </Link>
+                </div>
+
+                {/* Copyright */}
                 <p className="tracking-wide">
                     © {new Date().getFullYear()} Clyve AI. All rights reserved.
                 </p>

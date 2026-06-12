@@ -8,7 +8,7 @@ import { motion, useReducedMotion, MotionProps } from "framer-motion";
 import { Loader2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
 
-type AuthMode = "login" | "register";
+type AuthMode = "login" | "signup";
 
 type AuthFormProps = {
   mode: AuthMode;
@@ -61,7 +61,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
         });
 
         if (response.error) {
-          throw new Error(response.error.message ?? "Unable to register.");
+          throw new Error(response.error.message ?? "Unable to signup.");
         }
       }
 
@@ -105,7 +105,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
           className="block transition-transform hover:scale-105 active:scale-95"
         >
           <Image
-            src="/logo-long.svg"
+            src="/logo-auth.svg"
             alt="Logo"
             width={48}
             height={48}
@@ -125,8 +125,8 @@ export default function AuthForm({ mode }: AuthFormProps) {
         </h1>
         <p className="mt-2 text-sm leading-relaxed text-zinc-400">
           {isLogin
-            ? "Back in the loop. Sentiment is ready."
-            : "Early access. Build your market intelligence."}
+            ? "Back in the loop. Research intelligence is ready."
+            : "Early access. Structure your equity research."}
         </p>
 
         <form onSubmit={handleEmailAuth} className="mt-7 space-y-3.5">
@@ -176,7 +176,7 @@ export default function AuthForm({ mode }: AuthFormProps) {
 
         <p className="mt-6 text-center text-sm text-zinc-400">
           {isLogin ? "No account yet?" : "Already have an account?"}{" "}
-          <Link href={isLogin ? "/register" : "/login"} className="font-medium text-white">
+          <Link href={isLogin ? "/signup" : "/login"} className="font-medium text-white">
             {isLogin ? "Sign up" : "Sign in"}
           </Link>
         </p>

@@ -85,7 +85,7 @@ export default function Herox() {
                 </motion.h1>
 
                 {/* CTA Button */}
-                <Link href="/register">
+                <Link href="/signup">
                     <motion.button
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}

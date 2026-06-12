@@ -38,7 +38,7 @@ export const metadata: Metadata = {
   authors: [{ name: "Clyve AI Team", url: "https://clyveai.com" }],
   creator: "Clyve AI",
   icons: {
-    icon: "/logo.svg",
+    icon: "/icon.svg",
   },
   openGraph: {
     title: "Clyve AI | Professional Market Intelligence",
