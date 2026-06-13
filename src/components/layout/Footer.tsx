@@ -77,22 +77,11 @@ export default function Footer() {
                 <div className="absolute inset-0 bg-gradient-to-t from-[#000000] via-transparent to-transparent z-10" />
             </motion.div>
 
-            {/* === Bottom Links, Socials & Copyright (Static - No Animation) === */}
+            {/* === PERUBAHAN UTAMA: Rekonstruksi Struktur Urutan Tautan Bawah === */}
             <div className="relative z-20 flex flex-col md:flex-row items-center justify-between w-full max-w-7xl px-6 mt-10 text-sm font-medium text-[#71717a]">
 
-                {/* Legal Links */}
-                <div className="flex items-center gap-6 mb-4 md:mb-0">
-                    <Link href="/privacy" className="hover:text-white transition-colors duration-300">
-                        Privacy
-                    </Link>
-                    <span className="w-[1px] h-3 bg-[#27272a]" />
-                    <Link href="/terms" className="hover:text-white transition-colors duration-300">
-                        Terms
-                    </Link>
-                </div>
-
-                {/* Social Media Links */}
-                <div className="flex items-center gap-6 mb-4 md:mb-0">
+                {/* Social Media Links - Naik ke urutan pertama pada mobile melalui 'order-1 md:order-2' */}
+                <div className="flex flex-wrap justify-center items-center gap-6 mb-6 md:mb-0 order-1 md:order-2">
                     <Link href="https://www.threads.com/@clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
                         Threads
                     </Link>
@@ -107,8 +96,19 @@ export default function Footer() {
                     </Link>
                 </div>
 
-                {/* Copyright */}
-                <p className="tracking-wide">
+                {/* Legal Links - Berada di bawah Sosial Media pada mobile melalui 'order-2 md:order-1' */}
+                <div className="flex items-center gap-6 mb-4 md:mb-0 order-2 md:order-1">
+                    <Link href="/privacy" className="hover:text-white transition-colors duration-300">
+                        Privacy
+                    </Link>
+                    <span className="w-[1px] h-3 bg-[#27272a]" />
+                    <Link href="/terms" className="hover:text-white transition-colors duration-300">
+                        Terms
+                    </Link>
+                </div>
+
+                {/* Copyright - Paling bawah pada mobile melalui 'order-3' */}
+                <p className="tracking-wide order-3 text-xs md:text-sm text-center md:text-left opacity-80">
                     © {new Date().getFullYear()} Clyve AI. All rights reserved.
                 </p>
             </div>

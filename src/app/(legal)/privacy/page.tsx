@@ -18,13 +18,13 @@ export default function PrivacyPage() {
                             Privacy Policy
                         </h1>
                         <p className="text-zinc-400 text-base leading-relaxed max-w-2xl">
-                            At <span className="text-white font-medium">Clyve AI</span>, we recognize that your market analysis and trade queries are sensitive strategic assets. This policy details our commitment to securing your financial intelligence and the integrity of your data.
+                            Your research is your own. <span className="text-white font-medium">Clyve AI</span> is built to structure public data, not to collect, monitor, or profit from yours. Here's exactly how we handle your information.
                         </p>
 
                         {/* Effective Date with Icon */}
                         <div className="mt-4 flex items-center gap-2 text-[10px] font-medium text-zinc-600 uppercase tracking-[0.2em]">
                             <CalendarPlus size={12} strokeWidth={2.5} className="text-zinc-700" />
-                            <span>Effective Date: April 20, 2026</span>
+                            <span>Effective Date: June 12, 2026</span>
                         </div>
                     </header>
 
@@ -32,37 +32,37 @@ export default function PrivacyPage() {
                     <div className="space-y-8 text-zinc-400 leading-relaxed text-sm md:text-base">
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. Data Minimization & Integrity</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. What Data We Use</h2>
                             <p>
-                                We operate on a strict principle of data minimization. We only collect essential information for account authentication and secure subscription management. Clyve AI does not store the specific financial datasets or proprietary ticker symbols you analyze beyond the duration of your active session unless explicitly requested for your history.
+                                Clyve AI only works with publicly available information: regulatory filings, earnings releases, financial news, and public market metrics. We do not ingest, process, or store non-public, insider, or proprietary data of any kind. If it's not already public, it's not part of our pipeline.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Query Confidentiality</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Your Queries Are Private</h2>
                             <p>
-                                Your market inquiries and the resulting <span className="text-white">Predictive Insights</span> are strictly confidential. We do not monitor, sell, or train our internal models on your individual search patterns or sentiment queries. Your strategic "edge" remains exclusively yours.
+                                What you research on Clyve stays yours. We do not monitor your search history for commercial purposes, sell your usage patterns to third parties, or use your queries to train any AI model, ours or anyone else's. Your research process is private by design.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. Protection of Financial Intelligence</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. How We Protect Your Data</h2>
                             <p>
-                                We understand that market research is part of your professional know-how. All interaction data is encrypted using industry-standard AES-256 protocols. Our infrastructure ensures that your analysis history and account tier details remain inaccessible to unauthorized third parties.
+                                Your account data, research history, and session information are encrypted using AES-256, the same standard used by financial institutions. Access is strictly authenticated, and your data is never exposed to unauthorized parties.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. AI Engine Ecosystem</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. Third-Party AI Providers</h2>
                             <p>
-                                Clyve AI serves as the intelligence layer, while the underlying processing is powered by secure Large Language Models (LLMs). Your data is passed through encrypted APIs to these engines for real-time synthesis. We ensure that our enterprise-grade API agreements prevent your data from being used for generic model training by third-party providers.
+                                To structure and format research briefs, Clyve AI routes queries through third-party AI providers via secure, enterprise-grade APIs. These providers are contractually prohibited from retaining or using your queries for model training. Your inputs are processed in real time and not stored on their end.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">5. Sovereignty & Deletion</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">5. Your Right to Delete</h2>
                             <p>
-                                You maintain absolute sovereignty over your account data. You may request a full export of your analysis history or permanent deletion of your profile at any time. Upon execution, all associated records will be purged from our active high-security servers within 30 days.
+                                You're in full control of your data. You can clear your research history or request permanent account deletion at any time from your account dashboard. Once submitted, all associated data will be permanently removed from our systems within 30 days.
                             </p>
                         </section>
 

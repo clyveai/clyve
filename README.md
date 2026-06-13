@@ -304,6 +304,9 @@ PYTHON_SERVICE_URL=             # internal service URL
 | Pro | Unlimited | $19/month | PDF export + full history |
 | Pro Annual | Unlimited | $149/year | ~$12.4/month |
 
+> For full unit economics, infrastructure cost model, and scaling
+> projections, see [PRICING.md](./PRICING.md).
+
 ---
 
 ## Legal & Compliance

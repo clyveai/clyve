@@ -3,7 +3,7 @@
 import React from 'react';
 import Link from 'next/link';
 import { motion, AnimatePresence } from 'framer-motion';
-import { ChevronRight, X, LayoutGrid, Tag, Users } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 
 interface MobileNavProps {
     isOpen: boolean;
@@ -16,58 +16,64 @@ export default function MobileNav({ isOpen, setIsOpen, navLinks }: MobileNavProp
         <AnimatePresence>
             {isOpen && (
                 <>
-                    {/* Overlay Transparan (Klik untuk tutup) */}
+                    {/* Overlay Transparan dengan efek blur bertahap */}
                     <motion.div
                         initial={{ opacity: 0 }}
                         animate={{ opacity: 1 }}
                         exit={{ opacity: 0 }}
                         onClick={() => setIsOpen(false)}
-                        className="fixed inset-0 z-[55] bg-black/10 md:hidden"
+                        className="fixed inset-0 z-[55] bg-black/40 backdrop-blur-sm md:hidden"
                     />
 
-                    {/* Floating Menu Card */}
+                    {/* Floating Menu Card - Mengikuti gaya iOS Frosted Glass Header */}
                     <motion.div
-                        initial={{ opacity: 0, scale: 0.95, y: -10 }}
+                        initial={{ opacity: 0, scale: 0.98, y: -8 }}
                         animate={{ opacity: 1, scale: 1, y: 0 }}
-                        exit={{ opacity: 0, scale: 0.95, y: -10 }}
-                        transition={{ type: "spring", damping: 25, stiffness: 350 }}
-                        className="fixed top-20 left-5 right-5 z-[60] md:hidden bg-[#121110] border border-white/10 rounded-[28px] p-5 shadow-2xl overflow-hidden"
+                        exit={{ opacity: 0, scale: 0.98, y: -8 }}
+                        transition={{ duration: 0.3, ease: [0.4, 0, 0.2, 1] }}
+                        style={{
+                            backgroundColor: "rgba(8, 8, 8, 0.75)",
+                            backdropFilter: "blur(20px) saturate(180%)",
+                            WebkitBackdropFilter: "blur(20px) saturate(180%)",
+                            boxShadow: "0 0 0 1px rgba(255,255,255,0.06), 0 20px 40px rgba(0,0,0,0.5)",
+                        }}
+                        className="fixed top-20 left-5 right-5 z-[60] md:hidden rounded-[28px] p-4 overflow-hidden"
                     >
-                        <nav className="flex flex-col gap-1">
+                        {/* Navigation Links */}
+                        <nav className="flex flex-col gap-0.5">
                             {navLinks.map((link, idx) => (
                                 <motion.div
                                     key={link.name}
-                                    initial={{ opacity: 0, x: -10 }}
-                                    animate={{ opacity: 1, x: 0 }}
-                                    transition={{ delay: 0.05 * idx }}
+                                    initial={{ opacity: 0, y: -4 }}
+                                    animate={{ opacity: 1, y: 0 }}
+                                    transition={{ delay: 0.04 * idx, duration: 0.2 }}
                                 >
                                     <Link
                                         href={link.href}
                                         onClick={() => setIsOpen(false)}
-                                        className="flex items-center justify-between py-4 px-4 text-[15px] font-medium text-[#efefef] active:bg-white/5 rounded-2xl transition-all"
+                                        className="flex items-center justify-between py-3 px-4 text-[13.5px] font-medium text-white/50 hover:text-white/90 active:bg-white/[0.06] rounded-full transition-all duration-200"
                                     >
-                                        <div className="flex items-center gap-3">
-                                            {link.name}
-                                        </div>
-                                        <ChevronRight className="w-4 h-4 opacity-30" />
+                                        <span>{link.name}</span>
+                                        <ChevronRight className="w-3.5 h-3.5 opacity-30" />
                                     </Link>
                                 </motion.div>
                             ))}
                         </nav>
 
+                        {/* CTA Section */}
                         <motion.div
-                            initial={{ opacity: 0, y: 10 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: 0.2 }}
-                            className="mt-4 pt-4 border-t border-white/5"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            transition={{ delay: 0.15 }}
+                            className="mt-3 pt-3 border-t border-white/[0.06]"
                         >
                             <Link
-                                href="/login"
+                                href="/signup"
                                 onClick={() => setIsOpen(false)}
-                                className="flex w-full h-12 items-center justify-center gap-2 text-[14px] font-bold bg-white text-black rounded-xl active:scale-[0.98] transition-all"
+                                className="flex w-full h-11 items-center justify-center gap-1.5 text-[13px] font-semibold bg-white text-black rounded-full active:scale-95 transition-all duration-200"
                             >
                                 Get Started
-                                <ChevronRight className="w-4 h-4" />
+                                <ChevronRight className="w-3.5 h-3.5 opacity-50" />
                             </Link>
                         </motion.div>
                     </motion.div>

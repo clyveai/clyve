@@ -18,12 +18,12 @@ export default function TermsPage() {
                             Terms & Conditions
                         </h1>
                         <p className="text-zinc-400 text-base leading-relaxed max-w-2xl">
-                            These Terms & Conditions ("Terms") govern the professional use of <span className="text-white font-medium">Clyve AI</span>. By accessing our platform or utilizing our proprietary analytical tools, you agree to be bound by these formal protocols.
+                            These Terms & Conditions ("Terms") govern your use of <span className="text-white font-medium">Clyve AI</span>. By accessing our platform, you agree to the terms below. They are written to be clear, not complicated.
                         </p>
 
                         <div className="mt-4 flex items-center gap-2 text-[10px] font-medium text-zinc-600 uppercase tracking-[0.2em]">
                             <CalendarPlus size={12} strokeWidth={2.5} className="text-zinc-700" />
-                            <span>Effective Date: April 20, 2026</span>
+                            <span>Effective Date: June 12, 2026</span>
                         </div>
                     </header>
 
@@ -31,54 +31,54 @@ export default function TermsPage() {
                     <div className="space-y-8 text-zinc-400 leading-relaxed text-sm md:text-base">
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. Scope of Service</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. What Clyve AI Does (and Doesn't Do)</h2>
                             <p>
-                                Clyve AI is a financial intelligence platform providing market sentiment analysis and predictive data modeling. All outputs are generated through advanced Large Language Models (LLMs) and structured datasets to support quantitative and qualitative research.
+                                Clyve AI is a research structuring tool. We aggregate publicly available information: regulatory filings, earnings data, financial news, and organize it into clean, ready-to-use research briefs. We do not generate proprietary data, predict prices, or build investment theses. That part is entirely yours.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Financial Liability Disclaimer</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Not Financial Advice. Not Ever.</h2>
                             <p>
-                                Clyve AI does not provide financial, investment, or legal advice. All data generated is for informational and educational purposes only. Users are solely responsible for their investment decisions. Clyve AI shall not be held liable for any financial losses or damages resulting from the use of the platform's analytical data.
+                                Nothing on Clyve AI is financial advice. We are not a licensed advisor, broker, or research firm. Every output you see is structured public data, formatted to support your own research process, not to replace it. Any investment decision you make is entirely your own responsibility. Clyve AI bears no liability for trading outcomes, capital performance, or financial decisions made using our platform.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. Subscription & Resource Allocation</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. Your Account, Your Access</h2>
                             <p className="mb-2">
-                                Access to Clyve AI is governed by a subscription-based credit system. Credits are utilized to process real-time market data and generate high-fidelity reports.
+                                Your account is personal and non-transferable. Access is governed by your active subscription tier (Free or Pro). Two rules apply to everyone:
                             </p>
                             <ul className="space-y-1">
                                 <li className="flex gap-2 items-start">
                                     <span className="text-zinc-700">•</span>
-                                    <span>User accounts are strictly personal and non-transferable.</span>
+                                    <span>Your login credentials are for you only. Do not share or resell access.</span>
                                 </li>
                                 <li className="flex gap-2 items-start">
                                     <span className="text-zinc-700">•</span>
-                                    <span>Automated extraction (scraping) of Clyve AI’s proprietary data or interface is strictly prohibited.</span>
+                                    <span>Automated scraping, bulk data extraction, or programmatic abuse of the platform is strictly prohibited and will result in immediate account termination.</span>
                                 </li>
                             </ul>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. Intellectual Property Rights</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. Intellectual Property</h2>
                             <p>
-                                All analytical frameworks, system architectures, and interface designs are the exclusive intellectual property of Clyve AI. Unauthorized reproduction, reverse-engineering, or redistribution of the platform's internal logic is a direct violation of these Terms.
+                                The platform, including its interface, data pipeline, and underlying logic, belongs to Clyve AI. You are welcome to export and use generated briefs for personal or internal research. Redistributing, reverse-engineering, or commercially repurposing Clyve's output or codebase is not permitted.
                             </p>
                         </section>
 
                         <section>
                             <h2 className="text-base font-semibold text-white mb-1 tracking-tight">5. Billing & Refund Policy</h2>
                             <p>
-                                Due to the immediate allocation of computational resources and the digital nature of the services provided, all transactions are final. Subscriptions can be managed or canceled at any time to avoid future billing cycles, but no refunds will be issued for processed payments.
+                                Subscriptions renew monthly or annually. Because infrastructure costs activate the moment you subscribe (live API feeds, cloud compute, data processing), all payments are non-refundable once processed. You can cancel anytime from your account dashboard to stop future charges. Cancellation takes effect at the end of your current billing period.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">6. Compliance</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">6. Acceptable Use</h2>
                             <p>
-                                Users agree to utilize Clyve AI in accordance with international financial regulations and AI safety guidelines. Any misuse that compromises the integrity of our infrastructure will result in immediate account termination.
+                                Use Clyve AI in good faith and in compliance with applicable laws. Any attempt to disrupt the platform, exploit system vulnerabilities, or bypass usage controls will result in immediate account termination without refund, and may be escalated legally where warranted.
                             </p>
                         </section>
 

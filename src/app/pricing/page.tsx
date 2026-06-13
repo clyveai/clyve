@@ -6,65 +6,44 @@ import { Check, Sparkles } from 'lucide-react';
 
 const tiers = [
     {
-        name: 'Terminal',
-        id: 'tier-terminal',
-        description: 'Essential market intelligence for individual traders and analysts.',
-        monthlyPrice: 199000,
-        annualTotal: 1990000,
-        annualMonthlyPromo: 149000,
+        name: 'Free',
+        id: 'tier-free',
+        description: 'Try Clyve with no commitment. See exactly what structured research looks like before you subscribe.',
+        monthlyPrice: null,
+        annualTotal: null,
+        annualMonthlyPromo: null,
         features: [
-            'Real-time market sentiment analysis',
-            'Basic predictive signal alerts',
-            'Access to 10+ crypto/stock pairs',
-            'Standard AI inference speed',
-            'Daily market summary reports',
+            '3 lifetime research queries',
+            'Full structured brief per query',
+            'Executive summary, financials, news',
+            'Sentiment analysis included',
+            'No credit card required',
         ],
         mostPopular: false,
-        ctaText: 'Access Terminal',
+        ctaText: 'Start for Free',
     },
     {
-        name: 'Intelligence',
-        id: 'tier-intelligence',
-        description: 'Advanced predictive tools for professional market execution.',
-        monthlyPrice: 599000,
-        annualTotal: 5990000,
-        annualMonthlyPromo: 249000,
+        name: 'Pro',
+        id: 'tier-pro',
+        description: 'Unlimited research for serious investors who do their own due diligence.',
+        monthlyPrice: 19,
+        annualTotal: 149,
+        annualMonthlyPromo: 12,
         features: [
-            'Full LLM-driven financial insights',
-            'Unlimited asset monitoring',
-            'Priority neural processing',
-            'Custom volatility threshold alerts',
-            'Historical backtesting engine',
-            'Alpha-tier community access',
+            'Unlimited research queries',
+            'Full structured briefs — financials, news, risk factors, analyst consensus',
+            'Research history, saved and searchable',
+            'PDF export for every analysis',
+            'Sentiment analysis on all news',
+            'Priority processing speed',
         ],
         mostPopular: true,
-        ctaText: 'Upgrade to Intelligence',
-    },
-    {
-        name: 'Enterprise',
-        id: 'tier-enterprise',
-        description: 'High-frequency infrastructure and custom analytical models.',
-        monthlyPrice: 2490000,
-        annualTotal: 24900000,
-        features: [
-            'Everything in Intelligence, plus:',
-            'Proprietary model fine-tuning',
-            'Low-latency API & Webhooks',
-            'Custom data source integration',
-            'Institutional-grade security',
-            '24/7 technical engineering support',
-        ],
-        mostPopular: false,
-        ctaText: 'Contact for API Access',
+        ctaText: 'Get Pro Access',
     },
 ];
 
 export default function Pricing() {
     const [isAnnual, setIsAnnual] = useState(true);
-
-    const formatPrice = (price: number) => {
-        return `IDR ${price.toLocaleString('id-ID')}`;
-    };
 
     return (
         <section id="pricing" className="relative pt-32 pb-24 bg-[var(--bg-primary)] overflow-hidden">
@@ -81,7 +60,7 @@ export default function Pricing() {
                         viewport={{ once: true }}
                         className="text-4xl md:text-5xl font-bold tracking-tight text-[var(--fg-primary)] mb-4 text-balance"
                     >
-                        Simple, transparent pricing.
+                        Simple, Transparent Pricing.
                     </motion.h2>
 
                     <motion.div
@@ -91,8 +70,8 @@ export default function Pricing() {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-[var(--fg-secondary)] mb-8 text-pretty space-y-1"
                     >
-                        <p>Choose the tier that matches your production scale.</p>
-                        <p className="text-sm opacity-80">Credits never expire. No hidden fees.</p>
+                        <p>Bloomberg costs $2,000 a month. Clyve doesn't.</p>
+                        <p className="text-sm opacity-80">No hidden fees. Cancel anytime.</p>
                     </motion.div>
 
                     {/* Toggle Switch */}
@@ -137,7 +116,7 @@ export default function Pricing() {
                                         exit={{ opacity: 0, y: -10 }}
                                         className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]"
                                     >
-                                        Save up to 25% Yearly
+                                        Save $79 a year
                                     </motion.div>
                                 )}
                             </AnimatePresence>
@@ -145,8 +124,8 @@ export default function Pricing() {
                     </div>
                 </div>
 
-                {/* Pricing Grid */}
-                <div className="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto items-center">
+                {/* Pricing Grid — 2 tiers, centered */}
+                <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto items-center">
                     {tiers.map((tier, index) => {
                         const displayPrice = isAnnual && tier.annualMonthlyPromo
                             ? tier.annualMonthlyPromo
@@ -174,23 +153,42 @@ export default function Pricing() {
                                 </div>
 
                                 <div className="mb-8 flex flex-col">
-                                    {/* tabular-nums mencegah layout shift saat angka berganti */}
                                     <div className="flex items-baseline text-[var(--fg-primary)] tabular-nums">
-                                        <span className="text-3xl font-bold tracking-tighter">
-                                            {tier.id === 'tier-enterprise' ? 'Custom' : formatPrice(displayPrice)}
-                                        </span>
-                                        {tier.id !== 'tier-enterprise' && (
-                                            <span className="text-sm text-[var(--fg-secondary)] ml-2 font-medium">/mo</span>
+                                        {tier.monthlyPrice === null ? (
+                                            <span className="text-3xl font-bold tracking-tighter">Free</span>
+                                        ) : (
+                                            <>
+                                                <span className="text-3xl font-bold tracking-tighter">
+                                                    ${displayPrice}
+                                                </span>
+                                                <span className="text-sm text-[var(--fg-secondary)] ml-2 font-medium">/mo</span>
+                                            </>
                                         )}
                                     </div>
 
-                                    {isAnnual && tier.id !== 'tier-enterprise' && (
+                                    {tier.id === 'tier-free' && (
+                                        <span className="text-[11px] text-[var(--fg-secondary)] mt-2 font-medium">
+                                            3 queries, no card required
+                                        </span>
+                                    )}
+
+                                    {isAnnual && tier.id === 'tier-pro' && (
                                         <motion.span
                                             initial={{ opacity: 0 }}
                                             animate={{ opacity: 0.6 }}
                                             className="text-[11px] text-[var(--fg-secondary)] mt-2 font-medium italic"
                                         >
-                                            Billed annually at {formatPrice(tier.annualTotal)}
+                                            Billed annually at ${tier.annualTotal}
+                                        </motion.span>
+                                    )}
+
+                                    {!isAnnual && tier.id === 'tier-pro' && (
+                                        <motion.span
+                                            initial={{ opacity: 0 }}
+                                            animate={{ opacity: 0.6 }}
+                                            className="text-[11px] text-[var(--fg-secondary)] mt-2 font-medium italic"
+                                        >
+                                            Switch to annual and save $79/year
                                         </motion.span>
                                     )}
                                 </div>
@@ -215,7 +213,6 @@ export default function Pricing() {
                                         {tier.ctaText}
                                     </button>
 
-                                    {/* Hover Overlay: Mengomunikasikan status waitlist secara visual */}
                                     <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
                                         <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white bg-white/10 border border-white/20 px-4 py-1.5 rounded-full shadow-2xl">
                                             Join Waitlist
@@ -226,6 +223,17 @@ export default function Pricing() {
                         );
                     })}
                 </div>
+
+                {/* Bottom note */}
+                <motion.p
+                    initial={{ opacity: 0 }}
+                    whileInView={{ opacity: 1 }}
+                    viewport={{ once: true }}
+                    transition={{ delay: 0.5 }}
+                    className="text-center text-xs text-[var(--fg-secondary)] opacity-40 mt-12"
+                >
+                    All outputs are structured public data for research purposes only. Not financial advice.
+                </motion.p>
             </div>
         </section>
     );
