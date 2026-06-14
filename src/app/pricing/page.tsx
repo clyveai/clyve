@@ -25,12 +25,12 @@ const tiers = [
     {
         name: 'Pro',
         id: 'tier-pro',
-        description: 'Unlimited research for serious investors who do their own due diligence.',
+        description: 'High-volume research infrastructure for serious investors who do their own due diligence.',
         monthlyPrice: 19,
         annualTotal: 149,
         annualMonthlyPromo: 12,
         features: [
-            'Unlimited research queries',
+            '100 institutional-grade queries / mo',
             'Full structured briefs — financials, news, risk factors, analyst consensus',
             'Research history, saved and searchable',
             'PDF export for every analysis',
@@ -60,7 +60,7 @@ export default function Pricing() {
                         viewport={{ once: true }}
                         className="text-4xl md:text-5xl font-bold tracking-tight text-[var(--fg-primary)] mb-4 text-balance"
                     >
-                        Simple, Transparent Pricing.
+                        Simple, Transparent Pricing
                     </motion.h2>
 
                     <motion.div
@@ -70,8 +70,8 @@ export default function Pricing() {
                         transition={{ delay: 0.1 }}
                         className="text-lg text-[var(--fg-secondary)] mb-8 text-pretty space-y-1"
                     >
-                        <p>Bloomberg costs $2,000 a month. Clyve doesn't.</p>
-                        <p className="text-sm opacity-80">No hidden fees. Cancel anytime.</p>
+                        <p>Unrestricted access to structured market intelligence</p>
+                        <p className="text-sm opacity-80">No hidden fees, Cancel anytime</p>
                     </motion.div>
 
                     {/* Toggle Switch */}
