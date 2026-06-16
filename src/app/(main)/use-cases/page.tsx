@@ -39,9 +39,10 @@ const USE_CASES: UseCase[] = [
         id: "independent-analyst",
         icon: <IconUser size={18} />,
         audience: "Independent Analysts",
-        headline: "Replace a 4-tool stack with one structured layer.",
+        headline: "One structured environment. Every filing that matters.",
+        // Removed Bloomberg name-drop — Clyve stands on its own
         description:
-            "Bloomberg terminals cost $25K/year. Most independent analysts patch together SEC EDGAR, Koyfin, a PDF reader, and a spreadsheet. Clyve collapses this into a single structured research environment — purpose-built for the analyst working alone.",
+            "Independent analysts spend more time locating and formatting information than analyzing it. Clyve eliminates that overhead — pulling SEC filings, structuring the data that matters, and surfacing it in a format built for decision-making, not data entry.",
         workflow: [
             "Pull 10-K & 10-Q filings directly from SEC EDGAR",
             "Extract segment revenue, debt schedules, and risk factors automatically",
@@ -51,12 +52,13 @@ const USE_CASES: UseCase[] = [
         stat: { value: "4→1", label: "Tool consolidation" },
     },
     {
-        id: "retail-investor",
+        id: "serious-investor",
         icon: <IconChartBar size={18} />,
-        audience: "Serious Retail Investors",
-        headline: "Do institutional-grade due diligence. Without the institution.",
+        // Removed "retail" — elevates positioning
+        audience: "Serious Investors",
+        headline: "Your conviction should come from the filing, not the headline.",
         description:
-            "Retail investors who take equity seriously are blocked by the same barrier: raw filings are dense, cross-referencing is manual, and financial media is surface-level. Clyve gives you the information layer professionals use — structured, queryable, and fast.",
+            "Financial media summarizes. Clyve structures. There is a meaningful difference between reading someone's interpretation of an earnings report and reading the filing itself — organized, queryable, and cross-referenced. Clyve gives you the latter.",
         workflow: [
             "Query specific line items across multiple company filings",
             "Track management commentary patterns across earnings calls",
@@ -69,9 +71,9 @@ const USE_CASES: UseCase[] = [
         id: "research-teams",
         icon: <IconUsers size={18} />,
         audience: "Small Research Teams",
-        headline: "Standardize how your team structures information.",
+        headline: "Consistent research format across every analyst on your team.",
         description:
-            "Small buy-side teams waste cycles on inconsistent research formats. One analyst uses bullet points, another builds tables, nobody shares a common structure. Clyve enforces a consistent information architecture across every company your team covers.",
+            "Inconsistent research structure creates coordination cost. When every analyst formats information differently, synthesis becomes manual and errors compound. Clyve enforces a shared information architecture — so your team spends time on judgment, not reformatting.",
         workflow: [
             "Standardized filing extraction across all coverage",
             "Shared research history accessible to the full team",
@@ -84,13 +86,13 @@ const USE_CASES: UseCase[] = [
         id: "fintech-builders",
         icon: <IconBuildingBank size={18} />,
         audience: "Fintech Builders",
-        headline: "Build on top of structured financial intelligence.",
+        headline: "Structured financial data as a foundation, not a pipeline problem.",
         description:
-            "If you're building a financial product, structured SEC data is your moat — not raw text. Clyve's information structuring layer extracts and normalizes what matters, so you can focus on product rather than data pipeline engineering.",
+            "Building on raw SEC text is an engineering problem that never fully resolves. Clyve handles extraction, normalization, and structuring — so your team can focus on what your product does with the data, not how to get it into a usable shape.",
         workflow: [
             "Access structured filing data via API (Pro tier)",
             "Normalize XBRL data without custom parsers",
-            "Integrate Clyve's structured output into your own product",
+            "Integrate structured output directly into your product",
             "Reduce data engineering overhead significantly",
         ],
         stat: { value: "API", label: "Pro tier access" },
@@ -114,7 +116,7 @@ const CORE_CAPABILITIES: Feature[] = [
         icon: <IconSparkles size={16} />,
         title: "Research Cockpit",
         description:
-            "Hybrid UI designed around how analysts actually work — not how software engineers imagine they do.",
+            "A workspace designed around how analysts actually work — not how software engineers imagine they do.",
     },
     {
         icon: <IconChartBar size={16} />,
@@ -167,7 +169,6 @@ function UseCaseCard({ useCase, index }: { useCase: UseCase; index: number }) {
             custom={0}
             className="group relative border border-[#1a1a1a] rounded-[10px] overflow-hidden bg-[#080808] hover:border-[#2a2a2a] transition-colors duration-300"
         >
-            {/* Ambient glow on hover */}
             <div className="absolute inset-0 opacity-0 group-hover:opacity-100 transition-opacity duration-500 pointer-events-none"
                 style={{ background: "radial-gradient(600px circle at 50% 0%, rgba(255,255,255,0.02) 0%, transparent 60%)" }}
             />
@@ -176,7 +177,6 @@ function UseCaseCard({ useCase, index }: { useCase: UseCase; index: number }) {
                 {/* Content side */}
                 <div className={`p-8 lg:p-12 flex flex-col justify-between gap-8 ${!isEven ? "lg:[direction:ltr]" : ""}`}>
                     <div className="space-y-5">
-                        {/* Audience badge */}
                         <div className="flex items-center gap-2">
                             <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-[#111111] border border-[#1f1f1f] text-[#71717a]">
                                 {useCase.icon}
@@ -195,7 +195,6 @@ function UseCaseCard({ useCase, index }: { useCase: UseCase; index: number }) {
                         </p>
                     </div>
 
-                    {/* Stat */}
                     <div className="flex items-end gap-4 pt-4 border-t border-[#111111]">
                         <div>
                             <div className="text-3xl font-bold text-white tracking-tight" style={{ letterSpacing: "-0.04em" }}>
@@ -269,11 +268,7 @@ export default function UseCasesPage() {
     return (
         <main className="min-h-screen bg-[#000000] text-white">
             {/* ── Hero ── */}
-            <section
-                ref={heroRef}
-                className="relative pt-32 pb-24 px-6 overflow-hidden"
-            >
-                {/* Background grid */}
+            <section ref={heroRef} className="relative pt-32 pb-24 px-6 overflow-hidden">
                 <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
@@ -282,8 +277,6 @@ export default function UseCasesPage() {
                         backgroundSize: "80px 80px",
                     }}
                 />
-
-                {/* Radial fade overlay */}
                 <div
                     className="absolute inset-0 pointer-events-none"
                     style={{
@@ -307,10 +300,10 @@ export default function UseCasesPage() {
                         animate={heroInView ? "visible" : "hidden"}
                         variants={fadeUp}
                         custom={1}
-                        className="text-5xl lg:text-7xl font-bold tracking-tight"
+                        className="text-5xl lg:text-7xl font-bold tracking-tight gradient-text"
                         style={{ letterSpacing: "-0.04em" }}
                     >
-                        <span className="gradient-text">Who Clyve is built for.</span>
+                        Who Clyve is built for.
                     </motion.h1>
 
                     <motion.p
@@ -321,9 +314,10 @@ export default function UseCasesPage() {
                         className="text-base lg:text-lg text-[#71717a] max-w-2xl mx-auto leading-relaxed"
                         style={{ letterSpacing: "-0.01em" }}
                     >
-                        Clyve is not a prediction engine. It&apos;s an{" "}
+                        Clyve is not a prediction engine. It is an{" "}
                         <span className="text-[#a1a1aa]">information structuring layer</span> — built for
-                        anyone who needs to work with equity data seriously, without the Bloomberg price tag.
+                        anyone who needs to work with equity data seriously, without the overhead of
+                        enterprise tooling.
                     </motion.p>
                 </div>
             </section>
@@ -365,7 +359,6 @@ export default function UseCasesPage() {
                     transition={{ duration: 0.5, ease: [0.4, 0, 0.2, 1] }}
                     className="relative rounded-[10px] border border-[#1a1a1a] bg-[#080808] p-12 lg:p-16 overflow-hidden text-center"
                 >
-                    {/* Subtle top glow */}
                     <div
                         className="absolute top-0 left-1/2 -translate-x-1/2 w-96 h-px"
                         style={{
@@ -393,7 +386,7 @@ export default function UseCasesPage() {
                         </p>
                         <div className="flex items-center justify-center gap-3">
                             <Link href="/signup">
-                                <button className="btn-primary px-6 py-2.5 text-sm rounded-[10px]">
+                                <button className="btn-primary px-6 py-2.5 text-sm rounded-[10px] inline-flex items-center">
                                     Get Started
                                     <IconArrowRight size={14} className="ml-2" />
                                 </button>

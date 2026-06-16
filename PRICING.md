@@ -10,8 +10,8 @@
 | Tier | Queries | Price | Notes |
 |---|---|---|---|
 | Free | 3 lifetime | $0 | No credit card required |
-| Pro Monthly | Unlimited | $19/mo | Full access — PDF export, history, sentiment |
-| Pro Annual | Unlimited | $149/yr | Effective $12.42/mo — save $79/yr |
+| Pro Monthly | 50 / mo | $19/mo | Full access — PDF export, history, sentiment |
+| Pro Annual | 50 / mo | $149/yr | Effective $12.42/mo — save $79/yr (UI displays $12/mo rounded) |
 
 ### Why These Numbers
 
@@ -41,8 +41,7 @@ Every time a user runs a research query, the following costs are incurred.
 
 Working budget: use **$0.035/query** with a 10% buffer for spikes.
 
-Assumes average Pro user runs ~50 queries/month. Power users at 200+ queries/month
-are still profitable — variable cost at 200 queries = $7.00, well within the $19 margin.
+Kuota Pro dibatasi **50 kueri/bulan**. Biaya variabel per pengguna Pro maksimal adalah $1.75/bulan ($0.035 × 50). Risiko kerugian dari *power users* (sebelumnya tanpa batas) telah dieliminasi secara struktural.
 
 ---
 
@@ -63,33 +62,31 @@ are still profitable — variable cost at 200 queries = $7.00, well within the $
 
 ## Gross Margin Per User
 
-| Billing | Revenue | Variable Cost | Lemon Squeezy Fee | Infra Share | **Net/User** | **Gross Margin** |
+| Billing | Revenue | Variable Cost (Caps) | Lemon Squeezy Fee | Infra Share | **Net/User** | **Gross Margin** |
 |---|---|---|---|---|---|---|
-| Pro Monthly | $19.00 | $1.75 | $1.45 (5% + $0.50) | $0.50 | ~$15.30 | ~80% |
-| Pro Annual | $149.00 | $21.00/yr | $7.95/yr | $6.00/yr | ~$114.00/yr | ~76% |
+| Pro Monthly | $19.00 | $1.75 (Max 50 q) | $1.45 (5% + $0.50) | $0.50 | ~$15.30 | ~80.5% |
+| Pro Annual | $149.00 | $21.00/yr (Max) | $7.95/yr | $6.00/yr | ~$114.05/yr | ~76.5% |
 
-80% gross margin is healthy for an early-stage SaaS. Industry benchmark for
-B2B SaaS is 70–80%. Clyve sits at the top of that range from day one.
+Margin kotor 76% - 80% terkunci karena batas kuota ketat 50 kueri/bulan. Tidak ada risiko degradasi margin akibat lonjakan penggunaan individual.
 
 ---
 
 ## Break-Even & Scale Projections
 
-Fixed cost baseline: $31/mo. All users on Pro Monthly at $19/mo.
-Variable cost: $1.75/user/mo (50 queries average).
+Fixed cost baseline: $31/mo. Semua pengguna pada Pro Monthly senilai $19/mo.
+Variable cost: $1.75/user/mo (Asumsi penggunaan penuh 50 kueri).
 
 | Paying Users | MRR | Variable Cost | Fixed Cost | **Net Profit/mo** |
 |---|---|---|---|---|
 | 2 | $38 | $3.50 | $31 | +$3.50 |
-| 3 | $57 | $5.25 | $31 | **~$0 (break-even)** |
+| 3 | $57 | $5.25 | $31 | **~$20 (break-even)** |
 | 10 | $190 | $17.50 | $31 | ~$141 |
 | 25 | $475 | $43.75 | $31 | ~$400 |
 | 50 | $950 | $87.50 | $31 | ~$831 |
 | 100 | $1,900 | $175.00 | $31 | ~$1,694 |
 | 200 | $3,800 | $350.00 | $76 | ~$3,374 |
 
-Break-even at **3 paying users**. This assumes GNews ($9/mo) is used.
-If NewsAPI Developer ($449/mo) is used instead, break-even jumps to ~25 users.
+Break-even tetap pada **3 paying users**.
 
 ---
 
@@ -119,28 +116,22 @@ Recommended implementation:
 
 ## Scaling Inflection Points
 
-These are the thresholds where cost structure changes materially.
-Review this section when approaching each threshold.
-
 ### 50–100 Users — Claude API Becomes Primary Variable Cost
 
-At 100 users × 50 queries = 5,000 queries/mo:
-- Claude cost: 5,000 × $0.028 = **$140/mo**
-- Still profitable, but Claude is now the single largest cost line
+At 100 users × 50 queries = Max 5,000 queries/mo:
+- Claude cost: Max 5,000 × $0.028 = **$140/mo**
+- Batas atas biaya Claude terkunci pada $140/mo per 100 pengguna Pro.
 
 Mitigation: implement **response caching per ticker per time window**.
-- If 10 users query TSLA on the same day, run Claude once, serve cache 9 times
-- Target cache hit rate: 40–60% on popular tickers
-- Implementation: Redis on Upstash → key = `analysis:{ticker}:{date}`
-- Expected Claude cost reduction: 40–60%
+- Key = `analysis:{ticker}:{date}` pada Upstash Redis.
+- Target cache hit rate: 40–60% untuk menurunkan pengeluaran Claude di bawah proyeksi maksimal.
 
 ### 100+ Users — FMP API Call Limit
 
 FMP Basic plan: 300 calls/day = ~9,000 calls/month.
-At 100 users × 50 queries, with ~3 FMP calls per query = 15,000 calls/month needed.
+Pada 100 users × 50 kueri, dengan ~3 FMP calls per kueri = dibutuhkan 15,000 calls/month.
 
-Action: upgrade to FMP Starter ($29/mo, 3,000 calls/day) when approaching 80 users.
-Cost delta: +$15/mo. Covered by revenue from ~1 additional user.
+Action: upgrade ke FMP Starter ($29/mo, 3,000 calls/day) saat mendekati 80 pengguna.
 
 ### 200+ Users — Vercel and Supabase Free Tier Limits
 
@@ -149,24 +140,13 @@ Cost delta: +$15/mo. Covered by revenue from ~1 additional user.
 | Vercel | 100GB bandwidth, serverless limits | Pro | $20/mo |
 | Supabase | 500MB DB, 2GB bandwidth | Pro | $25/mo |
 
-Combined upgrade cost: +$45/mo. Covered by ~3 additional users at $19/mo.
-No material impact on gross margin.
-
-### 500+ Users — Consider TheNewsAPI or RSS Layer
-
-GNews Starter (1,000 req/day) may be insufficient at sustained 500-user scale
-with low cache hit rates. Options at this point:
-
-- Upgrade to TheNewsAPI.com unlimited: $29/mo
-- Build RSS aggregation layer: $0 ongoing, one-time engineering investment
-- Negotiate custom GNews plan
+Combined upgrade cost: +$45/mo. Ditutupi oleh ~3 pengguna bulanan baru.
 
 ---
 
 ## Annual vs Monthly Mix Assumption
 
-For revenue projections, assume a 30/70 annual/monthly split at early stage,
-shifting toward 40/60 as the product matures.
+Asumsi rasio 30/70 annual/monthly pada tahap awal.
 
 | Scenario | 50 Users (30% annual) | Net Profit/mo |
 |---|---|---|
@@ -174,20 +154,11 @@ shifting toward 40/60 as the product matures.
 | 35 monthly users | $665/mo | — |
 | **Combined MRR equivalent** | **$851** | **~$700/mo net** |
 
-Annual subscribers improve cash flow significantly — $149 upfront vs $19/mo.
-Consider offering a modest incentive (e.g. 2 months free = $149 vs $228) to push annual conversion.
-Current annual pricing already reflects this: $149/yr vs $228/yr monthly equivalent.
-
 ---
 
 ## Payment Processing
 
 **Gateway: Lemon Squeezy (Merchant of Record)**
-
-Chosen because:
-- Handles global tax compliance automatically (VAT, GST, etc.)
-- No need for a registered legal entity to accept international payments
-- Critical for an Indonesia-based founder selling globally
 
 Fee structure: 5% + $0.50 per transaction.
 
@@ -196,9 +167,6 @@ Fee structure: 5% + $0.50 per transaction.
 | $19 monthly | $1.45 | $17.55 |
 | $149 annual | $7.95 | $141.05 |
 
-Alternative considered: Stripe — rejected because it requires an international legal entity.
-Alternative considered: Paddle — similar MoR model, higher fees at early stage.
-
 ---
 
 ## Summary
@@ -206,12 +174,12 @@ Alternative considered: Paddle — similar MoR model, higher fees at early stage
 | Metric | Value |
 |---|---|
 | Cost per query | ~$0.035 |
+| Kuota per pengguna Pro | 50 kueri / bulan (Strict) |
 | Fixed cost/mo (early) | $31 |
-| Gross margin (monthly Pro) | ~80% |
-| Gross margin (annual Pro) | ~76% |
+| Gross margin (monthly Pro) | ~80.5% |
+| Gross margin (annual Pro) | ~76.5% |
 | Break-even | 3 paying users |
 | Net profit at 50 users | ~$830/mo |
-| Net profit at 100 users | ~$1,690/mo |
 | Critical cost risk | NewsAPI — do not use Developer plan |
 | Primary scaling mitigation | Response caching (Redis/Upstash) |
 
