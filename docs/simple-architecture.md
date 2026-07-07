@@ -68,7 +68,7 @@ src/
 │   └── layout.tsx               # Root application layout
 │
 │
-├── modules/                     # Business domain layer
+├── features/                     # Business domain layer
 │   │                            # Seluruh logic aplikasi hidup di sini
 │   │                            # Folder paling penting di project
 │   │

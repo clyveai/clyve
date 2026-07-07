@@ -1,6 +1,6 @@
-import Hero from "@/components/sections/Hero"
+import Hero from "@/features/marketing/Hero"
 // import Testimonial from "@/components/sections/Testimonial"
-import Support from "@/components/sections/Support"
+import Support from "@/features/marketing/Support"
 
 export default function Home() {
     return (

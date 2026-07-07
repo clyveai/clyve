@@ -3,7 +3,7 @@ import type { Metadata, Viewport } from "next"
 import { ThemeProvider } from "next-themes"
 import { Geist, Geist_Mono } from "next/font/google"
 import { cn } from "@/lib/utils"
-import AppShell from "@/components/layout/AppShell"
+import AppShell from "@/shared/layout/AppShell"
 
 // Inisialisasi Font
 const geistSans = Geist({

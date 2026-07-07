@@ -2,8 +2,8 @@
 
 import { motion, type Variants } from "framer-motion";
 import Link from "next/link";
-import { DottedSurface } from "@/components/ui/dotted-surface";
-import { LiquidMetalButton } from "@/components/ui/liquid-metal-button";
+import { DottedSurface } from "@/shared/ui/dotted-surface";
+import { LiquidMetalButton } from "@/shared/ui/liquid-metal-button";
 
 const CARDS = [
     {

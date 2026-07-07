@@ -1,8 +1,8 @@
 "use client";
 
 import { usePathname } from "next/navigation";
-import Header from "@/components/layout/Header";
-import Footer from "@/components/layout/Footer";
+import Header from "@/shared/layout/Header";
+import Footer from "@/shared/layout/Footer";
 
 const noMarketingChromePrefixes = ["/login", "/signup", "/dashboard", "/settings"];
 

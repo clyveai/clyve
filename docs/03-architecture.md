@@ -67,15 +67,15 @@ It should never contain:
 
 ---
 
-## 3. Business Logic Lives in Modules
+## 3. Business Logic Lives in features
 
 All product logic belongs inside:
 
 ```text
-src/modules/
+src/features/
 ```
 
-Modules are the heart of the application.
+features are the heart of the application.
 
 ---
 
@@ -117,7 +117,7 @@ All database access belongs in:
 src/database/
 ```
 
-No direct database queries should be scattered across modules.
+No direct database queries should be scattered across features.
 
 ---
 
@@ -136,7 +136,7 @@ No direct database queries should be scattered across modules.
                      │
                      ▼
 ┌──────────────────────────────────────────┐
-│                 Modules                  │
+│                 features                  │
 │                                          │
 │ Auth                                    │
 │ Research                                │
@@ -179,7 +179,7 @@ public/
 src/
 
 ├── app/
-├── modules/
+├── features/
 ├── shared/
 ├── database/
 ├── lib/
@@ -206,7 +206,7 @@ drizzle.config.ts
 src/
 
 ├── app/
-├── modules/
+├── features/
 ├── shared/
 ├── database/
 ├── lib/
@@ -380,7 +380,7 @@ api/
 
 ---
 
-# modules/
+# features/
 
 Core business layer.
 
@@ -389,7 +389,7 @@ Most important folder in the entire project.
 Structure:
 
 ```text
-modules/
+features/
 
 ├── auth/
 ├── research/
@@ -604,7 +604,7 @@ Not allowed:
 * CompanyAnalysis
 * FilingViewer
 
-Those belong to modules.
+Those belong to features.
 
 ---
 
@@ -686,7 +686,7 @@ Bad:
 * generateResearch()
 * getNews()
 
-Those belong to modules.
+Those belong to features.
 
 ---
 
