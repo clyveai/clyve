@@ -276,7 +276,7 @@ export default function Pricing() {
                         className="text-lg text-[var(--fg-secondary)] mb-8 text-pretty space-y-1"
                     >
                         <p>Research infrastructure for serious investors</p>
-                        <p className="text-sm opacity-80">No hidden fees · Cancel anytime</p>
+                        <p className="text-sm opacity-90">No hidden fees · Cancel anytime</p>
                     </motion.div>
 
                     <BillingToggle isAnnual={isAnnual} onToggle={setIsAnnual} />
@@ -293,22 +293,14 @@ export default function Pricing() {
                     ))}
                 </div>
 
-                <motion.p
-                    initial={{ opacity: 0 }}
-                    whileInView={{ opacity: 1 }}
-                    viewport={{ once: true }}
-                    transition={{ delay: 0.5 }}
-                    className="text-center text-xs text-[var(--fg-secondary)] opacity-40 mt-10 max-w-md mx-auto leading-relaxed"
-                >
-                    50 queries per month. Enough to research 10–15 positions with full depth.
-                </motion.p>
+                <br />
 
                 <motion.p
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.6 }}
-                    className="text-center text-xs text-[var(--fg-secondary)] opacity-30 mt-4"
+                    transition={{ delay: 0.5 }}
+                    className="text-center text-sm md:text-[15px] text-[var(--fg-secondary)] opacity-40 mt-10 max-w-md mx-auto leading-relaxed"
                 >
                     All outputs are structured public data for research purposes only. Not financial advice.
                 </motion.p>

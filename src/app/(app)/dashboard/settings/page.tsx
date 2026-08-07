@@ -6,8 +6,8 @@ import { useRouter } from "next/navigation";
 import { motion, AnimatePresence } from "framer-motion";
 import { Loader2, Trash2 } from "lucide-react";
 import { authClient } from "@/lib/auth-client";
-import AmbientGlow from "@/components/dashboard/AmbientGlow";
-import AvatarDropdown from "@/components/dashboard/AvatarDropdown";
+import AmbientGlow from "@/app/(app)/_components/AmbientGlow";
+import AvatarDropdown from "@/app/(app)/_components/AvatarDropdown";
 
 type AccountUser = {
   id: string;

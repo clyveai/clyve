@@ -1,705 +1,344 @@
-# Architecture
+# 03 — Architecture
 
-## Overview
+Clyve follows a **Modular Monolith** with **Domain-Driven Design** principles: one deployable application, strict domain boundaries inside it. This keeps velocity high for a solo founder while staying safe to hand off to a 10-engineer team later — no premature microservices, no unstructured dumping grounds.
 
-Clyve V1 is a monolithic full-stack SaaS built with Next.js App Router.
+**Analogy:**
 
-The primary goal is:
-
-* Ship fast
-* Stay maintainable as a solo founder
-* Keep architecture understandable for AI agents
-* Avoid premature microservices
-* Scale without major rewrites
-
-V1 intentionally uses:
-
-* One repository
-* One application
-* One database
-* One deployment
-
-There are no separate backend services, workers, queues, or microservices in V1.
+| Layer | Role |
+|---|---|
+| `app/` | The waiter who takes the order |
+| `modules/` | The chef who cooks the food |
+| `infrastructure/` | The kitchen, stove, cooking equipment |
+| `shared/` | The plates and glasses everyone uses |
+| `jobs/` | Heavy work done behind the scenes |
 
 ---
 
-# Architecture Principles
-
-## 1. Domain-Driven Structure
-
-Business logic is organized by domain.
-
-Examples:
-
-* Research
-* Company
-* Filing
-* News
-* Billing
-
-Each domain owns its own:
-
-* Components
-* Types
-* Services
-* Validation
-* Hooks
-
-This prevents giant global folders.
-
----
-
-## 2. Thin Routing Layer
-
-The `app/` directory handles:
-
-* Routes
-* Pages
-* Layouts
-* API endpoints
-
-It should never contain:
-
-* Database queries
-* AI orchestration
-* External API integrations
-* Core business logic
-
----
-
-## 3. Business Logic Lives in features
-
-All product logic belongs inside:
-
-```text
-src/features/
-```
-
-features are the heart of the application.
-
----
-
-## 4. Shared Code Must Be Truly Shared
-
-Reusable UI and utilities belong in:
-
-```text
-src/shared/
-```
-
-If a component is only used by one feature, it belongs inside that module.
-
----
-
-## 5. Infrastructure Is Separate
-
-Infrastructure concerns belong in:
-
-```text
-src/lib/
-```
-
-Examples:
-
-* Logging
-* Environment validation
-* Analytics
-* Rate limiting
-* Cache abstraction
-
----
-
-## 6. Database Access Is Centralized
-
-All database access belongs in:
-
-```text
-src/database/
-```
-
-No direct database queries should be scattered across features.
-
----
-
-# High-Level System Architecture
-
-```text
-┌──────────────────────────────────────────┐
-│                 Browser                  │
-└────────────────────┬─────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────┐
-│            Next.js App Router            │
-│      Pages • Layouts • API Routes        │
-└────────────────────┬─────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────┐
-│                 features                  │
-│                                          │
-│ Auth                                    │
-│ Research                                │
-│ Company                                 │
-│ Filing                                  │
-│ News                                    │
-│ Billing                                 │
-│ Dashboard                               │
-└────────────────────┬─────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────┐
-│              Infrastructure              │
-│                                          │
-│ Logger                                  │
-│ Cache                                   │
-│ Analytics                               │
-│ Rate Limiting                           │
-│ Environment Validation                  │
-└────────────────────┬─────────────────────┘
-                     │
-                     ▼
-┌──────────────────────────────────────────┐
-│                Database                  │
-│         PostgreSQL (Supabase)            │
-└──────────────────────────────────────────┘
-```
-
----
-
-# Repository Structure
-
-```text
-clyve/
-
-docs/
-drizzle/
-public/
-
-src/
-
-├── app/
-├── features/
-├── shared/
-├── database/
-├── lib/
-├── jobs/
-├── cache/
-├── styles/
-├── middleware.ts
-└── instrumentation.ts
-
-.env.example
-.env.local
-
-package.json
-tsconfig.json
-next.config.ts
-drizzle.config.ts
-```
-
----
-
-# Source Structure
+# Top-Level Structure
 
 ```text
 src/
 
-├── app/
-├── features/
-├── shared/
-├── database/
-├── lib/
-├── jobs/
-├── cache/
-├── styles/
-├── middleware.ts
-└── instrumentation.ts
+├── app/                  # Routing & UI composition (the waiter)
+├── modules/               # Business domains (the chefs)
+├── infrastructure/        # Technology layer (the kitchen)
+├── shared/                # Reusable, domain-agnostic code (the plates)
+├── providers/             # Global application providers
+├── contexts/              # Global React context
+├── hooks/                 # Global React hooks
+├── config/                # Application configuration
+├── types/                 # Global TypeScript types
+├── constants/             # Global constants
+├── styles/                # Global styling
+├── jobs/                  # Background processing (future)
+├── middleware.ts           # Request-level guard
+└── instrumentation.ts      # Observability entrypoint
 ```
 
 ---
 
 # app/
 
-Routing layer.
-
-Responsible for:
-
-* URL structure
-* Pages
-* Layouts
-* Route groups
-* API endpoints
-
-Not responsible for:
-
-* Business logic
-* Database access
-* AI workflows
-
-Structure:
-
 ```text
-app/
+app/                        # Routing & UI composition layer — the waiter
 
-├── (marketing)
-├── (auth)
-├── (apps)
-├── (admin)
-├── api
-└── layout.tsx
+├── (marketing)/            # Public website: landing, pricing, SEO pages
+├── (auth)/                 # Login, register, password recovery
+├── (app)/                  # Authenticated product workspace
+├── (admin)/                # Internal founder tooling
+├── api/                    # Streaming responses & external webhooks only
+└── layout.tsx               # Root layout
 ```
 
----
+`app/` is the **routing and UI composition layer**. It decides *where* the user is and *what screen* renders — nothing more.
 
-## (marketing)
+* `page.tsx` — a route's entry UI. Composes components; contains no business logic.
+* `layout.tsx` — shared shell for a route segment (nav, providers, structure).
+* `route.ts` — API endpoint handler. Used only for streaming (SSE) and webhooks, never general CRUD.
+* `_components/` — UI composition pieces local to that route group only (shell, sidebar, navbar). Not a business domain, not reusable outside that group.
 
-Public website.
+**Allowed:** pages, layouts, route handlers for streaming/webhooks, route-group-local UI shells that assemble other components.
+**Not allowed:** database queries, AI orchestration, external API integration logic, business calculations. If a route needs a mutation, it calls a Server Action from `modules/*/actions/` — it never writes the logic itself.
 
-Purpose:
-
-* Landing page
-* Pricing page
-* SEO content
-* Marketing content
-
-Structure:
+### Example — `(app)/`
 
 ```text
-(marketing)
-
-├── page.tsx
-├── pricing/
-├── about/
-├── terms/
-├── privacy/
-└── layout.tsx
-```
-
----
-
-## (auth)
-
-Authentication pages.
-
-Purpose:
-
-* Login
-* Registration
-* Password recovery
-
-Structure:
-
-```text
-(auth)
-
-├── login/
-├── register/
-├── forgot-password/
-└── layout.tsx
-```
-
----
-
-## (apps)
-
-Main application.
-
-Purpose:
-
-* User workspace
-* Research experience
-* Product features
-
-Structure:
-
-```text
-(apps)
+(app)/
 
 ├── dashboard/
 ├── research/
-├── history/
-├── watchlist/
-├── portfolio/
 ├── settings/
-└── layout.tsx
+│
+├── _components/            # UI shell local to the authenticated app — not a business domain
+│
+│   ├── app-shell/
+│   │   ├── AppShell.tsx      # Overall authenticated layout frame
+│   │   ├── Sidebar.tsx        # Left navigation
+│   │   ├── Navbar.tsx         # Top bar
+│   │   └── SidebarItem.tsx    # Single nav entry
+│   │
+│   ├── command/
+│   │   ├── CommandMenu.tsx    # Cmd+K command palette
+│   │   └── CommandItem.tsx    # Single command entry
+│   │
+│   └── user-menu/
+│       ├── UserMenu.tsx        # Account dropdown
+│       └── UserAvatar.tsx      # Avatar render
 ```
+
+Dashboard layout chrome — sidebar, navbar, app shell, command menu, user menu — lives here because it's structural UI for the route group, not a product feature. **Business UI (a research report card, a company financial chart) never lives here** — it belongs in the owning module's `components/`.
 
 ---
 
-## (admin)
-
-Internal founder tools.
-
-Purpose:
-
-* User management
-* Subscription management
-* Analytics
-* Customer support
-
-Structure:
+# modules/
 
 ```text
-(admin)
+modules/                    # Business layer — the chefs
 
-├── users/
-├── subscriptions/
-├── analytics/
-├── support/
-└── layout.tsx
+├── research/                # AI equity research engine
+├── company/                 # Company intelligence & financial data
+├── filing/                  # SEC filing intelligence
+├── news/                    # News intelligence & sentiment
+├── auth/                    # Identity & session
+├── billing/                 # Subscriptions & revenue
+├── dashboard/                # Workspace summaries & widgets
+├── admin/                   # Internal operations logic
+├── portfolio/                # Portfolio tracking (not in V1)
+└── watchlist/                # Watchlists & alerts (not in V1)
 ```
 
----
+`modules/` is where **all product logic lives**. Every domain owns everything it needs to function end-to-end — nothing about a domain should be scattered elsewhere.
 
-## api/
-
-Server execution layer.
-
-Purpose:
-
-* Secure backend operations
-* External integrations
-* Streaming responses
-
-Structure:
+### Example — `modules/research/`
 
 ```text
-api/
+research/
 
-├── auth/
-├── analyze/
-├── company/
-├── filing/
-├── news/
-├── billing/
-├── history/
-├── export/
-└── webhooks/
+├── actions/                 # Server Actions
+├── services/                 # Business logic
+├── agents/                   # AI agents
+├── pipelines/                 # Workflow AI
+├── prompts/                   # LLM prompts
+├── repositories/               # Database access
+├── schemas/                   # Validation
+├── components/                 # Domain UI
+├── hooks/                     # Domain hooks
+└── types.ts
 ```
+
+* **`actions/`** — the entry point from the UI. Receives the request from a component or form, validates input, and calls `services/`. Contains no business rules or database access of its own.
+* **`services/`** — the core business logic. This is where `generateResearchReport()` or `calculateIntrinsicValue()` actually live.
+* **`repositories/`** — the only place that talks to the database for this domain, through a repository abstraction. No raw queries scattered elsewhere.
+* **`components/`** — UI that only makes sense for this domain, e.g. `ResearchReport.tsx`, `FinancialChart.tsx`. Never moved to `shared/` unless it becomes genuinely generic.
+
+**Example files:**
+
+```
+modules/research/components/ResearchReport.tsx    # Renders a full research report
+modules/research/components/FinancialChart.tsx    # Domain-specific chart for research data
+modules/research/services/GenerateResearch.ts      # Orchestrates the AI research generation flow
+```
+
+**Allowed:** anything that expresses what Clyve *does* as a business — analysis, generation, extraction, calculation, domain UI, domain data access.
+**Not allowed:** generic UI primitives (belongs in `shared/`), raw infra clients (belongs in `infrastructure/`).
 
 ---
 
-# features/
-
-Core business layer.
-
-Most important folder in the entire project.
-
-Structure:
+# infrastructure/
 
 ```text
-features/
+infrastructure/              # Technology layer — the kitchen
 
-├── auth/
-├── research/
-├── company/
-├── filing/
-├── news/
-├── billing/
-├── dashboard/
-├── admin/
-├── portfolio/
-├── watchlist/
-└── api-platform/
+├── ai/                      # LLM provider clients
+├── database/                 # Connection, schema, migrations
+├── auth/                     # Auth provider/session config
+├── payments/                  # Payment provider client
+├── cache/                     # Redis client
+├── storage/                   # File/object storage client
+├── http/                      # HTTP client, retry, rate-limit
+├── logger/                    # Application logging
+├── security/                  # Encryption, hashing, CSRF
+├── env/                       # Environment validation
+└── monitoring/                 # Error tracking, tracing
 ```
 
----
+`infrastructure/` is the **technology layer**. It answers *"how does the system technically work?"*, never *"what does Clyve do?"*. It contains **no business logic**.
 
-## auth/
+### Example — `ai/`
 
-Authentication domain.
+```text
+ai/
 
-Responsible for:
+├── claude.ts                 # Claude API client
+├── openai.ts                  # OpenAI client (if used)
+└── tokens.ts                  # Token counting
+```
 
-* Session management
-* Login
-* Registration
-* Authorization
+**Contains:** API client setup, provider configuration, retry logic, token counting.
+**Does not contain:** `generateResearch()`, `analyzeStock()` — those are business logic and belong in `modules/research/services/`.
 
----
+### Example — `database/`
 
-## research/
-
-Core AI research engine.
-
-Responsible for:
-
-* Research orchestration
-* Prompt generation
-* AI workflows
-* Structured analysis generation
-
-This is the most important module in Clyve.
-
----
-
-## company/
-
-Company intelligence.
-
-Responsible for:
-
-* Company profiles
-* Financial metrics
-* Market information
-* Ticker validation
-
-Primary source:
-
-* Financial Modeling Prep
-
----
-
-## filing/
-
-SEC filing intelligence.
-
-Responsible for:
-
-* Filing retrieval
-* Filing parsing
-* Risk factor extraction
-* Regulatory document processing
-
-Examples:
-
-* 10-K
-* 10-Q
-* 8-K
-
----
-
-## news/
-
-News intelligence.
-
-Responsible for:
-
-* News aggregation
-* News normalization
-* Sentiment analysis
-* News summaries
-
----
-
-## billing/
-
-Revenue infrastructure.
-
-Responsible for:
-
-* Subscriptions
-* Plans
-* Upgrades
-* Billing lifecycle
-
-Primary provider:
-
-* Lemon Squeezy
-
----
-
-## dashboard/
-
-User workspace.
-
-Responsible for:
-
-* Dashboard widgets
-* Summary cards
-* User metrics
-* Research overview
-
----
-
-## admin/
-
-Internal operations.
-
-Responsible for:
-
-* User management
-* Revenue reporting
-* Subscription administration
-
----
-
-## portfolio/
-
-Future module.
-
-Responsible for:
-
-* Portfolio tracking
-* Portfolio research
-* Portfolio intelligence
-
-Not part of V1.
-
----
-
-## watchlist/
-
-Future module.
-
-Responsible for:
-
-* Watchlists
-* Alerts
-* Saved companies
-
-Not part of V1.
-
----
-
-## api-platform/
-
-Future product.
-
-Responsible for:
-
-* Public API
-* API keys
-* Usage metering
-* Developer platform
-
-Not part of V1.
+**Contains:** connection client, schema definitions, migrations.
+**Does not contain:** business query logic — that belongs in each module's own `repositories/`.
 
 ---
 
 # shared/
 
-Reusable code.
-
-Rule:
-
-No business logic allowed.
-
-Structure:
-
 ```text
-shared/
+shared/                     # Reusable, domain-agnostic code — the plates and glasses
 
-├── components/
+├── components/               # Button, Modal, Input
 ├── hooks/
-├── utils/
+├── utils/                     # formatCurrency, cn, formatDate
 ├── constants/
-├── config/
-└── types/
+├── types/
+├── providers/
+└── config/
 ```
 
-Examples:
+`shared/` contains only code that is **reusable and has no knowledge of any business domain**.
 
-Allowed:
+**Example contents:**
 
-* Button
-* Dialog
-* Input
-* Modal
+```
+components/  → Button, Modal, Input
+utils/       → formatCurrency, cn, formatDate
+```
 
-Not allowed:
-
-* ResearchCard
-* CompanyAnalysis
-* FilingViewer
-
-Those belong to features.
+**Never place here:** `ResearchCard`, `CompanyAnalysis`, `BillingLogic` — anything that implies a domain belongs in that domain's own module.
 
 ---
 
-# database/
-
-Database layer.
-
-Responsible for:
-
-* Schema definitions
-* Queries
-* Repositories
-* Migrations
-
-Structure:
+# hooks/
 
 ```text
-database/
+hooks/                      # Global reusable React hooks
 
-├── schema/
-├── queries/
-├── repositories/
-├── migrations/
-├── seeds/
+├── useDebounce.ts
+├── useMediaQuery.ts
+└── useClipboard.ts
+```
+
+Global hooks with no dependency on any business domain — usable anywhere in the app. A hook that only makes sense for one module (e.g. `useResearchStream`) lives in that module's own `hooks/`, not here.
+
+---
+
+# contexts/
+
+```text
+contexts/                   # Global React context
+
+├── ThemeContext.tsx
+├── UserContext.tsx
+└── AppContext.tsx
+```
+
+Application-wide state that many unrelated parts of the app need — theme, current user session, global app state.
+
+**`contexts/` vs. module providers:** `contexts/` holds state with **no domain meaning** — it's infrastructure for the React tree itself (theme, session). A `modules/*/providers/` (if one exists) would hold state scoped to that domain only, e.g. a `ResearchSessionProvider` used only inside the research module's UI tree. If a context is only consumed by one module, it does not belong in `contexts/`.
+
+---
+
+# providers/
+
+```text
+providers/                  # Global application providers
+
+├── AppProvider.tsx           # Composes all global providers into one
+├── QueryProvider.tsx          # React Query client provider
+├── ThemeProvider.tsx           # Theme provider
 └── index.ts
 ```
 
----
+`providers/` is kept separate from `contexts/`: `contexts/` defines the context itself, `providers/` wires the actual application-wide providers together (context providers, React Query, theme, etc.) into a single composition point.
 
-# lib/
-
-Infrastructure layer.
-
-Purpose:
-
-Provide global technical capabilities.
-
-Never store business logic here.
-
-Structure:
+**Flow:**
 
 ```text
-lib/
-
-├── ai.ts
-├── analytics.ts
-├── cache.ts
-├── cn.ts
-├── env.ts
-├── errors.ts
-├── fetcher.ts
-├── logger.ts
-├── numbers.ts
-├── pdf.ts
-├── ratelimit.ts
-├── strings.ts
-├── urls.ts
-├── redis.ts
-├── queue.ts
-├── storage.ts
-├── observability.ts
-├── security.ts
-├── crypto.ts
-└── constants.ts
+app/layout.tsx
+ │
+ ▼
+providers/AppProvider.tsx
+ │
+ ▼
+Context + React Query + Theme
 ```
 
-Examples:
+---
 
-Good:
+# config/
 
-* class name merging
-* cache abstraction
-* logging
-* analytics
+```text
+config/                     # Application configuration
 
-Bad:
+├── site.ts                   # Site metadata (name, url, description)
+├── navigation.ts               # Navigation menu structure
+├── plans.ts                    # Billing plan definitions
+└── feature-flags.ts             # Feature flag toggles
+```
 
-* getCompanyData()
-* generateResearch()
-* getNews()
+Static application configuration — not business logic.
 
-Those belong to features.
+```ts
+export const plans = {
+  pro: {
+    price: 29,
+    limit: 100
+  }
+}
+```
+
+---
+
+# types/
+
+```text
+types/                      # Global TypeScript types
+
+├── api.ts
+├── database.ts
+├── global.ts
+└── next-auth.d.ts
+```
+
+For small projects, `shared/types` is enough. For a larger SaaS, root-level `types/` is useful for types that span the entire app rather than a single domain or shared component (API response shapes, database row types, global ambient types, third-party type augmentation).
+
+---
+
+# constants/
+
+```text
+constants/                  # Global constants
+
+├── routes.ts
+├── permissions.ts
+└── limits.ts
+```
+
+App-wide constant values that don't belong to any single domain or shared component — similar in spirit to `types/`.
+
+---
+
+# styles/
+
+```text
+styles/
+
+├── globals.css
+├── variables.css
+└── themes.css
+```
+
+Global styling only — no component-scoped styles.
 
 ---
 
 # jobs/
 
-Future background processing.
-
-Not used in V1.
-
-Structure:
-
 ```text
-jobs/
+jobs/                       # Background processing — not used in V1
 
 ├── research/
 ├── filing/
@@ -707,155 +346,65 @@ jobs/
 └── cleanup/
 ```
 
-Examples:
-
-* SEC ingestion
-* Cache warming
-* Daily updates
+Future background work: SEC ingestion, cache warming, scheduled cleanup. Not implemented until V1 has real load.
 
 ---
 
-# cache/
-
-Future centralized caching.
-
-Not required in V1.
-
-Structure:
+# Server Action Flow
 
 ```text
-cache/
-
-├── company/
-├── filing/
-├── research/
-└── news/
+UI
+ │
+ ▼
+modules/*/actions
+ │
+ ▼
+modules/*/services
+ │
+ ▼
+modules/*/repositories
+ │
+ ▼
+infrastructure
+ │
+ ▼
+database
 ```
 
-Future backend:
-
-* Redis
-* Upstash
+A component calls an action → the action validates input and delegates to a service → the service applies business rules and calls a repository → the repository uses `infrastructure/database` to reach Postgres. No layer is skipped.
 
 ---
 
-# styles/
+# UI Placement Rule
 
-Global styling.
+| UI | Location |
+|---|---|
+| Marketing Hero | `app/(marketing)/_components` |
+| Login Form | `app/(auth)/_components` |
+| Sidebar Dashboard | `app/(app)/_components` |
+| Research Report UI | `modules/research/components` |
+| Button | `shared/components` |
 
-Structure:
+Rule of thumb: if the UI is structural to a route group (shell, nav), it lives in that route group's `_components/`. If it expresses a business domain, it lives in that module's `components/`. If it's generic and reusable everywhere, it lives in `shared/components/`.
+
+---
+
+# Dependency Rule
+
+**Allowed:**
 
 ```text
-styles/
-
-├── globals.css
-├── themes.css
-└── variables.css
+app → modules → infrastructure
 ```
 
----
+`shared/` can be used by any layer.
 
-# middleware.ts
-
-Application middleware.
-
-Responsibilities:
-
-* Route protection
-* Authentication checks
-* Request filtering
-* Security enforcement
-
----
-
-# instrumentation.ts
-
-Observability entrypoint.
-
-Future responsibilities:
-
-* Analytics
-* Monitoring
-* Error tracking
-* Distributed tracing
-
----
-
-# Core Research Pipeline
+**Forbidden:**
 
 ```text
-User
- │
- ▼
-Research Page
- │
- ▼
-POST /api/analyze
- │
- ▼
-Auth Check
- │
- ▼
-Quota Check
- │
- ▼
-Company Module
- │
- ▼
-News Module
- │
- ▼
-Filing Module
- │
- ▼
-Research Module
- │
- ▼
-Prompt Construction
- │
- ▼
-Claude API
- │
- ▼
-Structured Analysis
- │
- ▼
-Database Save
- │
- ▼
-Streaming Response
- │
- ▼
-User
+shared → modules            # shared must never depend on a business domain
+infrastructure → modules     # infrastructure must never depend on business logic
+app storing business logic   # app must stay a thin routing/composition layer
 ```
 
----
-
-# Current Scaling Strategy
-
-V1
-
-* Single repository
-* Single application
-* Single deployment
-* Single database
-
-V2
-
-* Redis caching
-* Background jobs
-* Filing ingestion
-
-V3
-
-* Public API
-* Developer platform
-* Advanced research intelligence
-
-V4
-
-* Monorepo
-* Workers
-* Dedicated data pipelines
-
-Do not build V2, V3, or V4 infrastructure until V1 has real users and validated demand.
+Dependencies flow one direction only: `app` composes `modules`, `modules` use `infrastructure`. Nothing flows backward.

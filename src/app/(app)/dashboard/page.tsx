@@ -4,10 +4,10 @@ import Link from "next/link";
 import { useCallback, useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUp } from "lucide-react";
-import AmbientGlow from "@/components/dashboard/AmbientGlow";
-import AvatarDropdown from "@/components/dashboard/AvatarDropdown";
-import { MobileTopNav } from "@/components/sidebar/MobileTopNav";
-import { ResearchSidebar } from "@/components/sidebar/ResearchSidebar";
+import AmbientGlow from "@/app/(app)/_components/AmbientGlow";
+import AvatarDropdown from "@/app/(app)/_components/AvatarDropdown";
+import { MobileTopNav } from "@/app/(app)/_components/sidebar/MobileTopNav";
+import { ResearchSidebar } from "@/app/(app)/_components/sidebar/ResearchSidebar";
 import { useSidebar } from "@/context/SidebarContext";
 import { generateResearchTitle } from "@/lib/generateResearchTitle";
 

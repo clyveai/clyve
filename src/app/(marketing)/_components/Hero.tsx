@@ -11,7 +11,7 @@ const CARDS = [
         tag: "Research Brief",
         title: "From question to brief.",
         subtitle: "Type a ticker. Get the full picture.",
-        accent: "#22c55e",
+        accent: "#ffffff",
         rows: [
             { label: "Financials & valuation", status: "structured", color: "#22c55e" },
             { label: "Analyst consensus", status: "synthesized", color: "#22c55e" },
@@ -25,9 +25,9 @@ const CARDS = [
         subtitle: "No forecasts. No buy signals. No advice.",
         accent: "#ffffff",
         rows: [
-            { label: "Public data only", status: "verified", color: "#a1a1aa" },
+            { label: "Public data only", status: "verified", color: "#22c55e" },
             { label: "Sourced & cited", status: "always", color: "#a1a1aa" },
-            { label: "Your call to make", status: "not ours", color: "#71717a" },
+            { label: "Your call to make", status: "not ours", color: "#a1a1aa" },
         ],
     },
     {
@@ -35,9 +35,9 @@ const CARDS = [
         tag: "Time to Insight",
         title: "3 hours \u2192 3 minutes.",
         subtitle: "Spend your time on the analysis, not the assembly.",
-        accent: "#3b82f6",
+        accent: "#ffffff",
         rows: [
-            { label: "News sentiment", status: "scored", color: "#3b82f6" },
+            { label: "News sentiment", status: "scored", color: "#2196F3" },
             { label: "Research history", status: "saved", color: "#a1a1aa" },
             { label: "PDF export", status: "one click", color: "#a1a1aa" },
         ],
@@ -81,22 +81,6 @@ export default function Hero() {
             {/* Hero Content */}
             <div className="relative z-10 flex flex-col items-center pt-24 pb-32 max-w-[1200px] mx-auto px-6">
 
-                {/* Eyebrow */}
-                <motion.div
-                    initial={{ opacity: 0, y: -8 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ duration: 0.4, ease: "easeOut" }}
-                    className="flex items-center gap-2 mb-8"
-                >
-                    <span
-                        className="inline-block w-1.5 h-1.5 rounded-full bg-[#22c55e]"
-                        style={{ boxShadow: "0 0 6px #22c55e" }}
-                    />
-                    <span className="text-xs font-mono uppercase tracking-[0.2em] text-zinc-500">
-                        Waitlist Open
-                    </span>
-                </motion.div>
-
                 {/* Headline */}
                 <motion.h1
                     initial={{ opacity: 0, y: 20 }}
@@ -105,7 +89,7 @@ export default function Hero() {
                     className="text-5xl md:text-7xl lg:text-[80px] font-medium text-center leading-[1.05] tracking-tight max-w-3xl"
                 >
                     Own your <br />
-                    <span className="text-zinc-400">equity research.</span>
+                    <span className="text-zinc-400">equity research</span>
                 </motion.h1>
 
                 {/* Subline */}
@@ -116,7 +100,7 @@ export default function Hero() {
                     className="mt-6 text-sm md:text-base text-zinc-500 text-center max-w-md leading-relaxed"
                 >
                     You already know how to read a balance sheet.
-                    Stop spending 3 hours gathering the data before you can start.
+                    Stop spending 3 hours gathering the data before you can start
                 </motion.p>
 
                 {/* CTA */}
@@ -150,7 +134,7 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.2, duration: 0.6 }}
-                    className="mt-10 text-[11px] font-mono text-zinc-700 tracking-wider uppercase"
+                    className="mt-10 text-[11px] font-mono text-zinc-500 tracking-wider uppercase"
                 >
                     Public data only &mdash; not financial advice &mdash; not a licensed advisor
                 </motion.p>
@@ -191,15 +175,15 @@ function DataCard({ card }: { card: CardData }) {
             {/* Card header */}
             <div className="flex items-start justify-between mb-5">
                 <div>
-                    <p className="text-[11px] font-mono text-zinc-600 uppercase tracking-widest mb-1">
+                    <p className="text-[11px] font-mono text-zinc-400 uppercase tracking-widest mb-1">
                         {card.subtitle}
                     </p>
-                    <h3 className="text-base font-medium text-white tracking-tight">
+                    <h3 className="text-base font-medium text-zinc-200 tracking-tight">
                         {card.title}
                     </h3>
                 </div>
                 <span
-                    className="text-[10px] font-mono text-zinc-500 bg-white/[0.04] border border-white/[0.06] px-2 py-1 rounded-md tracking-wide whitespace-nowrap"
+                    className="text-[10px] font-mono text-zinc-400 bg-white/[0.04] border border-white/[0.06] px-2 py-1 rounded-md tracking-wide whitespace-nowrap"
                 >
                     {card.tag}
                 </span>
@@ -231,7 +215,7 @@ function DataCard({ card }: { card: CardData }) {
 
             {/* Bottom mono line — signature terminal feel */}
             <div className="mt-5 pt-4 border-t border-white/[0.04]">
-                <p className="text-[10px] font-mono text-zinc-700 leading-relaxed">
+                <p className="text-[10px] font-mono text-zinc-600 leading-relaxed">
                     clyve / <span className="text-zinc-600">layer.{card.id}</span>
                 </p>
             </div>
