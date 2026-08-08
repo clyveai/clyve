@@ -22,7 +22,6 @@ You type a company name or ticker. Clyve pulls verified public data, structures 
 | [06 — Decisions](./docs/06-decisions.md) | ADRs — key architectural and product decisions with rationale |
 | [07 — Pricing & Unit Economics](./docs/07-pricing.md) | Cost per query, gross margin, break-even, scaling thresholds |
 
-| [Simple Architecture](./docs/simple-architecture.md) | Check this out to see how simple the architecture is|
 ---
 
 ## Quick Start
@@ -48,6 +47,11 @@ Clyve AI does not provide price predictions, recommend investment actions, use n
 
 ---
 
-## Contact
+## Contribute
 
-Early access, feedback, or inquiries → [LinkedIn](https://linkedin.com/company/clyveai)
+Clyve is being built in public. Developers and builders are welcome to explore the codebase, report issues, propose improvements, and contribute to the project.
+
+→ **[Contribute on GitHub](https://github.com/clyveai)**
+→ **[Connect on LinkedIn](https://linkedin.com/company/clyveai)**
+
+*Build with us from the early days.*
