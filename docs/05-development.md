@@ -13,7 +13,7 @@
 
 ```bash
 # 1. Clone and install
-git clone https://github.com/your-org/clyve.git
+git clone https://github.com/clyveai/clyve.git
 cd clyve
 pnpm install
 
