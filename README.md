@@ -1,12 +1,12 @@
 # Clyve AI
 
-> Financial research intelligence, structured. No noise. No advice. Just data.
+> A memory layer for conviction. Not a place to look for information — a place to store and test your own reasoning over time.
 
 ---
 
-You type a company name or ticker. Clyve pulls verified public data, structures it, and returns a clean research brief in seconds — not hours. No predictions. No buy/sell signals. No financial advice. Just organized, sourced intelligence so you can make your own call faster.
+You write down why you hold a position — the specific claims your thesis depends on. Clyve tracks filings and news against it, and flags the moment reality starts to diverge. No predictions. No buy/sell signals. No financial advice. Just your own reasoning, kept honest over time.
 
-**Status:** Pre-launch · Pre-revenue · Bootstrapped solo founder
+**Status:** Pre-launch · Pre-revenue · Bootstrapped, 3-person team
 
 ---
 
@@ -14,13 +14,13 @@ You type a company name or ticker. Clyve pulls verified public data, structures 
 
 | Doc | Contents |
 |---|---|
-| [01 — Product](./docs/01-product.md) | Why it exists, target market, positioning, core features, pricing |
+| [01 — Product](./docs/01-product.md) | Why it exists, positioning shift (V0→V1), target market, core features, competitive positioning |
 | [02 — Roadmap](./docs/02-roadmap.md) | V1/V2/V3 scope, current build status |
-| [03 — Architecture](./docs/03-architecture.md) | System design, data flow, project structure, DB schema |
+| [03 — Architecture](./docs/03-architecture.md) | System design, module structure, data flow |
 | [04 — Tech Stack](./docs/04-tech-stack.md) | Every tool, why it was chosen, links |
 | [05 — Development](./docs/05-development.md) | Local setup, env vars, scripts |
 | [06 — Decisions](./docs/06-decisions.md) | ADRs — key architectural and product decisions with rationale |
-| [07 — Pricing & Unit Economics](./docs/07-pricing.md) | Cost per query, gross margin, break-even, scaling thresholds |
+| [07 — Pricing & Unit Economics](./docs/07-pricing.md) | Cost model, unit economics, break-even, scaling thresholds |
 
 ---
 
@@ -39,7 +39,7 @@ pnpm dev
 
 ## Legal
 
-Every analysis output includes a non-removable disclaimer:
+Every thesis analysis output includes a non-removable disclaimer:
 
 > *This report is generated from publicly available data for research and informational purposes only. It does not constitute financial advice, investment advice, or a recommendation to buy or sell any security. Always consult a qualified financial advisor before making investment decisions. Clyve AI is not a licensed financial advisor.*
 

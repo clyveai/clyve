@@ -82,18 +82,29 @@ ANTHROPIC_API_KEY=                   # sk-ant-...
 FMP_API_KEY=                         # financialmodelingprep.com → API Keys
 
 # ─────────────────────────────────────────
-# News — NewsAPI
-# https://newsapi.org/register
+# News — GNews API
+# https://gnews.io
+# CORRECTION: earlier draft listed NEWS_API_KEY (NewsAPI Developer, $449/mo)
+# which conflicts with the pricing model — GNews ($9/mo) is the correct provider
 # ─────────────────────────────────────────
-NEWS_API_KEY=                        # newsapi.org → Account → API Key
+GNEWS_API_KEY=                       # gnews.io → Dashboard → API Key
 
 # ─────────────────────────────────────────
-# Billing — Lemon Squeezy
-# https://docs.lemonsqueezy.com/api
+# Billing — Polar.sh
+# https://docs.polar.sh
 # ─────────────────────────────────────────
-LEMONSQUEEZY_API_KEY=                # app.lemonsqueezy.com → Settings → API
-LEMONSQUEEZY_WEBHOOK_SECRET=         # app.lemonsqueezy.com → Settings → Webhooks
-NEXT_PUBLIC_LEMONSQUEEZY_STORE_ID=   # your store ID
+POLAR_ACCESS_TOKEN=                  # polar.sh → Settings → Developers → Access Token
+POLAR_WEBHOOK_SECRET=                # polar.sh → Settings → Webhooks
+NEXT_PUBLIC_POLAR_ORGANIZATION_ID=   # your organization ID
+
+# ─────────────────────────────────────────
+# Cache — Upstash Redis
+# https://upstash.com
+# Required for V1 — event/news caching per ticker per monitoring window
+# is structural to the cost model, not optional (see 07-pricing.md)
+# ─────────────────────────────────────────
+UPSTASH_REDIS_REST_URL=
+UPSTASH_REDIS_REST_TOKEN=
 ```
 
 ---
@@ -111,15 +122,14 @@ Clyve uses [Drizzle ORM](https://orm.drizzle.team) with [Drizzle Kit](https://or
 ## Deployment
 
 Clyve deploys to [Vercel](https://vercel.com) via GitHub integration.
-
-```
 Push to main → Vercel CI/CD → Production deploy
 Push to feature/* → Vercel preview deployment (unique URL)
-```
 
 **Required Vercel environment variables:** Mirror all variables from `.env.local` into Vercel project settings → Environment Variables.
 
 **Supabase connection note:** Use the **Transaction Pooler** connection string (port 6543) for `DATABASE_URL` on Vercel — not the direct connection — to avoid connection exhaustion on serverless.
+
+**Polar webhook note:** Register the webhook endpoint in Polar dashboard pointing to `/api/webhooks/polar` (or equivalent route handler) before going live — subscription state sync depends on this.
 
 ---
 

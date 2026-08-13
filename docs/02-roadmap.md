@@ -1,42 +1,46 @@
 # Roadmap
 
-## V1 — Core Research Assistant
-**Scope:** US markets (NYSE / NASDAQ) only · English-first · Single-user subscription
+## V1 — Thesis Memory Layer
+**Scope:** US markets (NYSE/NASDAQ) only · English-first · Single-user subscription
 
 | Item | Status |
 |---|---|
-| Conversational research interface | 🔲 In progress |
-| Structured analysis output (financials + news + summary) | 🔲 In progress |
-| Research history + sidebar | 🔲 In progress |
+| Thesis capture flow (structured: belief, why, invalidation, horizon) | 🔲 In progress |
+| Drift monitoring engine (per-assumption, not binary) | 🔲 In progress |
+| Status dashboard (bubble/card, color-coded) | 🔲 In progress |
+| Curated document history (periodic narrative, not raw feed) | 🔲 In progress |
+| Halal ETF screening (standalone feature) | 🔲 Planned |
 | PDF export (Pro tier) | 🔲 Planned |
-| Freemium + Pro subscription via Lemon Squeezy | 🔲 Planned |
-| Sentiment analysis via Claude API (inline, no Python service) | 🔲 Planned |
+| Freemium + Pro subscription via Polar sh | 🔲 Planned |
+| Sentiment analysis via Claude API (inline) | 🔲 Planned |
 | Disclaimer system (non-removable) | 🔲 Planned |
 | Landing page + pricing page | 🔲 In progress |
 
 **V1 intentionally excludes:**
-- Python ML microservice (deferred — see [ADR-003](./06-decisions.md#adr-003))
+- Conversational chatbot interface (deprecated — V0 concept)
+- Python ML microservice (see ADR-003)
 - Admin panel (Supabase dashboard used instead)
-- Non-US markets
-- Crypto, forex
+- Non-US markets, crypto, forex
+- Broker connect (evaluated, deferred — see below)
 
 ---
 
 ## V2 — Depth & Expansion
 **Trigger:** V1 live + first revenue + validated retention signal
 
-- [ ] SEC filing deep-dive (10-K / 10-Q full parsing via EDGAR)
-- [ ] Competitor comparison (side-by-side structured analysis)
-- [ ] Watchlist & price-change alerts
+- [ ] Broker connect / auto-sync holdings (differentiator vs. MyThesis's non-functional version — build this properly, not as vaporware)
+- [ ] SEC filing deep-dive (10-K/10-Q full parsing via direct EDGAR)
+- [ ] Competitor comparison (structured, per-assumption)
+- [ ] Portfolio-level cross-thesis reasoning (not just per-ticker)
 - [ ] International markets (LSE, SGX, IDX)
 - [ ] Python FastAPI microservice for heavier ML workloads
 
 ---
 
 ## V3 — Intelligence Layer
-**Trigger:** Consistent MRR + product-market fit signal from Pro users
+**Trigger:** Consistent MRR + PMF signal from Pro users
 
-- [ ] Custom scoring models (user-defined weighting)
-- [ ] Portfolio-level research view (multi-ticker aggregation)
-- [ ] API access for power users / analysts
+- [ ] Longitudinal behavioral pattern detection (e.g. "you historically underestimate margin compression") — not offered by any identified competitor as of this writing
+- [ ] Custom scoring models
+- [ ] API access for power users/analysts
 - [ ] Non-English market support

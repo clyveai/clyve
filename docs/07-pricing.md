@@ -1,189 +1,98 @@
 # Pricing & Unit Economics
 
-> Internal reference for all pricing decisions, infrastructure cost modeling, and scaling thresholds.
-> Update this document whenever a vendor plan, usage pattern, or pricing tier changes.
->
-> Canonical pricing for UI and docs → [01-product.md](./01-product.md)
+> V1 cost driver is fundamentally different from V0: V0 billed per discrete query (user asks, pays per answer). V1's cost scales with **number of holdings tracked × monitoring frequency**, since drift-checking runs continuously in the background, not on-demand. The V0 model below is retained for historical reference only — do not reuse its cap logic.
 
 ---
 
-## Pricing Tiers
+## V1 Pricing — Not Yet Finalized
 
-| Tier | Queries | Price | Notes |
-|---|---|---|---|
-| Free | 3 lifetime | $0 | No credit card required |
-| Pro Monthly | 50 / mo | $19/mo | Full access — PDF export, history, sentiment — resets each billing cycle |
-| Pro Annual | 50 / mo | $149/yr | Effective $12.42/mo (UI displays $12 rounded) · Save $79/yr |
+**Options under consideration (see ADR discussion in 01-product.md):**
 
-### Why These Numbers
-
-$19/mo sits at a deliberate position in the market:
-
-- Bloomberg Terminal: ~$2,000/mo — institutional, inaccessible to retail
-- ChatGPT Plus: $20/mo — no structured financial output, no verified sources
-- Clyve Pro: $19/mo — structured intelligence, verified data, accessible to retail
-
-The price is not race-to-the-bottom. It signals seriousness while remaining accessible to the exact user Clyve is built for: independent investors who already do their own due diligence.
-
----
-
-## Cost Per Query (Variable)
-
-Every time a user runs a research query, the following costs are incurred.
-
-| Component | Basis | Cost/Query |
+| Model | Mechanism | Risk |
 |---|---|---|
-| Claude API (Sonnet) | ~2,000 input + ~1,500 output tokens @ $3/$15 per 1M | ~$0.028 |
-| FMP API | Amortized across ~1,000 queries/mo on paid plan | ~$0.001 |
-| GNews API | Amortized across ~1,000 queries/mo on $9/mo plan | ~$0.001 |
-| **Total variable cost** | | **~$0.030** |
+| Flat with holdings cap | e.g. "$19/mo, up to 10 holdings tracked" | Needs per-holding cost model before setting the cap number |
+| Flat with monitoring-frequency throttle | Unlimited holdings, checked less often | Conflicts with "faster than MyThesis" as a differentiator |
+| True flat/unlimited | No cap | Not viable pre-revenue without a modeled worst-case cost — see below |
 
-Working budget: use **$0.035/query** with a ~15% buffer for spikes.
-
-Pro quota is capped at **50 queries/month**. Maximum variable cost per Pro user = **$1.75/mo** ($0.035 × 50). Margin degradation risk from power users is structurally eliminated.
+**Decision blocker:** none of these can be finalized until the per-holding monitoring cost is modeled (see next section). Do not ship "unlimited" without this.
 
 ---
 
-## Fixed Monthly Infrastructure
+## Estimated Cost Per Tracked Holding (V1 — needs validation)
+
+Unlike V0's per-query model, V1 cost is recurring per holding, per monitoring cycle.
+
+| Component | Basis | Est. Cost/Holding/Monitoring-Cycle |
+|---|---|---|
+| Event ingestion (FMP + GNews + SEC EDGAR pull) | Amortized across API plan (see below) | ~$0.002–0.005 |
+| Drift classification (Claude, per new event) | Varies with event volume/holding | ~$0.01–0.03 |
+| Curated history synthesis (Claude, per period) | 1 synthesis call per monitoring period, not per event (ADR-009) | ~$0.02–0.04 |
+| **Total, estimated** | | **~$0.03–0.08 / holding / cycle** |
+
+> **This table is a placeholder estimate, not a validated number.** Before setting V1 pricing, run this against real monitoring frequency assumptions (daily? weekly? on-filing-only?) and confirm against actual token usage from a working prototype. Treat every number here as provisional.
+
+---
+
+## Fixed Monthly Infrastructure (retained from V0, still applicable)
 
 | Service | Plan | Cost/mo | Trigger to Upgrade |
 |---|---|---|---|
 | [GNews API](https://gnews.io) | Starter ($9/mo, 1,000 req/day) | $9 | Switch to TheNewsAPI at ~500 users |
 | [Financial Modeling Prep](https://site.financialmodelingprep.com/developer/docs) | Basic ($14/mo, 300 calls/day) | $14 | Upgrade to Starter ($29/mo) at ~80–100 users |
+| [Upstash Redis](https://upstash.com) | Free tier → paid | $0 → | **Now required for V1, not optional** — caching is structural to the monitoring-cost model, not just a scaling mitigation (see ADR-009 note on cost) |
 | [Vercel](https://vercel.com/pricing) | Free tier | $0 | Upgrade to Pro ($20/mo) at ~200 users |
 | [Supabase](https://supabase.com/pricing) | Free tier | $0 | Upgrade to Pro ($25/mo) at ~200 users |
 | Domain | — | $1 | — |
-| **Total (early stage)** | | **$24/mo** | |
-| **Total (200+ users)** | | **~$69/mo** | Vercel + Supabase paid kicks in |
-
-> **Note:** Python ML service (Railway ~$7/mo) is deferred to V2. Not included in V1 fixed cost baseline. See [ADR-003](./06-decisions.md#adr-003).
+| **Total (early stage)** | | **~$24/mo** | |
 
 ---
 
-## Gross Margin Per User
+## News API Strategy (unchanged, still binding)
 
-| Billing | Revenue | Variable Cost (capped) | Lemon Squeezy Fee | Infra Share | **Net/User** | **Gross Margin** |
-|---|---|---|---|---|---|---|
-| Pro Monthly | $19.00 | $1.75 (max 50 q) | $1.45 (5% + $0.50) | $0.50 | ~$15.30 | ~**80.5%** |
-| Pro Annual | $149.00 | $21.00/yr (max) | $7.95/yr | $6.00/yr | ~$114.05/yr | ~**76.5%** |
+**Default: GNews API ($9/mo). Do NOT use NewsAPI Developer ($449/mo).**
 
-Gross margin 76–80% is locked in by the hard 50 query cap. No margin compression risk from individual usage spikes.
-
----
-
-## Break-Even & Scale Projections
-
-Fixed cost baseline: $24/mo (V1). All users on Pro Monthly at $19/mo. Variable cost: $1.75/user/mo (full 50 query usage assumed).
-
-| Paying Users | MRR | Variable Cost | Fixed Cost | **Net Profit/mo** |
-|---|---|---|---|---|
-| 2 | $38 | $3.50 | $24 | +$10.50 |
-| 2–3 | — | — | — | **~Break-even** |
-| 10 | $190 | $17.50 | $24 | ~$148 |
-| 25 | $475 | $43.75 | $24 | ~$407 |
-| 50 | $950 | $87.50 | $24 | ~$838 |
-| 100 | $1,900 | $175.00 | $24 | ~$1,701 |
-| 200 | $3,800 | $350.00 | $69 | ~$3,381 |
-
-Break-even: **2–3 paying users.**
-
----
-
-## News API Strategy
-
-**Default: GNews API ($9/mo). Do not use NewsAPI Developer ($449/mo) in production.**
-
-| Provider | Free Tier | Paid Tier | Production Verdict |
+| Provider | Free Tier | Paid Tier | Verdict |
 |---|---|---|---|
-| [NewsAPI](https://newsapi.org) | 100 req/day | $449/mo (Developer) | ❌ Do not use — destroys unit economics |
-| [GNews API](https://gnews.io/docs/v4) | 100 req/day | $9/mo (1,000 req/day) | ✅ **Default. Use this.** |
-| [TheNewsAPI](https://www.thenewsapi.com/pricing) | 100 req/day | $29/mo (unlimited) | Upgrade path at ~300–500 users |
-| RSS aggregation | Unlimited | $0 (engineering time) | V2 consideration for cost ceiling |
+| [NewsAPI](https://newsapi.org) | 100 req/day | $449/mo | ❌ Do not use |
+| [GNews API](https://gnews.io/docs/v4) | 100 req/day | $9/mo | ✅ Default |
+| [TheNewsAPI](https://www.thenewsapi.com/pricing) | 100 req/day | $29/mo unlimited | Upgrade path at ~300–500 users |
 
-### Caching is Non-Negotiable
-
-News results must be cached per ticker per time window. Multiple users querying AAPL within the same hour should not trigger multiple API calls.
-
-Recommended implementation:
-
-- Cache layer: [Upstash Redis](https://upstash.com) (free tier covers early stage)
-- TTL: 60 minutes per ticker
-- Expected cache hit rate at 50 users: 60–80%
-- Impact: reduces effective news API cost by 60–80%
+**Caching is non-negotiable** — event data per ticker per monitoring window must be cached (Upstash Redis, TTL per monitoring frequency decision). This is now a cost-model requirement, not just a nice-to-have, since V1's cost scales with continuous monitoring rather than discrete user-triggered queries.
 
 ---
 
-## Scaling Inflection Points
+## V0 Reference Pricing (deprecated — historical comparison only)
 
-### 50–100 Users — Claude API Becomes Primary Variable Cost
-
-At 100 users × 50 queries = max 5,000 queries/mo:
-- Claude cost: 5,000 × $0.028 = **$140/mo maximum**
-- Cap is structural — 50 query limit per user makes this ceiling firm.
-
-Mitigation: implement **response caching per ticker per time window**.
-- Key = `analysis:{ticker}:{date}` on Upstash Redis
-- Target cache hit rate: 40–60% — reduces Claude spend below maximum projection
-
-### 80–100 Users — FMP API Call Limit
-
-FMP Basic plan: 300 calls/day ≈ 9,000 calls/month.
-At 100 users × 50 queries × ~3 FMP calls per query = 15,000 calls/month needed.
-
-**Action:** Upgrade to FMP Starter ($29/mo, 3,000 calls/day) approaching 80 users. → [FMP Pricing](https://site.financialmodelingprep.com/developer/docs/pricing)
-
-### 200+ Users — Vercel and Supabase Free Tier Limits
-
-| Service | Free Tier Limit | Paid Plan | Cost |
-|---|---|---|---|
-| [Vercel](https://vercel.com/pricing) | 100GB bandwidth, serverless limits | Pro | $20/mo |
-| [Supabase](https://supabase.com/pricing) | 500MB DB, 2GB bandwidth | Pro | $25/mo |
-
-Combined upgrade: +$45/mo — covered by ~3 net new monthly users.
-
----
-
-## Annual vs Monthly Mix Assumption
-
-Assumed 30/70 annual/monthly ratio at early stage.
-
-| Scenario | 50 Users (30% annual) | |
+| Tier | Queries | Price |
 |---|---|---|
-| 15 annual users | $186/mo effective ($149 ÷ 12) | |
-| 35 monthly users | $665/mo | |
-| **Combined MRR equivalent** | **$851** | **~$707/mo net** |
+| Free | 3 lifetime | $0 |
+| Pro Monthly | 50/mo | $19/mo |
+| Pro Annual | 50/mo | $149/yr |
+
+Break-even under V0's model was 2–3 paying users at ~80% gross margin. **This margin figure does not carry over to V1** — the cost structure is no longer capped by a simple query count, and margin cannot be claimed until the per-holding monitoring cost table above is validated against a real prototype.
 
 ---
 
 ## Payment Processing
 
-**Gateway: [Lemon Squeezy](https://www.lemonsqueezy.com) (Merchant of Record)**
+**Gateway: Polar.sh (Merchant of Record).**
 
-Fee structure: 5% + $0.50 per transaction. → [Lemon Squeezy Pricing](https://www.lemonsqueezy.com/pricing)
+> **Unresolved:** exact fee structure and payout cadence need to be pulled from Polar's current published pricing before the net revenue figures below can be trusted. The numbers in this section still use Lemon Squeezy's fee structure (5% + $0.50/transaction) as a placeholder — do not treat as final.
 
-| Transaction | Gross Fee | Net Revenue |
+| Transaction (placeholder, using old fee structure) | Gross Fee | Net Revenue |
 |---|---|---|
 | $19 monthly | $1.45 | $17.55 |
 | $149 annual | $7.95 | $141.05 |
 
-Net-30 payout cycle. Set a hard Anthropic API spend cap before launch — API costs are payable before revenue clears. See [ADR-004](./06-decisions.md#adr-004).
+**Action item before this section is finalized:** confirm Polar.sh's actual transaction fee % and fixed fee, and payout cycle timing (net-X days). Update ADR-004's spend-cap rationale accordingly once confirmed — the "API costs payable before revenue clears" risk still applies regardless of gateway, but the exact cash flow gap depends on Polar's payout cadence, not Lemon Squeezy's.
 
 ---
 
-## Summary
+## Open Items Before This Doc Is Finalized
 
-| Metric | Value |
-|---|---|
-| Cost per query | ~$0.035 (buffered) |
-| Pro query cap | 50 / month (hard) |
-| Fixed cost/mo (V1 early stage) | $24 |
-| Gross margin — Pro Monthly | ~80.5% |
-| Gross margin — Pro Annual | ~76.5% |
-| Break-even | 2–3 paying users |
-| Net profit at 50 users | ~$838/mo |
-| Critical cost risk | NewsAPI Developer plan — do not use |
-| Primary scaling mitigation | Response caching via Upstash Redis |
+1. Validate per-holding-per-cycle cost against a working prototype, not estimates
+2. Decide monitoring frequency (this is both a UX decision — "how fresh is the alert" — and a cost decision)
+3. Set the holdings cap number for the flat-tier pricing model based on #1
+4. Re-run break-even projection once #1–#3 are locked
 
----
-
-*Last updated: June 2026*
+*Last updated: August 2026 — supersedes June 2026 version, which was written entirely against the deprecated V0 query-metered model.*

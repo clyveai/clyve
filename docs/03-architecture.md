@@ -1,146 +1,24 @@
-# 03 — Architecture
+**Allowed:** anything that expresses what Clyve *does* as a business — thesis capture, drift detection, curated synthesis, domain UI, domain data access.
+**Not allowed:** generic UI primitives (belongs in `shared/`), raw infra clients (belongs in `infrastructure/`).
 
-Clyve follows a **Modular Monolith** with **Domain-Driven Design** principles: one deployable application, strict domain boundaries inside it. This keeps velocity high for a solo founder while staying safe to hand off to a 10-engineer team later — no premature microservices, no unstructured dumping grounds.
-
-**Analogy:**
-
-| Layer | Role |
-|---|---|
-| `app/` | The waiter who takes the order |
-| `modules/` | The chef who cooks the food |
-| `infrastructure/` | The kitchen, stove, cooking equipment |
-| `shared/` | The plates and glasses everyone uses |
-| `jobs/` | Heavy work done behind the scenes |
-
----
-
-# Top-Level Structure
+### Example — `modules/screening/`
 
 ```text
-src/
-
-├── app/                  # Routing & UI composition (the waiter)
-├── modules/               # Business domains (the chefs)
-├── infrastructure/        # Technology layer (the kitchen)
-├── shared/                # Reusable, domain-agnostic code (the plates)
-├── providers/             # Global application providers
-├── contexts/              # Global React context
-├── hooks/                 # Global React hooks
-├── config/                # Application configuration
-├── types/                 # Global TypeScript types
-├── constants/             # Global constants
-├── styles/                # Global styling
-├── jobs/                  # Background processing (future)
-├── middleware.ts           # Request-level guard
-└── instrumentation.ts      # Observability entrypoint
-```
-
----
-
-# app/
-
-```text
-app/                        # Routing & UI composition layer — the waiter
-
-├── (marketing)/            # Public website: landing, pricing, SEO pages
-├── (auth)/                 # Login, register, password recovery
-├── (app)/                  # Authenticated product workspace
-├── (admin)/                # Internal founder tooling
-├── api/                    # Streaming responses & external webhooks only
-└── layout.tsx               # Root layout
-```
-
-`app/` is the **routing and UI composition layer**. It decides *where* the user is and *what screen* renders — nothing more.
-
-* `page.tsx` — a route's entry UI. Composes components; contains no business logic.
-* `layout.tsx` — shared shell for a route segment (nav, providers, structure).
-* `route.ts` — API endpoint handler. Used only for streaming (SSE) and webhooks, never general CRUD.
-* `_components/` — UI composition pieces local to that route group only (shell, sidebar, navbar). Not a business domain, not reusable outside that group.
-
-**Allowed:** pages, layouts, route handlers for streaming/webhooks, route-group-local UI shells that assemble other components.
-**Not allowed:** database queries, AI orchestration, external API integration logic, business calculations. If a route needs a mutation, it calls a Server Action from `modules/*/actions/` — it never writes the logic itself.
-
-### Example — `(app)/`
-
-```text
-(app)/
-
-├── dashboard/
-├── research/
-├── settings/
-│
-├── _components/            # UI shell local to the authenticated app — not a business domain
-│
-│   ├── app-shell/
-│   │   ├── AppShell.tsx      # Overall authenticated layout frame
-│   │   ├── Sidebar.tsx        # Left navigation
-│   │   ├── Navbar.tsx         # Top bar
-│   │   └── SidebarItem.tsx    # Single nav entry
-│   │
-│   ├── command/
-│   │   ├── CommandMenu.tsx    # Cmd+K command palette
-│   │   └── CommandItem.tsx    # Single command entry
-│   │
-│   └── user-menu/
-│       ├── UserMenu.tsx        # Account dropdown
-│       └── UserAvatar.tsx      # Avatar render
-```
-
-Dashboard layout chrome — sidebar, navbar, app shell, command menu, user menu — lives here because it's structural UI for the route group, not a product feature. **Business UI (a research report card, a company financial chart) never lives here** — it belongs in the owning module's `components/`.
-
----
-
-# modules/
-
-```text
-modules/                    # Business layer — the chefs
-
-├── research/                # AI equity research engine
-├── company/                 # Company intelligence & financial data
-├── filing/                  # SEC filing intelligence
-├── news/                    # News intelligence & sentiment
-├── auth/                    # Identity & session
-├── billing/                 # Subscriptions & revenue
-├── dashboard/                # Workspace summaries & widgets
-├── admin/                   # Internal operations logic
-├── portfolio/                # Portfolio tracking (not in V1)
-└── watchlist/                # Watchlists & alerts (not in V1)
-```
-
-`modules/` is where **all product logic lives**. Every domain owns everything it needs to function end-to-end — nothing about a domain should be scattered elsewhere.
-
-### Example — `modules/research/`
-
-```text
-research/
+screening/
 
 ├── actions/                 # Server Actions
-├── services/                 # Business logic
-├── agents/                   # AI agents
-├── pipelines/                 # Workflow AI
-├── prompts/                   # LLM prompts
+├── services/                 # Compliance ruleset evaluation
 ├── repositories/               # Database access
 ├── schemas/                   # Validation
-├── components/                 # Domain UI
-├── hooks/                     # Domain hooks
+├── components/                 # Domain UI (ScreeningResultTable.tsx, ComplianceBadge.tsx)
+├── hooks/
 └── types.ts
 ```
 
-* **`actions/`** — the entry point from the UI. Receives the request from a component or form, validates input, and calls `services/`. Contains no business rules or database access of its own.
-* **`services/`** — the core business logic. This is where `generateResearchReport()` or `calculateIntrinsicValue()` actually live.
-* **`repositories/`** — the only place that talks to the database for this domain, through a repository abstraction. No raw queries scattered elsewhere.
-* **`components/`** — UI that only makes sense for this domain, e.g. `ResearchReport.tsx`, `FinancialChart.tsx`. Never moved to `shared/` unless it becomes genuinely generic.
+`screening/` is kept as its own module, separate from `thesis/`, because it's a rules-engine (compliance threshold evaluation) rather than an AI-reasoning feature — a different technical shape from thesis drift detection, and standalone enough that it shouldn't be forced into the core domain.
 
-**Example files:**
-
-```
-modules/research/components/ResearchReport.tsx    # Renders a full research report
-modules/research/components/FinancialChart.tsx    # Domain-specific chart for research data
-modules/research/services/GenerateResearch.ts      # Orchestrates the AI research generation flow
-```
-
-**Allowed:** anything that expresses what Clyve *does* as a business — analysis, generation, extraction, calculation, domain UI, domain data access.
-**Not allowed:** generic UI primitives (belongs in `shared/`), raw infra clients (belongs in `infrastructure/`).
+**Allowed:** compliance ruleset logic, screening result generation, domain UI for screening.
+**Not allowed:** thesis logic, drift detection — those stay in `thesis/`.
 
 ---
 
@@ -170,12 +48,17 @@ infrastructure/              # Technology layer — the kitchen
 ai/
 
 ├── claude.ts                 # Claude API client
-├── openai.ts                  # OpenAI client (if used)
+├── gemini.ts                  # Gemini Flash client (fast/cheap drift classification)
 └── tokens.ts                  # Token counting
 ```
 
 **Contains:** API client setup, provider configuration, retry logic, token counting.
-**Does not contain:** `generateResearch()`, `analyzeStock()` — those are business logic and belong in `modules/research/services/`.
+**Does not contain:** `detectThesisDrift()`, `synthesizeHistoryEntry()` — those are business logic and belong in `modules/thesis/services/`.
+
+### Example — `payments/`
+
+**Contains:** Polar.sh client setup, webhook signature verification.
+**Does not contain:** subscription business rules — those belong in `modules/billing/services/`.
 
 ### Example — `database/`
 
@@ -201,13 +84,10 @@ shared/                     # Reusable, domain-agnostic code — the plates and 
 `shared/` contains only code that is **reusable and has no knowledge of any business domain**.
 
 **Example contents:**
+components/ → Button, Modal, Input
+utils/ → formatCurrency, cn, formatDate
 
-```
-components/  → Button, Modal, Input
-utils/       → formatCurrency, cn, formatDate
-```
-
-**Never place here:** `ResearchCard`, `CompanyAnalysis`, `BillingLogic` — anything that implies a domain belongs in that domain's own module.
+**Never place here:** `ThesisCard`, `ScreeningResultTable`, `BillingLogic` — anything that implies a domain belongs in that domain's own module.
 
 ---
 
@@ -221,7 +101,7 @@ hooks/                      # Global reusable React hooks
 └── useClipboard.ts
 ```
 
-Global hooks with no dependency on any business domain — usable anywhere in the app. A hook that only makes sense for one module (e.g. `useResearchStream`) lives in that module's own `hooks/`, not here.
+Global hooks with no dependency on any business domain — usable anywhere in the app. A hook that only makes sense for one module (e.g. `useThesisDrift`) lives in that module's own `hooks/`, not here.
 
 ---
 
@@ -237,7 +117,7 @@ contexts/                   # Global React context
 
 Application-wide state that many unrelated parts of the app need — theme, current user session, global app state.
 
-**`contexts/` vs. module providers:** `contexts/` holds state with **no domain meaning** — it's infrastructure for the React tree itself (theme, session). A `modules/*/providers/` (if one exists) would hold state scoped to that domain only, e.g. a `ResearchSessionProvider` used only inside the research module's UI tree. If a context is only consumed by one module, it does not belong in `contexts/`.
+**`contexts/` vs. module providers:** `contexts/` holds state with **no domain meaning** — it's infrastructure for the React tree itself (theme, session). A `modules/*/providers/` (if one exists) would hold state scoped to that domain only, e.g. a `ThesisSessionProvider` used only inside the thesis module's UI tree. If a context is only consumed by one module, it does not belong in `contexts/`.
 
 ---
 
@@ -284,8 +164,8 @@ Static application configuration — not business logic.
 ```ts
 export const plans = {
   pro: {
-    price: 29,
-    limit: 100
+    price: 19,
+    holdingsCap: 10 // TBD — see docs/07-pricing.md, unresolved
   }
 }
 ```
@@ -340,13 +220,14 @@ Global styling only — no component-scoped styles.
 ```text
 jobs/                       # Background processing — not used in V1
 
-├── research/
+├── thesis/                  # Periodic drift monitoring, curated history synthesis
 ├── filing/
 ├── news/
+├── screening/                # Periodic compliance ruleset refresh
 └── cleanup/
 ```
 
-Future background work: SEC ingestion, cache warming, scheduled cleanup. Not implemented until V1 has real load.
+Future background work: SEC ingestion, cache warming, scheduled cleanup, periodic thesis drift checks. Not implemented until V1 has real load.
 
 ---
 
@@ -382,7 +263,8 @@ A component calls an action → the action validates input and delegates to a se
 | Marketing Hero | `app/(marketing)/_components` |
 | Login Form | `app/(auth)/_components` |
 | Sidebar Dashboard | `app/(app)/_components` |
-| Research Report UI | `modules/research/components` |
+| Thesis Document / Drift Badge | `modules/thesis/components` |
+| Screening Result Table | `modules/screening/components` |
 | Button | `shared/components` |
 
 Rule of thumb: if the UI is structural to a route group (shell, nav), it lives in that route group's `_components/`. If it expresses a business domain, it lives in that module's `components/`. If it's generic and reusable everywhere, it lives in `shared/components/`.

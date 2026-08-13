@@ -2,78 +2,88 @@
 
 ## Frontend & Full-Stack Framework
 
-| Tool | Role | Link |
-|---|---|---|
-| [Next.js 15](https://nextjs.org) (App Router) | Full-stack framework — handles routing, SSR, API routes | [Docs](https://nextjs.org/docs) |
-| [React 19](https://react.dev) | UI layer | [Docs](https://react.dev/learn) |
-| [TypeScript](https://www.typescriptlang.org) | Type safety across the entire codebase | [Docs](https://www.typescriptlang.org/docs) |
-| [Tailwind CSS v3](https://tailwindcss.com) | Utility-first styling | [Docs](https://v3.tailwindcss.com/docs) |
-| [Framer Motion](https://www.framer.com/motion) | Animations and transitions | [Docs](https://www.framer.com/motion) |
-| [Geist](https://vercel.com/font) | Typography (Vercel's typeface — matches the design language) | [Docs](https://vercel.com/font) |
-| [Radix UI](https://www.radix-ui.com) | Accessible, unstyled UI primitives | [Docs](https://www.radix-ui.com/primitives/docs/overview/introduction) |
-| [Lucide React](https://lucide.dev) | Icon library | [Docs](https://lucide.dev/guide) |
+| Tool | Role |
+|---|---|
+| [Next.js 16](https://nextjs.org) (App Router, Turbo) | Full-stack framework |
+| [React 19](https://react.dev) | UI layer |
+| [TypeScript](https://www.typescriptlang.org) | Type safety |
+| [Tailwind CSS](https://tailwindcss.com) (cva, tailwind-merge, tailwindcss-animate) | Styling |
+| [Framer Motion](https://www.framer.com/motion) | Animations |
+| [Geist](https://vercel.com/font) | Typography |
+| [Radix UI](https://www.radix-ui.com) | Accessible primitives |
+| [Tabler Icons](https://tabler.io/icons) + [Lucide React](https://lucide.dev) | Icon libraries |
+| [Three.js](https://threejs.org) / [@paper-design/shaders](https://paper.design) | Landing page visual accents |
+| [SWR](https://swr.vercel.app) | Client-side data fetching/caching |
+
+**Design system:** background `#000000`, accent `#FE4E00`, surface `#111111`/`#101010`, text `#FFFFFF`, muted `#a1a1aa` — styled after Resend/TradingView aesthetic. Dark monochrome dashboard, not the light-mode generic look of MyThesis.ai.
 
 ---
 
 ## AI & Streaming
 
-| Tool | Role | Link |
-|---|---|---|
-| [Vercel AI SDK](https://sdk.vercel.ai) | Streaming LLM responses in Next.js Route Handlers | [Docs](https://sdk.vercel.ai/docs) |
-| [Anthropic Claude API](https://www.anthropic.com) | Primary LLM — structures raw financial + news data into research output | [Docs](https://docs.anthropic.com) |
+| Tool | Role |
+|---|---|
+| [Vercel AI SDK](https://sdk.vercel.ai) | Streaming responses |
+| [Anthropic Claude API](https://www.anthropic.com) | Thesis-vs-evidence synthesis, curated history narrative generation |
 
-**Model in use:** `claude-sonnet-4-6` (balance of quality and cost for structured output)
+**Model in use:** `claude-sonnet-4-6`
 
-> Multi-LLM abstraction layer (Gemini Flash, GPT-4o Mini as fallbacks) is planned via Vercel AI SDK's provider switching. Deferred to post-V1. See [ADR-004](./06-decisions.md#adr-004).
+> **Revision from V0 plan:** Multi-LLM abstraction (Gemini Flash for fast/cheap drift classification, Claude for narrative synthesis) is reconsidered as **earlier-priority than originally planned**, not deferred to V2 — analysis speed is an explicit V1 differentiator against MyThesis.ai's slow, email-notified completion flow. Single-LLM-only (ADR-004) should be revisited if Claude-only latency can't beat MyThesis's turnaround time.
 
 ---
 
 ## Auth & Database
 
-| Tool | Role | Link |
-|---|---|---|
-| [Better Auth](https://better-auth.com) | Authentication — sessions, OAuth, email/password | [Docs](https://www.better-auth.com/docs/introduction) |
-| [Drizzle ORM](https://orm.drizzle.team) | Type-safe database queries and schema management | [Docs](https://orm.drizzle.team/docs/overview) |
-| [PostgreSQL](https://www.postgresql.org) via [Supabase](https://supabase.com) | Primary database — free tier covers V1 | [Supabase Docs](https://supabase.com/docs) |
+| Tool | Role |
+|---|---|
+| [Better Auth](https://better-auth.com) | Authentication |
+| [Drizzle ORM](https://orm.drizzle.team) + postgres | Type-safe queries, schema |
+| [PostgreSQL](https://www.postgresql.org) via [Supabase](https://supabase.com) | Primary database |
 
 ---
 
 ## Payments
 
-| Tool | Role | Link |
-|---|---|---|
-| [Lemon Squeezy](https://www.lemonsqueezy.com) | **Active — V1 payment infrastructure.** Merchant of Record, handles global tax compliance, no monthly fees, no buyer login required, automatic email delivery | [Docs](https://docs.lemonsqueezy.com) |
-| [Midtrans](https://midtrans.com) | **V2 consideration.** Local Indonesian payment gateway — QRIS, VA, e-wallet. Required if targeting IDR-paying local users at scale | [Docs](https://docs.midtrans.com) |
-
-> Stripe and Paddle are not in scope. See [ADR-005](./06-decisions.md#adr-005) for full payment gateway decision rationale.
+| Tool | Role |
+|---|---|
+| [Polar.sh](https://polar.sh) | Active — V1 payment infra, Merchant of Record (global) |
+| [Midtrans](https://midtrans.com) | V2 consideration — local Indonesian payment |
 
 ---
 
 ## PDF Export
 
-| Tool | Role | Link |
-|---|---|---|
-| [@react-pdf/renderer](https://react-pdf.org) | PDF generation from React components — Pro tier feature | [Docs](https://react-pdf.org/components) |
+| Tool | Role |
+|---|---|
+| [@react-pdf/renderer](https://react-pdf.org) | Export thesis document as PDF — Pro tier feature |
 
 ---
 
 ## Infrastructure
 
-| Tool | Role | Link |
-|---|---|---|
-| [Vercel](https://vercel.com) | Deployment — Next.js hosting, edge functions, CI/CD from GitHub | [Docs](https://vercel.com/docs) |
-| [Vercel Analytics](https://vercel.com/analytics) | Usage analytics — pageviews, performance | [Docs](https://vercel.com/docs/analytics) |
-| [Supabase](https://supabase.com) | Managed PostgreSQL + Supabase dashboard for admin/ops in V1 | [Docs](https://supabase.com/docs) |
+| Tool | Role |
+|---|---|
+| [Vercel](https://vercel.com) | Deployment, edge functions, CI/CD |
+| [Vercel Analytics](https://vercel.com/analytics) | Usage analytics |
+| [Supabase](https://supabase.com) | Managed Postgres + dashboard for ops |
 
 ---
 
-## External Data APIs
+## External Data APIs (unchanged — all retained)
 
-| Tool | Role | Link |
-|---|---|---|
-| [Financial Modeling Prep](https://financialmodelingprep.com) | Financial data — revenue, EPS, P/E, market cap, analyst consensus, SEC filings, company profiles | [Docs](https://site.financialmodelingprep.com/developer/docs) |
-| [NewsAPI](https://newsapi.org) | News aggregation from verified publishers | [Docs](https://newsapi.org/docs) |
-| [SEC EDGAR](https://www.sec.gov/cgi-bin/browse-edgar) | Primary source for regulatory filings — accessed via FMP in V1, direct in V2 | [EDGAR Full-Text Search](https://efts.sec.gov/LATEST/search-index?q=%22full-text+search%22) |
+| Tool | Role |
+|---|---|
+| [Financial Modeling Prep](https://financialmodelingprep.com) | Financial data, company profiles, analyst consensus, SEC filings access |
+| [GNews API](https://gnews.io) | News aggregation — see [07-pricing.md](./07-pricing.md), NOT NewsAPI Developer plan |
+| [SEC EDGAR](https://www.sec.gov/cgi-bin/browse-edgar) | Primary regulatory filing source — via FMP in V1, direct in V2 |
+
+---
+
+## Tooling
+
+| Tool | Role |
+|---|---|
+| husky + lint-staged | Pre-commit hooks |
 
 ---
 
@@ -81,7 +91,8 @@
 
 | Tool | Role | Decision |
 |---|---|---|
-| [FastAPI](https://fastapi.tiangolo.com) | Python microservice framework for heavier ML workloads | Deferred — see [ADR-003](./06-decisions.md#adr-003) |
-| [Pydantic v2](https://docs.pydantic.dev) | Data validation in Python service | Deferred with FastAPI |
-| [Railway](https://railway.app) / [Render](https://render.com) | Python service hosting | Deferred with FastAPI |
-| [Polygon.io](https://polygon.io) | Higher-quality market data, real-time quotes | Upgrade path from FMP post-V1 |
+| [FastAPI](https://fastapi.tiangolo.com) | Heavier ML workloads | Deferred — ADR-003 |
+| [Pydantic v2](https://docs.pydantic.dev) | Validation in Python service | Deferred with FastAPI |
+| [Railway](https://railway.app)/[Render](https://render.com) | Python hosting | Deferred with FastAPI |
+| [Polygon.io](https://polygon.io) | Real-time data upgrade | Upgrade path from FMP |
+| Broker connect (Plaid or similar) | Auto-sync holdings | V2 — build functional, unlike MyThesis's non-working version |
