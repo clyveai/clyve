@@ -1,15 +1,15 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import { useRouter } from "next/navigation";
 import { motion } from "framer-motion";
-import { ArrowUp } from "lucide-react";
 import AmbientGlow from "@/app/(app)/_components/AmbientGlow";
 import AvatarDropdown from "@/app/(app)/_components/AvatarDropdown";
 import { MobileTopNav } from "@/app/(app)/_components/sidebar/MobileTopNav";
 import { ResearchSidebar } from "@/app/(app)/_components/sidebar/ResearchSidebar";
 import { useSidebar } from "@/context/SidebarContext";
-import { generateResearchTitle } from "@/lib/generateResearchTitle";
+import { ThesisStartPanel } from "@/modules/thesis/components/ThesisStartPanel";
 
 type DashboardUser = {
   id: string;
@@ -19,9 +19,8 @@ type DashboardUser = {
 };
 
 export default function DashboardPage() {
-  const [promptInput, setPromptInput] = useState("");
   const [user, setUser] = useState<DashboardUser | null>(null);
-  const inputRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
 
   const { isMobile, isCollapsed } = useSidebar();
 
@@ -39,36 +38,9 @@ export default function DashboardPage() {
     };
   }, []);
 
-  const handleHistoryItemClick = useCallback((query: string) => {
-    setPromptInput(query);
-    inputRef.current?.focus();
-  }, []);
-
-  const handleNewResearch = useCallback(() => {
-    setPromptInput("");
-    inputRef.current?.focus();
-  }, []);
-
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!promptInput.trim()) return;
-
-      const title = generateResearchTitle(promptInput);
-
-      try {
-        await fetch("/api/research-history", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: promptInput, title }),
-        });
-        setPromptInput("");
-      } catch (error) {
-        console.error("Failed to save research history:", error);
-      }
-    },
-    [promptInput],
-  );
+  const handleNewThesis = useCallback(() => {
+    router.push("/thesis/new");
+  }, [router]);
 
   const sidebarWidth = isCollapsed ? 56 : 260;
   const topOffset = isMobile ? 52 : 80;
@@ -78,8 +50,7 @@ export default function DashboardPage() {
       <AmbientGlow />
       <ResearchSidebar
         user={user}
-        onHistoryItemClick={handleHistoryItemClick}
-        onNewResearch={handleNewResearch}
+        onNewThesis={handleNewThesis}
       />
 
       {isMobile && <MobileTopNav user={user} />}
@@ -100,44 +71,16 @@ export default function DashboardPage() {
         style={{ marginLeft: isMobile ? 0 : sidebarWidth, paddingTop: topOffset }}
       >
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col">
-          <div className="flex flex-1 items-center justify-center">
-            <motion.h1
+          <div className="flex flex-1 items-center justify-center py-10">
+            <motion.div
               initial={{ opacity: 0.65, y: 8 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.5, ease: "easeOut" }}
-              className="relative text-4xl font-semibold tracking-[-0.05em] text-zinc-200 sm:text-5xl md:text-6xl lg:text-7xl"
-              style={{
-                background:
-                  "linear-gradient(120deg, rgba(255,255,255,0.96) 0%, rgba(255,255,255,0.7) 46%, rgba(255,220,168,0.72) 100%)",
-                WebkitBackgroundClip: "text",
-                WebkitTextFillColor: "transparent",
-              }}
+              className="w-full"
             >
-              CLYVE AI
-              <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_65%_50%,rgba(255,200,130,0.26),transparent_52%)] blur-xl" />
-            </motion.h1>
+              <ThesisStartPanel />
+            </motion.div>
           </div>
-
-          <form onSubmit={handleSubmit} className="mb-4 flex justify-center">
-            <div className="w-full max-w-xl rounded-full border border-white/10 bg-white/[0.04] p-1 shadow-[0_10px_50px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:max-w-3xl">
-              <div className="flex items-center gap-2 rounded-full bg-black/45 px-3 py-2">
-                <input
-                  ref={inputRef}
-                  value={promptInput}
-                  onChange={(event) => setPromptInput(event.target.value)}
-                  placeholder="Research a stock, company, or SEC filing..."
-                  className="h-10 w-full bg-transparent px-3 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
-                />
-                <button
-                  type="submit"
-                  className="grid h-10 w-10 place-items-center rounded-full bg-white text-black transition hover:bg-zinc-200"
-                  aria-label="Submit prompt"
-                >
-                  <ArrowUp className="h-4 w-4" />
-                </button>
-              </div>
-            </div>
-          </form>
         </div>
       </main>
     </div>

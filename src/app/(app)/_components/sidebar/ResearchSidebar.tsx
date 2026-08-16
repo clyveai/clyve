@@ -2,11 +2,9 @@
 
 import { AnimatePresence, motion } from "framer-motion";
 import { useCallback, useEffect, useState } from "react";
-import { HistoryItem } from "./HistoryItem";
-import { NewResearchButton } from "./NewResearchButton";
+import { NewThesisButton } from "./NewThesisButton";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarBackdrop } from "./SidebarBackdrop";
-import { useResearchHistory } from "@/hooks/useResearchHistory";
 import { useSidebar } from "@/context/SidebarContext";
 
 interface User {
@@ -18,8 +16,7 @@ interface User {
 
 interface ResearchSidebarProps {
     user: User | null;
-    onHistoryItemClick?: (query: string) => void;
-    onNewResearch?: () => void;
+    onNewThesis?: () => void;
 }
 
 const SIDEBAR_WIDTH = 260;
@@ -28,13 +25,10 @@ const MOBILE_SIDEBAR_WIDTH = 280;
 
 export function ResearchSidebar({
     user,
-    onHistoryItemClick,
-    onNewResearch,
+    onNewThesis,
 }: ResearchSidebarProps) {
-    const [activeId, setActiveId] = useState<string | null>(null);
     const [mounted, setMounted] = useState(false);
 
-    const { history, isLoading, deleteHistory } = useResearchHistory(user?.id);
     const { isMobile, isOpen, isCollapsed, close, toggleCollapsed } = useSidebar();
 
     useEffect(() => {
@@ -43,38 +37,12 @@ export function ResearchSidebar({
 
     const effectiveCollapsed = !isMobile && isCollapsed;
 
-    const handleNewResearch = useCallback(() => {
-        setActiveId(null);
-        onNewResearch?.();
+    const handleNewThesis = useCallback(() => {
+        onNewThesis?.();
         if (isMobile) {
             close();
         }
-    }, [close, isMobile, onNewResearch]);
-
-    const handleHistoryItemClick = useCallback(
-        (query: string, id: string) => {
-            setActiveId(id);
-            onHistoryItemClick?.(query);
-            if (isMobile) {
-                close();
-            }
-        },
-        [close, isMobile, onHistoryItemClick],
-    );
-
-    const handleDelete = useCallback(
-        async (id: string) => {
-            try {
-                await deleteHistory(id);
-                if (activeId === id) {
-                    setActiveId(null);
-                }
-            } catch (error) {
-                console.error("Failed to delete history item:", error);
-            }
-        },
-        [activeId, deleteHistory],
-    );
+    }, [close, isMobile, onNewThesis]);
 
     if (!mounted) {
         return null;
@@ -107,49 +75,29 @@ export function ResearchSidebar({
             )}
 
             <div className="px-3 py-4">
-                <NewResearchButton isCollapsed={effectiveCollapsed} onClick={handleNewResearch} />
+                <NewThesisButton isCollapsed={effectiveCollapsed} onClick={handleNewThesis} />
             </div>
 
             {user ? (
                 <div className="flex-1 overflow-hidden flex flex-col">
                     <div className="px-3 py-2">
                         <h2 className="text-[0.65rem] font-medium uppercase tracking-[0.05em] text-[var(--fg-secondary)]">
-                            {!effectiveCollapsed && "Recents"}
+                            {!effectiveCollapsed && "Theses"}
                         </h2>
                     </div>
 
                     <div className="flex-1 overflow-y-auto px-2 pb-4">
-                        {isLoading ? (
-                            <div className="flex items-center justify-center py-4">
-                                <div className="h-4 w-4 animate-spin rounded-full border-2 border-[var(--fg-secondary)] border-t-white" />
-                            </div>
-                        ) : history.length === 0 ? (
-                            !effectiveCollapsed && (
-                                <p className="px-2 py-4 text-xs text-[var(--fg-secondary)]">
-                                    No research yet. Start exploring!
-                                </p>
-                            )
-                        ) : (
-                            <div className="space-y-1">
-                                {history.map((item) => (
-                                    <HistoryItem
-                                        key={item.id}
-                                        id={item.id}
-                                        title={item.title}
-                                        isActive={activeId === item.id}
-                                        isCollapsed={effectiveCollapsed}
-                                        onClick={() => handleHistoryItemClick(item.query, item.id)}
-                                        onDelete={handleDelete}
-                                    />
-                                ))}
-                            </div>
+                        {!effectiveCollapsed && (
+                            <p className="px-2 py-4 text-xs leading-5 text-[var(--fg-secondary)]">
+                                Your active theses will appear here after the first monitoring slice is complete.
+                            </p>
                         )}
                     </div>
                 </div>
             ) : (
                 <div className="flex-1 flex flex-col items-center justify-center px-3 text-center">
                     <p className="text-xs text-[var(--fg-secondary)]">
-                        {!effectiveCollapsed && "Sign in to save research history"}
+                        {!effectiveCollapsed && "Sign in to record an investment thesis"}
                     </p>
                 </div>
             )}

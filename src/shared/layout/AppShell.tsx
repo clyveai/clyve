@@ -4,7 +4,7 @@ import { usePathname } from "next/navigation";
 import Header from "@/shared/layout/Header";
 import Footer from "@/shared/layout/Footer";
 
-const noMarketingChromePrefixes = ["/login", "/signup", "/dashboard", "/settings"];
+const noMarketingChromePrefixes = ["/login", "/signup", "/dashboard", "/thesis", "/settings"];
 
 export default function AppShell({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();

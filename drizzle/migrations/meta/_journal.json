@@ -15,6 +15,13 @@
       "when": 1780758733082,
       "tag": "0001_cloudy_eternity",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "7",
+      "when": 1786814867207,
+      "tag": "0002_thesis_monitoring",
+      "breakpoints": true
     }
   ]
 }
