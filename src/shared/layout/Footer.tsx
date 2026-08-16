@@ -40,7 +40,7 @@ export default function Footer() {
 
                 {/* App Title */}
                 <h2 className="text-[32px] font-semibold text-white tracking-tight mb-6">
-                    Clyve AI
+                    ClyveAI
                 </h2>
 
                 {/* CTA Button */}

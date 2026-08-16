@@ -13,11 +13,16 @@
 
   /* Batman Theme Palette (Pure Black Focus) */
   --bg-primary: #000000;
-  --bg-secondary: #080808;
+  --bg-secondary: #111111;
   --fg-primary: #ffffff;
   --fg-secondary: #a1a1aa;
   --border-color: #1a1a1a;
-  --accent-color: #ffffff;
+
+  /* Accent, reserved for interactive signals only: focus, selection, active states.
+     Not for large surfaces, headings, or body text, this stays a monochrome product. */
+  --accent-color: #FE4E00;
+  --accent-color-dim: rgba(254, 78, 0, 0.4);
+  --accent-color-glow: rgba(254, 78, 0, 0.12);
 }
 
 /* === Reset & Base Styling === */
@@ -58,6 +63,14 @@ body {
     font-weight: 700;
   }
 
+  /* Keyboard focus gets the accent, mouse clicks stay clean */
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible {
+    outline: 2px solid var(--accent-color);
+    outline-offset: 2px;
+  }
+
   input:focus {
     outline: none;
   }
@@ -82,13 +95,14 @@ body {
     background-color: #050505;
     border: 1px solid var(--border-color);
     color: var(--fg-primary);
-    transition: border-color var(--transition), background-color var(--transition);
+    transition: border-color var(--transition), background-color var(--transition), box-shadow var(--transition);
     font-size: 0.875rem;
   }
 
   .input-dark:focus {
-    border-color: #3f3f46;
+    border-color: var(--accent-color);
     background-color: #000000;
+    box-shadow: 0 0 0 3px var(--accent-color-glow);
   }
 
   .btn-primary {
@@ -129,6 +143,18 @@ body {
   .btn-secondary:active {
     transform: scale(0.97);
   }
+
+  /* Reserved for status/alert states that must read as urgent,
+     e.g. a broken thesis assumption. Use sparingly. */
+  .text-accent {
+    color: var(--accent-color);
+  }
+
+  .badge-accent {
+    background-color: var(--accent-color-glow);
+    border: 1px solid var(--accent-color-dim);
+    color: var(--accent-color);
+  }
 }
 
 /* === Utilities & Performance === */
@@ -151,9 +177,14 @@ body {
 ::-webkit-scrollbar-thumb {
   background: #1a1a1a;
   border-radius: 10px;
+  transition: background var(--transition);
+}
+
+::-webkit-scrollbar-thumb:hover {
+  background: #27272a;
 }
 
 ::selection {
-  background-color: #ffffff;
-  color: #000000;
+  background-color: var(--accent-color);
+  color: #ffffff;
 }

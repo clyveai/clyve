@@ -8,43 +8,43 @@ import { BookOpen, MessageSquareText, ShieldOff, Users, Activity } from "lucide-
 
 // ─── FAQ CONFIG ───────────────────────────────────────────────────────────────
 // Keep pricing copy in sync with Pricing.tsx TIERS config.
-// Current model: Free = 3 lifetime, Pro = 50 queries/mo at $19/mo or $149/yr.
+// Positioning, ClyveAI is the memory layer for your investment thesis, not a research chatbot.
 
 const faqs = [
     {
         id: 1,
         icon: <BookOpen className="w-5 h-5 text-blue-400" />,
-        question: "What exactly is Clyve AI?",
+        question: "What exactly is ClyveAI?",
         answer:
-            "Clyve AI is a financial research assistant that structures publicly available market data, SEC filings, and financial news into clear, readable research briefs. We don't predict markets or give financial advice — we organize information so you can form your own view, faster.",
+            "ClyveAI is an investment intelligence platform built around your thesis. You record why you hold a position, and Clyve continuously tracks filings, news, and company events to flag the moment reality starts to diverge from what you believed. It is not a chatbot you query, it is the memory layer that holds you accountable to your own reasoning.",
     },
     {
         id: 2,
         icon: <MessageSquareText className="w-5 h-5 text-amber-500" />,
-        question: "What kind of questions can I ask Clyve?",
+        question: "How is this different from asking an AI chatbot about a stock?",
         answer:
-            "Anything research-oriented. Ask about a company's revenue trend, what a 10-K filing says about their debt structure, recent news around an earnings report, or how a stock has performed over a given period. If it's a factual equity question, Clyve can structure the answer.",
+            "A chatbot answers a question once and forgets it. Clyve remembers the specific thesis you recorded for each position, permanently, and keeps checking new filings and news against it. The value compounds, the longer you use Clyve, the more thesis history it holds and the sharper its drift detection becomes.",
     },
     {
         id: 3,
         icon: <ShieldOff className="w-5 h-5 text-emerald-500" />,
         question: "Is Clyve a financial advisor?",
         answer:
-            "No — and that's intentional. Clyve surfaces structured data and organized context from public sources. We do not issue buy/sell recommendations, price targets, or investment advice. What you do with the research is entirely your decision.",
+            "No, and that is intentional. Clyve does not issue buy or sell recommendations, price targets, or investment advice. It surfaces structured evidence from public filings and news, and shows you whether that evidence still supports the reasoning you originally recorded. What you do with that is entirely your decision.",
     },
     {
         id: 4,
         icon: <Users className="w-5 h-5 text-violet-500" />,
         question: "Who is Clyve built for?",
         answer:
-            "Serious independent investors and analysts who are tired of toggling between earnings PDFs, news feeds, and screeners. If you do your own research and want your research process to be faster and cleaner, Clyve is built for you.",
+            "Independent investors and analysts who already do their own research but lose track of why they entered a position months later. If you have ever looked at a holding and thought 'why did I buy this again,' Clyve exists to answer that question for you, automatically.",
     },
     {
         id: 5,
         icon: <Activity className="w-5 h-5 text-zinc-300" />,
-        question: "How does the query limit work?",
+        question: "How does thesis tracking actually work?",
         answer:
-            "Free users get 3 lifetime queries to explore what a full structured brief looks like. Pro subscribers get 50 queries per month, which resets every billing cycle. That covers serious research on 10–15 positions per month. No hidden usage tiers, no surprise charges — your limit is always visible in your dashboard.",
+            "For each position, you record your thesis, the specific assumptions your investment depends on. Clyve monitors filings and news against those assumptions and marks each position green, yellow, or red depending on whether your reasoning still holds. Instead of a raw feed of every event, Clyve gives you one curated, periodic summary per position, so your history reads like a document, not a stream of alerts.",
     },
 ];
 
@@ -162,9 +162,9 @@ export default function SupportSection() {
                 <p className="text-gray-500 font-medium text-xs mb-4">Contact us at</p>
                 <a
                     href="https://www.instagram.com/clyveai/"
-                    className="text-orange-500 font-medium hover:underline decoration-orange-500/30"
+                    className="text-orange-500 font-medium no-underline hover:no-underline hover:text-orange-600 transition-colors duration-200"
                 >
-                    @Clyve AI
+                    @ClyveAI
                 </a>
             </motion.div>
         </section>

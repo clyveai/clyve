@@ -6,7 +6,7 @@ import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion, MotionProps } from "framer-motion";
 import { Loader2 } from "lucide-react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/infrastructure/auth/auth-client";
 
 type AuthMode = "login" | "signup";
 

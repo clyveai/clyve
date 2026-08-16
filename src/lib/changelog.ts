@@ -13,7 +13,7 @@ export interface ChangelogEntry {
     title: string;
     subtitle: string;
     description: string;
-    changes: ChangeItem[]; // Image opsional dihapus total sesuai instruksi
+    changes: ChangeItem[];
 }
 
 export const changelog: ChangelogEntry[] = [
@@ -25,13 +25,13 @@ export const changelog: ChangelogEntry[] = [
         title: "Authentication System",
         subtitle: "Users can now create accounts and sign in securely.",
         description:
-            "The full authentication layer is live. Register with email and password, sign in with persistent sessions, and access protected routes. Built on Better Auth with server-side session handling — no tokens exposed to the client.",
+            "The full authentication layer is live. Register with email and password, sign in with persistent sessions, and access protected routes, the foundation every thesis you record will sit behind. Built on Better Auth with server-side session handling, no tokens exposed to the client.",
         changes: [
             { type: "added", description: "User registration with email and password" },
             { type: "added", description: "Secure sign-in flow with persistent session management" },
             { type: "added", description: "Password validation and real-time error handling" },
             { type: "added", description: "Protected route architecture for the upcoming dashboard" },
-            { type: "security", description: "Sessions handled server-side via Better Auth — zero client-side token exposure" },
+            { type: "security", description: "Sessions handled server-side via Better Auth, zero client-side token exposure" },
         ],
     },
     {
@@ -40,14 +40,14 @@ export const changelog: ChangelogEntry[] = [
         slug: "initial-release",
         label: "alpha",
         title: "Initial Release",
-        subtitle: "Clyve is live. Core infrastructure and public site.",
+        subtitle: "ClyveAI is live. Core infrastructure and public site.",
         description:
-            "The foundation is in place. Public marketing site is live with Use Cases, Pricing, and Changelog. Database schema and backend infrastructure are deployed. NYSE & NASDAQ coverage scope is defined for V1, with SEC EDGAR as the primary data source.",
+            "The foundation is in place. Public marketing site is live with Use Cases, Pricing, and Changelog. Database schema and backend infrastructure are deployed. NYSE & NASDAQ coverage scope is defined for V1, with SEC EDGAR as the primary data source, no third-party intermediaries.",
         changes: [
-            { type: "added", description: "Public marketing site — Use Cases, Pricing, Changelog" },
+            { type: "added", description: "Public marketing site, Use Cases, Pricing, Changelog" },
             { type: "added", description: "Core database schema and backend infrastructure on Supabase" },
             { type: "added", description: "NYSE & NASDAQ coverage scope defined for V1" },
-            { type: "added", description: "SEC EDGAR as primary data source — no third-party intermediaries" },
+            { type: "added", description: "SEC EDGAR as primary data source, no third-party intermediaries" },
         ],
     },
 ];
@@ -65,7 +65,7 @@ export const VERSION_LABEL_CONFIG: Record<
     NonNullable<ChangelogEntry["label"]>,
     { text: string; bg: string; border: string }
 > = {
-    latest: { text: "Latest", bg: "#ffffff", border: "#ffffff" }, // Teks hitam otomatis via utility jika bg putih
+    latest: { text: "Latest", bg: "#ffffff", border: "#ffffff" },
     beta: { text: "Beta", bg: "#1a1a1a", border: "#27272a" },
     alpha: { text: "Alpha", bg: "#080808", border: "#1a1a1a" },
 };

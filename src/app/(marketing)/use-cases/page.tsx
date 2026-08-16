@@ -36,66 +36,64 @@ interface Feature {
 
 const USE_CASES: UseCase[] = [
     {
-        id: "independent-analyst",
+        id: "independent-investor",
         icon: <IconUser size={18} />,
-        audience: "Independent Analysts",
-        headline: "One structured environment. Every filing that matters.",
-        // Removed Bloomberg name-drop — Clyve stands on its own
+        audience: "Independent Investors",
+        headline: "You already know why you bought. Clyve makes sure you still do.",
         description:
-            "Independent analysts spend more time locating and formatting information than analyzing it. Clyve eliminates that overhead — pulling SEC filings, structuring the data that matters, and surfacing it in a format built for decision-making, not data entry.",
+            "Six months after opening a position, most investors could not restate their own thesis if asked. Clyve holds the reasons you held in the first place, then checks them against every filing and disclosure that follows, so conviction is never something you have to reconstruct from memory.",
         workflow: [
-            "Pull 10-K & 10-Q filings directly from SEC EDGAR",
-            "Extract segment revenue, debt schedules, and risk factors automatically",
-            "Cross-reference filings across fiscal periods",
-            "Export structured summaries for investment memos",
+            "Record your thesis in plain language when you open a position",
+            "Clyve converts it into specific, checkable assumptions",
+            "New filings and news are matched against those assumptions",
+            "You are notified only when something material shifts",
         ],
-        stat: { value: "4→1", label: "Tool consolidation" },
+        stat: { value: "0", label: "Assumptions forgotten" },
     },
     {
-        id: "serious-investor",
+        id: "serious-retail",
         icon: <IconChartBar size={18} />,
-        // Removed "retail" — elevates positioning
-        audience: "Serious Investors",
-        headline: "Your conviction should come from the filing, not the headline.",
+        audience: "Serious Retail & HNW",
+        headline: "Your conviction should decay on evidence, not on silence.",
         description:
-            "Financial media summarizes. Clyve structures. There is a meaningful difference between reading someone's interpretation of an earnings report and reading the filing itself — organized, queryable, and cross-referenced. Clyve gives you the latter.",
+            "Most portfolios drift not because the thesis broke, but because nobody was watching for the moment it did. Clyve tracks each assumption independently, so you know exactly which part of your reasoning is holding and which part has quietly stopped being true.",
         workflow: [
-            "Query specific line items across multiple company filings",
-            "Track management commentary patterns across earnings calls",
-            "Identify disclosure changes between annual reports",
-            "Build a structured research brief before any position",
+            "Track multiple theses across a full portfolio",
+            "See each assumption scored individually, not as one blended score",
+            "Get flagged the moment an assumption weakens, not when the price moves",
+            "Review a running history of what changed and when",
         ],
-        stat: { value: "10 min", label: "Earnings deep-dive" },
+        stat: { value: "Per assumption", label: "Not per headline" },
     },
     {
-        id: "research-teams",
+        id: "analysts",
         icon: <IconUsers size={18} />,
-        audience: "Small Research Teams",
-        headline: "Consistent research format across every analyst on your team.",
+        audience: "Analysts",
+        headline: "A record of what you believed, not just what you published.",
         description:
-            "Inconsistent research structure creates coordination cost. When every analyst formats information differently, synthesis becomes manual and errors compound. Clyve enforces a shared information architecture — so your team spends time on judgment, not reformatting.",
+            "A research note captures a moment. It does not tell you, six quarters later, which of your original assumptions were right. Clyve keeps that thread alive, so your track record is built from evidence, not from memory of your own calls.",
         workflow: [
-            "Standardized filing extraction across all coverage",
-            "Shared research history accessible to the full team",
-            "Consistent output format for investment committee memos",
-            "Audit trail of what was reviewed and when",
+            "Attach a structured thesis to every coverage initiation",
+            "Let evidence accumulate against each assumption automatically",
+            "Revisit any call with its full evidence trail intact",
+            "Export a clean thesis history for your own record",
         ],
-        stat: { value: "∞", label: "Coverage scalability" },
+        stat: { value: "Full trail", label: "Claim to evidence" },
     },
     {
-        id: "fintech-builders",
+        id: "investment-teams",
         icon: <IconBuildingBank size={18} />,
-        audience: "Fintech Builders",
-        headline: "Structured financial data as a foundation, not a pipeline problem.",
+        audience: "Investment Teams",
+        headline: "What the team believes should not live in one person's head.",
         description:
-            "Building on raw SEC text is an engineering problem that never fully resolves. Clyve handles extraction, normalization, and structuring — so your team can focus on what your product does with the data, not how to get it into a usable shape.",
+            "When conviction is undocumented, it cannot be reviewed, challenged, or handed off. Clyve gives a team a shared, structured record of what is believed, why, and what has changed since, so alignment does not depend on who happens to remember the original call.",
         workflow: [
-            "Access structured filing data via API (Pro tier)",
-            "Normalize XBRL data without custom parsers",
-            "Integrate structured output directly into your product",
-            "Reduce data engineering overhead significantly",
+            "Shared thesis records across every position the team holds",
+            "Visibility into who changed their view, and when",
+            "One evidence trail everyone on the team can query",
+            "Coming soon: workspace access for teams and firms",
         ],
-        stat: { value: "API", label: "Pro tier access" },
+        stat: { value: "Soon", label: "Team workspace" },
     },
 ];
 
@@ -104,25 +102,25 @@ const CORE_CAPABILITIES: Feature[] = [
         icon: <IconFileText size={16} />,
         title: "SEC EDGAR Native",
         description:
-            "Direct ingestion of 10-K, 10-Q, 8-K, and proxy filings. No third-party data intermediaries.",
+            "Direct ingestion of 10-K, 10-Q, 8-K, and proxy filings. No third party data intermediaries.",
     },
     {
         icon: <IconSearch size={16} />,
-        title: "Structured Queries",
+        title: "Claim to Evidence",
         description:
-            "Ask questions against filing content. Get structured answers, not raw document dumps.",
+            "Every flag traces back through claim, event, source, and evidence. Nothing is a black box.",
     },
     {
         icon: <IconSparkles size={16} />,
-        title: "Research Cockpit",
+        title: "Thesis Memory",
         description:
-            "A workspace designed around how analysts actually work — not how software engineers imagine they do.",
+            "What you believed does not disappear after one session. It persists, and it compounds over time.",
     },
     {
         icon: <IconChartBar size={16} />,
-        title: "Cross-Period Analysis",
+        title: "Divergence Detection",
         description:
-            "Compare financial disclosures across quarters and fiscal years without manual cross-referencing.",
+            "Clyve flags the assumption that broke, not every mention of your ticker in the news.",
     },
 ];
 
@@ -149,7 +147,7 @@ const fadeIn: Variants = {
 
 function SectionLabel({ children }: { children: React.ReactNode }) {
     return (
-        <span className="inline-flex items-center gap-2 text-xs font-medium tracking-widest uppercase text-[#52525b] border border-[#1a1a1a] px-3 py-1 rounded-full">
+        <span className="inline-flex items-center gap-2 text-xs font-medium tracking-widest uppercase text-[#8a8a94] border border-[#1a1a1a] px-3 py-1 rounded-full">
             {children}
         </span>
     );
@@ -181,7 +179,7 @@ function UseCaseCard({ useCase, index }: { useCase: UseCase; index: number }) {
                             <span className="flex items-center justify-center w-7 h-7 rounded-lg bg-[#111111] border border-[#1f1f1f] text-[#71717a]">
                                 {useCase.icon}
                             </span>
-                            <span className="text-xs font-medium text-[#52525b] tracking-wide uppercase">
+                            <span className="text-xs font-medium text-[#8a8a94] tracking-wide uppercase">
                                 {useCase.audience}
                             </span>
                         </div>
@@ -190,7 +188,7 @@ function UseCaseCard({ useCase, index }: { useCase: UseCase; index: number }) {
                             {useCase.headline}
                         </h2>
 
-                        <p className="text-sm text-[#71717a] leading-relaxed" style={{ letterSpacing: "-0.01em" }}>
+                        <p className="text-sm text-[#a1a1aa] leading-relaxed" style={{ letterSpacing: "-0.01em" }}>
                             {useCase.description}
                         </p>
                     </div>
@@ -200,14 +198,14 @@ function UseCaseCard({ useCase, index }: { useCase: UseCase; index: number }) {
                             <div className="text-3xl font-bold text-white tracking-tight" style={{ letterSpacing: "-0.04em" }}>
                                 {useCase.stat.value}
                             </div>
-                            <div className="text-xs text-[#52525b] mt-0.5">{useCase.stat.label}</div>
+                            <div className="text-xs text-[#8a8a94] mt-0.5">{useCase.stat.label}</div>
                         </div>
                     </div>
                 </div>
 
                 {/* Workflow side */}
                 <div className={`border-t lg:border-t-0 border-[#1a1a1a] p-8 lg:p-12 flex flex-col justify-center gap-3 ${!isEven ? "lg:[direction:ltr] lg:border-r lg:border-l-0" : "lg:border-l"}`}>
-                    <p className="text-xs font-medium text-[#3f3f46] uppercase tracking-widest mb-2">
+                    <p className="text-xs font-medium text-[#71717a] uppercase tracking-widest mb-2">
                         Workflow
                     </p>
                     {useCase.workflow.map((step, i) => (
@@ -222,7 +220,7 @@ function UseCaseCard({ useCase, index }: { useCase: UseCase; index: number }) {
                             <span className="flex-shrink-0 w-5 h-5 rounded-full border border-[#1f1f1f] bg-[#0d0d0d] flex items-center justify-center mt-0.5">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#3f3f46] group-hover/step:bg-white transition-colors duration-200" />
                             </span>
-                            <span className="text-sm text-[#71717a] leading-relaxed group-hover/step:text-[#a1a1aa] transition-colors duration-200">
+                            <span className="text-sm text-[#a1a1aa] leading-relaxed group-hover/step:text-[#e4e4e7] transition-colors duration-200">
                                 {step}
                             </span>
                         </motion.div>
@@ -252,7 +250,7 @@ function CapabilityCard({ feature, index }: { feature: Feature; index: number })
                 </span>
                 <span className="text-sm font-semibold text-[#e4e4e7]">{feature.title}</span>
             </div>
-            <p className="text-sm text-[#52525b] leading-relaxed" style={{ letterSpacing: "-0.01em" }}>
+            <p className="text-sm text-[#a1a1aa] leading-relaxed" style={{ letterSpacing: "-0.01em" }}>
                 {feature.description}
             </p>
         </motion.div>
@@ -311,13 +309,12 @@ export default function UseCasesPage() {
                         animate={heroInView ? "visible" : "hidden"}
                         variants={fadeUp}
                         custom={2}
-                        className="text-base lg:text-lg text-[#71717a] max-w-2xl mx-auto leading-relaxed"
+                        className="text-base lg:text-lg text-[#a1a1aa] max-w-2xl mx-auto leading-relaxed"
                         style={{ letterSpacing: "-0.01em" }}
                     >
-                        Clyve is not a prediction engine. It is an{" "}
-                        <span className="text-[#a1a1aa]">information structuring layer</span> — built for
-                        anyone who needs to work with equity data seriously, without the overhead of
-                        enterprise tooling.
+                        Clyve is not a research tool you query and forget. It is the{" "}
+                        <span className="text-[#e4e4e7]">memory layer between what you believe and what actually happens</span>,
+                        built for anyone whose conviction needs to survive contact with new evidence.
                     </motion.p>
                 </div>
             </section>
@@ -338,7 +335,7 @@ export default function UseCasesPage() {
                             className="text-3xl lg:text-4xl font-bold gradient-text"
                             style={{ letterSpacing: "-0.04em" }}
                         >
-                            What powers every workflow.
+                            What powers every thesis.
                         </h2>
                     </div>
 
@@ -379,10 +376,10 @@ export default function UseCasesPage() {
                             className="text-3xl lg:text-4xl font-bold gradient-text"
                             style={{ letterSpacing: "-0.04em" }}
                         >
-                            Start structuring your research.
+                            Record your first thesis.
                         </h2>
-                        <p className="text-sm text-[#71717a]" style={{ letterSpacing: "-0.01em" }}>
-                            Free tier available. No credit card required. NYSE &amp; NASDAQ coverage from day one.
+                        <p className="text-sm text-[#a1a1aa]" style={{ letterSpacing: "-0.01em" }}>
+                            Free tier available. No credit card required. NYSE and NASDAQ coverage from day one.
                         </p>
                         <div className="flex items-center justify-center gap-3">
                             <Link href="/signup">

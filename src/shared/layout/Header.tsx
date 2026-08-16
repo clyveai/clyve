@@ -77,7 +77,7 @@ export default function Header() {
                             <Link
                                 key={link.name}
                                 href={link.href}
-                                className="text-[13.5px] font-medium text-white/50 hover:text-white/90 px-4 py-2 rounded-full hover:bg-white/[0.06] transition-all duration-200"
+                                className="text-[13.5px] font-medium text-white/70 hover:text-white px-4 py-2 rounded-full hover:bg-white/[0.06] transition-all duration-200"
                             >
                                 {link.name}
                             </Link>
@@ -91,7 +91,7 @@ export default function Header() {
                             className="hidden md:flex items-center gap-1.5 py-2 px-5 bg-white text-black text-[13px] font-semibold rounded-full hover:bg-white/90 active:scale-95 transition-all duration-200"
                         >
                             Get Started
-                            <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+                            <ChevronRight className="w-3.5 h-3.5 opacity-60" />
                         </Link>
 
                         {/* Mobile toggle */}
