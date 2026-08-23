@@ -1,3 +1,5 @@
+import ThesisWorkspaceLayout from "@/app/(app)/_components/app-shell/ThesisWorkspaceLayout";
+
 export default function DashboardLayout({ children }: { children: React.ReactNode }) {
-    return children;
+    return <ThesisWorkspaceLayout>{children}</ThesisWorkspaceLayout>;
 }

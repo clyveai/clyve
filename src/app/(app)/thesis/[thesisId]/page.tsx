@@ -16,9 +16,5 @@ export default async function ThesisDetailPage({ params }: { params: Promise<{ t
     notFound();
   }
 
-  return (
-    <main className="relative min-h-screen bg-[var(--bg-primary)] px-4 py-24 text-white sm:px-6">
-      <ThesisDocument thesis={thesis} />
-    </main>
-  );
+  return <ThesisDocument thesis={thesis} />;
 }

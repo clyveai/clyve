@@ -1,6 +1,6 @@
-import { and, asc, eq } from "drizzle-orm";
+import { and, asc, desc, eq } from "drizzle-orm";
 import { db, thesisAssumptions, theses } from "@/infrastructure/database";
-import type { CreateThesisInput, ThesisDetail } from "../types";
+import type { CreateThesisInput, ThesisDetail, ThesisListItem } from "../types";
 
 type CreateThesisRecordInput = CreateThesisInput & {
   userId: string;
@@ -98,5 +98,23 @@ export const thesisRepository = {
           : [],
       ),
     };
+  },
+
+  async findManyForUser(userId: string): Promise<ThesisListItem[]> {
+    return db
+      .select({
+        id: theses.id,
+        ticker: theses.ticker,
+        companyName: theses.companyName,
+        position: theses.position,
+        title: theses.title,
+        status: theses.status,
+        health: theses.health,
+        updatedAt: theses.updatedAt,
+      })
+      .from(theses)
+      .where(eq(theses.userId, userId))
+      .orderBy(desc(theses.updatedAt))
+      .limit(50);
   },
 };

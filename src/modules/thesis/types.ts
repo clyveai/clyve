@@ -41,3 +41,14 @@ export type ThesisDetail = {
     importance: AssumptionImportance;
   }>;
 };
+
+export type ThesisListItem = {
+  id: string;
+  ticker: string;
+  companyName: string | null;
+  position: ThesisPosition;
+  title: string;
+  status: "active" | "paused" | "archived";
+  health: "unknown" | "aligned" | "watch" | "diverged";
+  updatedAt: Date;
+};

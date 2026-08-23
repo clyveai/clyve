@@ -1,7 +1,7 @@
 "use client";
 
 import { AnimatePresence, motion } from "framer-motion";
-import { useCallback, useEffect, useState } from "react";
+import { useCallback, useEffect, useState, type ReactNode } from "react";
 import { NewThesisButton } from "./NewThesisButton";
 import { SidebarHeader } from "./SidebarHeader";
 import { SidebarBackdrop } from "./SidebarBackdrop";
@@ -17,6 +17,7 @@ interface User {
 interface ResearchSidebarProps {
     user: User | null;
     onNewThesis?: () => void;
+    thesisNavigation?: ReactNode;
 }
 
 const SIDEBAR_WIDTH = 260;
@@ -26,6 +27,7 @@ const MOBILE_SIDEBAR_WIDTH = 280;
 export function ResearchSidebar({
     user,
     onNewThesis,
+    thesisNavigation,
 }: ResearchSidebarProps) {
     const [mounted, setMounted] = useState(false);
 
@@ -43,6 +45,12 @@ export function ResearchSidebar({
             close();
         }
     }, [close, isMobile, onNewThesis]);
+
+    const handleThesisNavigation = useCallback(() => {
+        if (isMobile) {
+            close();
+        }
+    }, [close, isMobile]);
 
     if (!mounted) {
         return null;
@@ -87,11 +95,7 @@ export function ResearchSidebar({
                     </div>
 
                     <div className="flex-1 overflow-y-auto px-2 pb-4">
-                        {!effectiveCollapsed && (
-                            <p className="px-2 py-4 text-xs leading-5 text-[var(--fg-secondary)]">
-                                Your active theses will appear here after the first monitoring slice is complete.
-                            </p>
-                        )}
+                        {!effectiveCollapsed ? <div onClick={handleThesisNavigation}>{thesisNavigation}</div> : null}
                     </div>
                 </div>
             ) : (
