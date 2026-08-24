@@ -10,6 +10,8 @@ import type {
 
 type CreateThesisRecordInput = CreateThesisInput & {
   userId: string;
+  companyName: string;
+  companyCik: string;
 };
 
 type UpdateThesisRecordInput = UpdateThesisInput & {
@@ -49,6 +51,7 @@ export const thesisRepository = {
           userId: input.userId,
           ticker: input.ticker,
           companyName: input.companyName,
+          companyCik: input.companyCik,
           position: input.position,
           title: input.title,
           thesis: input.thesis,
@@ -81,6 +84,7 @@ export const thesisRepository = {
         id: theses.id,
         ticker: theses.ticker,
         companyName: theses.companyName,
+        companyCik: theses.companyCik,
         position: theses.position,
         title: theses.title,
         thesis: theses.thesis,
@@ -129,6 +133,7 @@ export const thesisRepository = {
       id: firstRow.id,
       ticker: firstRow.ticker,
       companyName: firstRow.companyName,
+      companyCik: firstRow.companyCik,
       position: firstRow.position,
       title: firstRow.title,
       thesis: firstRow.thesis,
@@ -312,6 +317,7 @@ export const thesisRepository = {
         id: theses.id,
         ticker: theses.ticker,
         companyName: theses.companyName,
+        companyCik: theses.companyCik,
         position: theses.position,
         title: theses.title,
         status: theses.status,

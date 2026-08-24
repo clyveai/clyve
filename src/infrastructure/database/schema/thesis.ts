@@ -53,6 +53,7 @@ export const theses = pgTable(
       .references(() => user.id, { onDelete: "cascade" }),
     ticker: varchar("ticker", { length: 16 }).notNull(),
     companyName: text("company_name"),
+    companyCik: varchar("company_cik", { length: 10 }),
     position: thesisPosition("position").notNull().default("watching"),
     title: text("title").notNull(),
     thesis: text("thesis").notNull(),
@@ -68,6 +69,7 @@ export const theses = pgTable(
   (table) => ({
     userStatusUpdatedIdx: index("theses_user_status_updated_idx").on(table.userId, table.status, table.updatedAt),
     userTickerIdx: index("theses_user_ticker_idx").on(table.userId, table.ticker),
+    companyCikIdx: index("theses_company_cik_idx").on(table.companyCik),
   }),
 );
 

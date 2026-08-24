@@ -4,12 +4,11 @@ import {
   type CreateThesisInput,
   type ThesisAssumptionInput,
 } from "../types";
+import { isTickerSyntaxValid, normalizeTicker } from "@/modules/company/types";
 
 export type CreateThesisValidationResult =
   | { success: true; data: CreateThesisInput }
   | { success: false; error: string; fieldErrors: Record<string, string> };
-
-const tickerPattern = /^[A-Z0-9.\-]{1,16}$/;
 
 function firstValue(formData: FormData, key: string) {
   const value = formData.get(key);
@@ -28,13 +27,13 @@ function hasValue<T extends readonly string[]>(values: T, value: string): value 
 /** Parses and validates the Thesis Capture form at the module boundary. */
 export function parseCreateThesisFormData(formData: FormData): CreateThesisValidationResult {
   const fieldErrors: Record<string, string> = {};
-  const ticker = firstValue(formData, "ticker").toUpperCase();
+  const ticker = normalizeTicker(firstValue(formData, "ticker"));
   const title = firstValue(formData, "title");
   const thesis = firstValue(formData, "thesis");
   const position = firstValue(formData, "position");
 
-  if (!tickerPattern.test(ticker)) {
-    fieldErrors.ticker = "Enter a valid ticker symbol, for example NVDA or BRK.B.";
+  if (!isTickerSyntaxValid(ticker)) {
+    fieldErrors.ticker = "Enter a valid ticker symbol, for example NVDA or BRK-B.";
   }
 
   if (title.length < 3 || title.length > 160) {
@@ -94,7 +93,6 @@ export function parseCreateThesisFormData(formData: FormData): CreateThesisValid
     success: true,
     data: {
       ticker,
-      companyName: optionalValue(formData, "companyName"),
       position,
       title,
       thesis,

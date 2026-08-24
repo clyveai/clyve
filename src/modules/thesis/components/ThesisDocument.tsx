@@ -22,6 +22,7 @@ export function ThesisDocument({ thesis }: { thesis: ThesisDetail }) {
             <h1 className="mt-3 text-3xl font-semibold tracking-tight text-white sm:text-4xl">{thesis.title}</h1>
             <div className="mt-4 flex flex-wrap gap-2 text-xs text-zinc-300">
               <span className="rounded-full border border-white/15 px-3 py-1.5 font-medium">{thesis.ticker}</span>
+              {thesis.companyCik ? <span className="rounded-full border border-white/15 px-3 py-1.5 font-medium">CIK {thesis.companyCik}</span> : null}
               <span className="rounded-full border border-white/15 px-3 py-1.5 capitalize">{thesis.position}</span>
               <span className="rounded-full border border-white/15 px-3 py-1.5 capitalize">{thesis.status}</span>
               {thesis.timeHorizon ? <span className="rounded-full border border-white/15 px-3 py-1.5">{thesis.timeHorizon}</span> : null}

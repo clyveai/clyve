@@ -17,7 +17,6 @@ export type ThesisAssumptionUpdateInput = ThesisAssumptionInput & {
 
 export type CreateThesisInput = {
   ticker: string;
-  companyName?: string;
   position: ThesisPosition;
   title: string;
   thesis: string;
@@ -45,6 +44,7 @@ export type ThesisDetail = {
   id: string;
   ticker: string;
   companyName: string | null;
+  companyCik: string | null;
   position: ThesisPosition;
   title: string;
   thesis: string;
@@ -63,6 +63,7 @@ export type ThesisListItem = {
   id: string;
   ticker: string;
   companyName: string | null;
+  companyCik: string | null;
   position: ThesisPosition;
   title: string;
   status: "active" | "paused" | "archived";

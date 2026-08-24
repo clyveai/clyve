@@ -1,6 +1,11 @@
 "use client";
 
-import { useActionState, useState } from "react";
+import { useActionState, useCallback, useEffect, useRef, useState } from "react";
+import {
+  resolveCompanyIdentityAction,
+  type CompanyIdentityResolution,
+} from "@/modules/company/actions/resolve-company-identity";
+import { isTickerSyntaxValid, normalizeTicker } from "@/modules/company/types";
 import {
   createThesisAction,
   type CreateThesisActionState,
@@ -17,7 +22,6 @@ type AssumptionDraft = {
 
 type ThesisDraft = {
   ticker: string;
-  companyName: string;
   position: ThesisPosition;
   timeHorizon: string;
   title: string;
@@ -28,7 +32,6 @@ type ThesisDraft = {
 const initialState: CreateThesisActionState = {};
 const initialDraft: ThesisDraft = {
   ticker: "",
-  companyName: "",
   position: "long",
   timeHorizon: "",
   title: "",
@@ -44,17 +47,92 @@ const initialDraft: ThesisDraft = {
   ],
 };
 
+type TickerResolution = CompanyIdentityResolution | { status: "idle" } | { status: "checking" };
+
 const fieldClassName =
   "mt-2 w-full rounded-xl border border-white/10 bg-black/30 px-3 py-2.5 text-sm text-zinc-100 outline-none transition placeholder:text-zinc-600 focus:border-white/45 focus:ring-2 focus:ring-white/10";
 
-/** Domain UI for recording a thesis and the assumptions that Clyve will monitor. */
 export function ThesisCaptureForm() {
   const [state, formAction, isPending] = useActionState(createThesisAction, initialState);
   const [draft, setDraft] = useState<ThesisDraft>(initialDraft);
+  const [tickerResolution, setTickerResolution] = useState<TickerResolution>({ status: "idle" });
+  const tickerRequestId = useRef(0);
+  const verifiedTicker = useRef<string | null>(null);
 
   const updateDraft = <Field extends Exclude<keyof ThesisDraft, "assumptions">>(field: Field, value: ThesisDraft[Field]) => {
     setDraft((current) => ({ ...current, [field]: value }));
   };
+
+  const resolveTicker = useCallback(async (value: string) => {
+    const ticker = normalizeTicker(value);
+    const requestId = ++tickerRequestId.current;
+
+    if (!ticker) {
+      verifiedTicker.current = null;
+      setTickerResolution({ status: "idle" });
+      return;
+    }
+
+    if (!isTickerSyntaxValid(ticker)) {
+      verifiedTicker.current = null;
+      setTickerResolution({ status: "invalid", message: "Enter a valid ticker symbol, for example NVDA or BRK-B." });
+      return;
+    }
+
+    setTickerResolution({ status: "checking" });
+
+    try {
+      const result = await resolveCompanyIdentityAction(ticker);
+      if (requestId !== tickerRequestId.current) {
+        return;
+      }
+
+      if (result.status === "valid") {
+        verifiedTicker.current = result.identity.ticker;
+        setDraft((current) => ({ ...current, ticker: result.identity.ticker }));
+      } else {
+        verifiedTicker.current = null;
+      }
+
+      setTickerResolution(result);
+    } catch {
+      if (requestId !== tickerRequestId.current) {
+        return;
+      }
+
+      verifiedTicker.current = null;
+      setTickerResolution({ status: "unavailable", message: "SEC ticker verification is unavailable. Please try again." });
+    }
+  }, []);
+
+  const handleTickerChange = (value: string) => {
+    tickerRequestId.current += 1;
+    verifiedTicker.current = null;
+    setTickerResolution({ status: "idle" });
+    updateDraft("ticker", value);
+  };
+
+  useEffect(() => {
+    const ticker = normalizeTicker(draft.ticker);
+
+    if (!ticker) {
+      setTickerResolution({ status: "idle" });
+      return;
+    }
+
+    if (verifiedTicker.current === ticker) {
+      return;
+    }
+
+    const timeout = window.setTimeout(() => {
+      void resolveTicker(ticker);
+    }, 450);
+
+    return () => window.clearTimeout(timeout);
+  }, [draft.ticker, resolveTicker]);
+
+  const isTickerVerified =
+    tickerResolution.status === "valid" && tickerResolution.identity.ticker === draft.ticker;
 
   const updateAssumption = <Field extends Exclude<keyof AssumptionDraft, "id">>(
     id: string,
@@ -115,22 +193,27 @@ export function ThesisCaptureForm() {
             autoCapitalize="characters"
             placeholder="NVDA"
             value={draft.ticker}
-            onChange={(event) => updateDraft("ticker", event.target.value)}
+            onChange={(event) => handleTickerChange(event.target.value)}
+            onBlur={() => void resolveTicker(draft.ticker)}
             className={fieldClassName}
           />
           {state.fieldErrors?.ticker ? <p className="mt-2 text-xs text-red-300">{state.fieldErrors.ticker}</p> : null}
         </label>
 
-        <label className="block text-sm font-medium text-zinc-200">
-          Company name <span className="font-normal text-zinc-500">(optional)</span>
-          <input
-            name="companyName"
-            placeholder="NVIDIA Corporation"
-            value={draft.companyName}
-            onChange={(event) => updateDraft("companyName", event.target.value)}
-            className={fieldClassName}
-          />
-        </label>
+        <div className="block text-sm font-medium text-zinc-200">
+          <p>SEC identity</p>
+          <div aria-live="polite" className="mt-2 min-h-6 text-sm font-normal leading-6">
+            {tickerResolution.status === "idle" ? <span className="text-zinc-500">Enter a ticker to verify its SEC identity.</span> : null}
+            {tickerResolution.status === "checking" ? <span className="text-zinc-400">Checking SEC identity...</span> : null}
+            {tickerResolution.status === "valid" ? (
+              <span className="text-zinc-200">
+                {tickerResolution.identity.companyName} <span className="text-zinc-500">CIK {tickerResolution.identity.cik}</span>
+              </span>
+            ) : null}
+            {tickerResolution.status === "invalid" ? <span className="text-red-300">{tickerResolution.message}</span> : null}
+            {tickerResolution.status === "unavailable" ? <span className="text-amber-200">{tickerResolution.message}</span> : null}
+          </div>
+        </div>
 
         <label className="block text-sm font-medium text-zinc-200">
           Position
@@ -280,10 +363,11 @@ export function ThesisCaptureForm() {
 
       {state.error ? <p role="alert" className="rounded-xl border border-red-400/20 bg-red-950/30 px-4 py-3 text-sm text-red-200">{state.error}</p> : null}
 
-      <div className="flex justify-end">
+      <div className="flex flex-col-reverse gap-3 sm:flex-row sm:items-center sm:justify-between">
+        {!isTickerVerified ? <p className="text-sm text-zinc-500">Verify an SEC ticker before saving this thesis.</p> : <span />}
         <button
           type="submit"
-          disabled={isPending}
+          disabled={isPending || !isTickerVerified}
           className="h-11 rounded-xl bg-white px-5 text-sm font-semibold text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {isPending ? "Saving thesis…" : "Save thesis"}

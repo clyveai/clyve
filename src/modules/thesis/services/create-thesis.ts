@@ -1,3 +1,4 @@
+import { resolveSecCompanyIdentity } from "@/modules/company/services/resolve-sec-company-identity";
 import { thesisRepository } from "../repositories/thesis-repository";
 import type { CreateThesisInput } from "../types";
 
@@ -7,5 +8,13 @@ export async function createThesis(userId: string, input: CreateThesisInput) {
     throw new Error("A thesis requires at least one monitoring assumption.");
   }
 
-  return thesisRepository.createWithAssumptions({ ...input, userId });
+  const company = await resolveSecCompanyIdentity(input.ticker);
+
+  return thesisRepository.createWithAssumptions({
+    ...input,
+    userId,
+    ticker: company.ticker,
+    companyName: company.companyName,
+    companyCik: company.cik,
+  });
 }
