@@ -1,7 +1,7 @@
 import { betterAuth } from "better-auth";
 import { drizzleAdapter } from "better-auth/adapters/drizzle";
-import { db } from "@/infrastructure/database/db";
-import { schema } from "@/infrastructure/database/db/schema";
+import { db } from "@/infrastructure/database";
+import * as schema from "@/infrastructure/database/schema";
 
 const betterAuthSecret = process.env.BETTER_AUTH_SECRET;
 

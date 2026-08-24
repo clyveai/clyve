@@ -2,8 +2,8 @@ import { eq } from "drizzle-orm";
 import { headers } from "next/headers";
 import { NextResponse } from "next/server";
 import { auth } from "@/infrastructure/auth/auth";
-import { db } from "@/infrastructure/database/db";
-import { user } from "@/infrastructure/database/db/schema";
+import { db } from "@/infrastructure/database";
+import { user } from "@/infrastructure/database/schema";
 
 async function getCurrentSession() {
   const requestHeaders = await headers();

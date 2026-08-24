@@ -301,7 +301,7 @@ export default function UseCasesPage() {
                         className="text-5xl lg:text-7xl font-bold tracking-tight gradient-text"
                         style={{ letterSpacing: "-0.04em" }}
                     >
-                        Who Clyve is built for.
+                        Who Clyve is built for?
                     </motion.h1>
 
                     <motion.p

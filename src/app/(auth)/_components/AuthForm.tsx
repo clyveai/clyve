@@ -5,179 +5,148 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import { motion, useReducedMotion, MotionProps } from "framer-motion";
-import { Loader2 } from "lucide-react";
+import { Eye, EyeOff, Loader2 } from "lucide-react";
 import { authClient } from "@/infrastructure/auth/auth-client";
 
 type AuthMode = "login" | "signup";
 
-type AuthFormProps = {
-  mode: AuthMode;
+const fallbackNameFromEmail = (email: string) => email.trim().split("@")[0] || "member";
+
+const FADE: MotionProps["transition"] = { duration: 0.4, ease: "easeOut" };
+
+const COPY: Record<AuthMode, { title: string; subtitle: string; cta: string; switchLabel: string; switchCta: string; switchHref: string }> = {
+  login: {
+    title: "Welcome back",
+    subtitle: "Your thesis is where you left it.",
+    cta: "Sign in",
+    switchLabel: "New here?",
+    switchCta: "Create an account",
+    switchHref: "/signup",
+  },
+  signup: {
+    title: "Track your thesis",
+    subtitle: "Clyve remembers why, and flags when it stops holding.",
+    cta: "Create account",
+    switchLabel: "Already have an account?",
+    switchCta: "Sign in",
+    switchHref: "/login",
+  },
 };
 
-const fallbackNameFromEmail = (emailValue: string) => {
-  const localPart = emailValue.trim().split("@")[0];
-  return localPart.length > 0 ? localPart : "member";
-};
-
-export default function AuthForm({ mode }: AuthFormProps) {
+export default function AuthForm({ mode }: { mode: AuthMode }) {
   const router = useRouter();
-  const shouldReduceMotion = useReducedMotion();
+  const reduceMotion = useReducedMotion();
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [showPassword, setShowPassword] = useState(false);
   const [isLoading, setIsLoading] = useState(false);
-  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [error, setError] = useState<string | null>(null);
 
   const isLogin = mode === "login";
+  const { title, subtitle, cta, switchLabel, switchCta, switchHref } = COPY[mode];
 
-  // Konfigurasi animasi yang disamakan & Type-Safe
-  const fadeInwards: MotionProps = {
-    initial: shouldReduceMotion ? false : { opacity: 0, y: 14 },
-    animate: shouldReduceMotion ? undefined : { opacity: 1, y: 0 },
-    transition: { duration: 0.4, ease: "easeOut" as const }
-  };
+  const fadeIn: MotionProps = reduceMotion
+    ? {}
+    : { initial: { opacity: 0, y: 14 }, animate: { opacity: 1, y: 0 }, transition: FADE };
 
-  const handleEmailAuth = async (event: React.FormEvent<HTMLFormElement>) => {
-    event.preventDefault();
-    setErrorMessage(null);
+  const runAuth = async (action: () => Promise<{ error?: { message?: string } | null }>) => {
+    setError(null);
     setIsLoading(true);
-
     try {
-      if (isLogin) {
-        const response = await authClient.signIn.email({
-          email,
-          password,
-          callbackURL: "/dashboard",
-        });
-
-        if (response.error) {
-          throw new Error(response.error.message ?? "Unable to sign in.");
-        }
-      } else {
-        const response = await authClient.signUp.email({
-          email,
-          password,
-          name: fallbackNameFromEmail(email),
-          callbackURL: "/dashboard",
-        });
-
-        if (response.error) {
-          throw new Error(response.error.message ?? "Unable to signup.");
-        }
-      }
-
+      const { error: authError } = await action();
+      if (authError) throw new Error(authError.message ?? "Authentication failed.");
       router.push("/dashboard");
       router.refresh();
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Authentication failed.");
-    } finally {
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Authentication failed.");
       setIsLoading(false);
     }
   };
 
-  const handleGoogleAuth = async () => {
-    setErrorMessage(null);
-    setIsLoading(true);
-
-    try {
-      const response = await authClient.signIn.social({
-        provider: "google",
-        callbackURL: "/dashboard",
-      });
-
-      if (response.error) {
-        throw new Error(response.error.message ?? "Unable to continue with Google.");
-      }
-    } catch (error) {
-      setErrorMessage(error instanceof Error ? error.message : "Google sign-in failed.");
-      setIsLoading(false);
-    }
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    runAuth(() =>
+      isLogin
+        ? authClient.signIn.email({ email, password, callbackURL: "/dashboard" })
+        : authClient.signUp.email({ email, password, name: fallbackNameFromEmail(email), callbackURL: "/dashboard" })
+    );
   };
+
+  const handleGoogle = () =>
+    runAuth(() => authClient.signIn.social({ provider: "google", callbackURL: "/dashboard" }));
 
   return (
-    <div className="flex flex-col items-center w-full max-w-[440px]">
-      {/* Logo Section dengan Animasi & Link */}
-      <motion.div
-        {...fadeInwards}
-        className="mb-8"
-      >
-        <Link
-          href="/"
-          className="block transition-transform hover:scale-105 active:scale-95"
-        >
-          <Image
-            src="/logo-auth.svg"
-            alt="Logo"
-            width={48}
-            height={48}
-            className="w-auto h-12"
-            priority
-          />
+    <div className="flex w-full max-w-[440px] flex-col items-center px-4 sm:px-0">
+      <motion.div {...fadeIn} className="mb-6 sm:mb-8">
+        <Link href="/" className="block transition-transform hover:scale-105 active:scale-95">
+          <Image src="/logo-auth.svg" alt="Clyve" width={44} height={44} className="h-10 w-auto sm:h-12" priority />
         </Link>
       </motion.div>
 
-      {/* Card Design */}
       <motion.div
-        {...fadeInwards}
-        className="w-full rounded-3xl border border-white/10 bg-zinc-950/55 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:p-8"
+        {...fadeIn}
+        className="w-full rounded-3xl border border-[var(--border-color)] bg-[#111111]/55 p-5 shadow-[0_20px_80px_rgba(0,0,0,0.55)] backdrop-blur-xl sm:p-8"
       >
-        <h1 className="text-xl font-semibold tracking-tight text-white sm:text-2xl">
-          {isLogin ? "Welcome Back" : "Create Your Account"}
-        </h1>
-        <p className="mt-2 text-sm leading-relaxed text-zinc-400">
-          {isLogin
-            ? "Back in the loop. Research intelligence is ready."
-            : "Early access. Structure your equity research."}
-        </p>
+        <h1 className="text-xl font-semibold tracking-tight text-[var(--fg-primary)] sm:text-2xl">{title}</h1>
+        <p className="mt-2 text-sm leading-relaxed text-[var(--fg-secondary)]">{subtitle}</p>
 
-        <form onSubmit={handleEmailAuth} className="mt-7 space-y-3.5">
+        <form onSubmit={handleSubmit} className="mt-6 space-y-3.5 sm:mt-7">
           <input
             type="email"
             required
+            autoComplete="email"
+            inputMode="email"
             value={email}
-            onChange={(event) => setEmail(event.target.value)}
+            onChange={(e) => setEmail(e.target.value)}
             placeholder="Email address"
-            className="h-11 w-full rounded-xl border border-transparent bg-white/[0.02] px-4 text-sm text-white placeholder:text-zinc-500 outline-none ring-1 ring-white/10 transition will-change-transform focus:bg-white/[0.03] focus:ring-2 focus:ring-white/80 focus:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
-          />
-          <input
-            type="password"
-            required
-            minLength={8}
-            value={password}
-            onChange={(event) => setPassword(event.target.value)}
-            placeholder="Password"
-            className="h-11 w-full rounded-xl border border-transparent bg-white/[0.02] px-4 text-sm text-white placeholder:text-zinc-500 outline-none ring-1 ring-white/10 transition will-change-transform focus:bg-white/[0.03] focus:ring-2 focus:ring-white/80 focus:shadow-[0_0_20px_rgba(255,255,255,0.15)]"
+            className="input-dark h-11 w-full rounded-xl px-4 text-[16px] focus:border-white/80 focus:shadow-[0_0_0_3px_rgba(255,255,255,0.08)] sm:text-sm"
           />
 
-          {errorMessage ? <p className="text-sm text-red-300">{errorMessage}</p> : null}
+          <div className="relative">
+            <input
+              type={showPassword ? "text" : "password"}
+              required
+              minLength={8}
+              autoComplete={isLogin ? "current-password" : "new-password"}
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              placeholder="Password"
+              className="input-dark h-11 w-full rounded-xl px-4 pr-11 text-[16px] focus:border-white/80 focus:shadow-[0_0_0_3px_rgba(255,255,255,0.08)] sm:text-sm"
+            />
+            {password.length > 0 && (
+              <button
+                type="button"
+                onClick={() => setShowPassword((v) => !v)}
+                tabIndex={-1}
+                aria-label={showPassword ? "Hide password" : "Show password"}
+                className="absolute right-3 top-1/2 -translate-y-1/2 text-[var(--fg-secondary)] transition-colors hover:text-[var(--fg-primary)]"
+              >
+                {showPassword ? <EyeOff className="h-4 w-4" /> : <Eye className="h-4 w-4" />}
+              </button>
+            )}
+          </div>
 
-          <button
-            type="submit"
-            disabled={isLoading}
-            className="flex h-11 w-full items-center justify-center rounded-xl bg-white text-sm font-semibold text-black transition hover:bg-zinc-200 disabled:cursor-not-allowed disabled:opacity-60"
-          >
-            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : isLogin ? "Sign In" : "Create Account"}
+          {error && <p className="text-sm text-accent">{error}</p>}
+
+          <button type="submit" disabled={isLoading} className="btn-primary h-11 w-full text-sm">
+            {isLoading ? <Loader2 className="h-4 w-4 animate-spin" /> : cta}
           </button>
         </form>
 
-        <div className="my-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-zinc-500">
-          <span className="h-px flex-1 bg-white/10" />
+        <div className="my-5 flex items-center gap-3 text-[11px] uppercase tracking-[0.22em] text-[var(--fg-secondary)]">
+          <span className="h-px flex-1 bg-[var(--border-color)]" />
           Or
-          <span className="h-px flex-1 bg-white/10" />
+          <span className="h-px flex-1 bg-[var(--border-color)]" />
         </div>
 
-        <button
-          type="button"
-          onClick={handleGoogleAuth}
-          disabled={isLoading}
-          className="flex h-11 w-full items-center justify-center rounded-xl border border-white/15 bg-white/[0.02] text-sm font-medium text-zinc-100 transition hover:bg-white/[0.06] disabled:cursor-not-allowed disabled:opacity-60"
-        >
+        <button type="button" onClick={handleGoogle} disabled={isLoading} className="btn-secondary h-11 w-full text-sm">
           Continue with Google
         </button>
 
-        <p className="mt-6 text-center text-sm text-zinc-400">
-          {isLogin ? "No account yet?" : "Already have an account?"}{" "}
-          <Link href={isLogin ? "/signup" : "/login"} className="font-medium text-white">
-            {isLogin ? "Sign up" : "Sign in"}
+        <p className="mt-6 text-center text-sm text-[var(--fg-secondary)]">
+          {switchLabel}{" "}
+          <Link href={switchHref} className="font-medium text-[var(--fg-primary)]">
+            {switchCta}
           </Link>
         </p>
       </motion.div>
