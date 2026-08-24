@@ -1,10 +1,43 @@
-import { and, asc, desc, eq } from "drizzle-orm";
-import { db, thesisAssumptions, theses } from "@/infrastructure/database";
-import type { CreateThesisInput, ThesisDetail, ThesisListItem } from "../types";
+import { and, asc, desc, eq, inArray } from "drizzle-orm";
+import { db, evidenceAssumptions, thesisAlerts, thesisAssumptions, theses } from "@/infrastructure/database";
+import type {
+  CreateThesisInput,
+  ThesisAssumptionUpdateInput,
+  ThesisDetail,
+  ThesisListItem,
+  UpdateThesisInput,
+} from "../types";
 
 type CreateThesisRecordInput = CreateThesisInput & {
   userId: string;
 };
+
+type UpdateThesisRecordInput = UpdateThesisInput & {
+  thesisId: string;
+  userId: string;
+};
+
+type ExistingAssumption = {
+  id: string;
+  statement: string;
+  expectedOutcome: string | null;
+  metric: string | null;
+  importance: ThesisAssumptionUpdateInput["importance"];
+  sortOrder: number;
+};
+
+function optionalValue(value: string | undefined | null) {
+  return value || null;
+}
+
+function isSameAssumption(current: ExistingAssumption, next: ThesisAssumptionUpdateInput) {
+  return (
+    current.statement === next.statement &&
+    current.expectedOutcome === optionalValue(next.expectedOutcome) &&
+    current.metric === optionalValue(next.metric) &&
+    current.importance === next.importance
+  );
+}
 
 /** The sole database boundary for the thesis domain. */
 export const thesisRepository = {
@@ -54,6 +87,8 @@ export const thesisRepository = {
         timeHorizon: theses.timeHorizon,
         status: theses.status,
         health: theses.health,
+        version: theses.version,
+        archivedAt: theses.archivedAt,
         createdAt: theses.createdAt,
         updatedAt: theses.updatedAt,
         assumptionId: thesisAssumptions.id,
@@ -61,6 +96,8 @@ export const thesisRepository = {
         assumptionExpectedOutcome: thesisAssumptions.expectedOutcome,
         assumptionMetric: thesisAssumptions.metric,
         assumptionImportance: thesisAssumptions.importance,
+        assumptionStatus: thesisAssumptions.status,
+        assumptionRetiredAt: thesisAssumptions.retiredAt,
       })
       .from(theses)
       .leftJoin(thesisAssumptions, eq(thesisAssumptions.thesisId, theses.id))
@@ -72,6 +109,22 @@ export const thesisRepository = {
       return null;
     }
 
+    const assumptions = rows.flatMap((row) =>
+      row.assumptionId && row.assumptionStatement && row.assumptionImportance && row.assumptionStatus
+        ? [
+            {
+              id: row.assumptionId,
+              statement: row.assumptionStatement,
+              expectedOutcome: row.assumptionExpectedOutcome,
+              metric: row.assumptionMetric,
+              importance: row.assumptionImportance,
+              status: row.assumptionStatus,
+              retiredAt: row.assumptionRetiredAt,
+            },
+          ]
+        : [],
+    );
+
     return {
       id: firstRow.id,
       ticker: firstRow.ticker,
@@ -82,22 +135,175 @@ export const thesisRepository = {
       timeHorizon: firstRow.timeHorizon,
       status: firstRow.status,
       health: firstRow.health,
+      version: firstRow.version,
+      archivedAt: firstRow.archivedAt,
       createdAt: firstRow.createdAt,
       updatedAt: firstRow.updatedAt,
-      assumptions: rows.flatMap((row) =>
-        row.assumptionId && row.assumptionStatement && row.assumptionImportance
-          ? [
-              {
-                id: row.assumptionId,
-                statement: row.assumptionStatement,
-                expectedOutcome: row.assumptionExpectedOutcome,
-                metric: row.assumptionMetric,
-                importance: row.assumptionImportance,
-              },
-            ]
-          : [],
-      ),
+      assumptions: assumptions.filter((assumption) => assumption.status === "active"),
+      retiredAssumptions: assumptions.filter((assumption) => assumption.status === "retired"),
     };
+  },
+
+  async updateForUserWithAssumptions(input: UpdateThesisRecordInput) {
+    return db.transaction(async (tx) => {
+      const now = new Date();
+      const [updatedThesis] = await tx
+        .update(theses)
+        .set({
+          thesis: input.thesis,
+          timeHorizon: input.timeHorizon ?? null,
+          version: input.version + 1,
+          updatedAt: now,
+        })
+        .where(
+          and(
+            eq(theses.id, input.thesisId),
+            eq(theses.userId, input.userId),
+            eq(theses.status, "active"),
+            eq(theses.version, input.version),
+          ),
+        )
+        .returning({ id: theses.id });
+
+      if (!updatedThesis) {
+        throw new Error("This thesis was changed or archived in another session. Reload and try again.");
+      }
+
+      const currentAssumptions = await tx
+        .select({
+          id: thesisAssumptions.id,
+          statement: thesisAssumptions.statement,
+          expectedOutcome: thesisAssumptions.expectedOutcome,
+          metric: thesisAssumptions.metric,
+          importance: thesisAssumptions.importance,
+          sortOrder: thesisAssumptions.sortOrder,
+        })
+        .from(thesisAssumptions)
+        .where(and(eq(thesisAssumptions.thesisId, input.thesisId), eq(thesisAssumptions.status, "active")))
+        .orderBy(asc(thesisAssumptions.sortOrder));
+
+      const assumptionsById = new Map(currentAssumptions.map((assumption) => [assumption.id, assumption]));
+      const submittedExistingIds = input.assumptions.flatMap((assumption) => (assumption.id ? [assumption.id] : []));
+
+      if (submittedExistingIds.some((id) => !assumptionsById.has(id))) {
+        throw new Error("An assumption is no longer active. Reload the page and try again.");
+      }
+
+      const currentAssumptionIds = currentAssumptions.map((assumption) => assumption.id);
+      const historyAssumptionIds = new Set<string>();
+
+      if (currentAssumptionIds.length > 0) {
+        const evidenceLinks = await tx
+          .select({ assumptionId: evidenceAssumptions.thesisAssumptionId })
+          .from(evidenceAssumptions)
+          .where(inArray(evidenceAssumptions.thesisAssumptionId, currentAssumptionIds));
+        const alerts = await tx
+          .select({ assumptionId: thesisAlerts.thesisAssumptionId })
+          .from(thesisAlerts)
+          .where(inArray(thesisAlerts.thesisAssumptionId, currentAssumptionIds));
+
+        for (const row of evidenceLinks) {
+          historyAssumptionIds.add(row.assumptionId);
+        }
+
+        for (const row of alerts) {
+          historyAssumptionIds.add(row.assumptionId);
+        }
+      }
+
+      const submittedIds = new Set(submittedExistingIds);
+
+      for (const [index, assumption] of input.assumptions.entries()) {
+        const current = assumption.id ? assumptionsById.get(assumption.id) : undefined;
+
+        if (!current) {
+          await tx.insert(thesisAssumptions).values({
+            thesisId: input.thesisId,
+            statement: assumption.statement,
+            expectedOutcome: optionalValue(assumption.expectedOutcome),
+            metric: optionalValue(assumption.metric),
+            importance: assumption.importance,
+            sortOrder: index,
+          });
+          continue;
+        }
+
+        if (isSameAssumption(current, assumption)) {
+          if (current.sortOrder !== index) {
+            await tx
+              .update(thesisAssumptions)
+              .set({ sortOrder: index, updatedAt: now })
+              .where(eq(thesisAssumptions.id, current.id));
+          }
+          continue;
+        }
+
+        if (historyAssumptionIds.has(current.id)) {
+          await tx
+            .update(thesisAssumptions)
+            .set({ status: "retired", retiredAt: now, updatedAt: now })
+            .where(eq(thesisAssumptions.id, current.id));
+
+          await tx.insert(thesisAssumptions).values({
+            thesisId: input.thesisId,
+            statement: assumption.statement,
+            expectedOutcome: optionalValue(assumption.expectedOutcome),
+            metric: optionalValue(assumption.metric),
+            importance: assumption.importance,
+            sortOrder: index,
+          });
+          continue;
+        }
+
+        await tx
+          .update(thesisAssumptions)
+          .set({
+            statement: assumption.statement,
+            expectedOutcome: optionalValue(assumption.expectedOutcome),
+            metric: optionalValue(assumption.metric),
+            importance: assumption.importance,
+            sortOrder: index,
+            updatedAt: now,
+          })
+          .where(eq(thesisAssumptions.id, current.id));
+      }
+
+      for (const current of currentAssumptions) {
+        if (submittedIds.has(current.id)) {
+          continue;
+        }
+
+        await tx
+          .update(thesisAssumptions)
+          .set({ status: "retired", retiredAt: now, updatedAt: now })
+          .where(eq(thesisAssumptions.id, current.id));
+      }
+
+      return updatedThesis;
+    });
+  },
+
+  async archiveForUser(thesisId: string, userId: string, version: number) {
+    const now = new Date();
+    const [archivedThesis] = await db
+      .update(theses)
+      .set({
+        status: "archived",
+        archivedAt: now,
+        version: version + 1,
+        updatedAt: now,
+      })
+      .where(
+        and(
+          eq(theses.id, thesisId),
+          eq(theses.userId, userId),
+          eq(theses.status, "active"),
+          eq(theses.version, version),
+        ),
+      )
+      .returning({ id: theses.id });
+
+    return archivedThesis ?? null;
   },
 
   async findManyForUser(userId: string): Promise<ThesisListItem[]> {

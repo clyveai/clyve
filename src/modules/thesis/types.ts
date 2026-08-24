@@ -11,6 +11,10 @@ export type ThesisAssumptionInput = {
   importance: AssumptionImportance;
 };
 
+export type ThesisAssumptionUpdateInput = ThesisAssumptionInput & {
+  id?: string;
+};
+
 export type CreateThesisInput = {
   ticker: string;
   companyName?: string;
@@ -19,6 +23,22 @@ export type CreateThesisInput = {
   thesis: string;
   timeHorizon?: string;
   assumptions: ThesisAssumptionInput[];
+};
+
+export type UpdateThesisInput = {
+  version: number;
+  thesis: string;
+  timeHorizon?: string;
+  assumptions: ThesisAssumptionUpdateInput[];
+};
+
+export type ThesisAssumptionDetail = {
+  id: string;
+  statement: string;
+  expectedOutcome: string | null;
+  metric: string | null;
+  importance: AssumptionImportance;
+  retiredAt: Date | null;
 };
 
 export type ThesisDetail = {
@@ -31,15 +51,12 @@ export type ThesisDetail = {
   timeHorizon: string | null;
   status: "active" | "paused" | "archived";
   health: "unknown" | "aligned" | "watch" | "diverged";
+  version: number;
+  archivedAt: Date | null;
   createdAt: Date;
   updatedAt: Date;
-  assumptions: Array<{
-    id: string;
-    statement: string;
-    expectedOutcome: string | null;
-    metric: string | null;
-    importance: AssumptionImportance;
-  }>;
+  assumptions: ThesisAssumptionDetail[];
+  retiredAssumptions: ThesisAssumptionDetail[];
 };
 
 export type ThesisListItem = {
