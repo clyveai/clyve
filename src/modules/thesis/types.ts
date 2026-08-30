@@ -70,3 +70,9 @@ export type ThesisListItem = {
   health: "unknown" | "aligned" | "watch" | "diverged";
   updatedAt: Date;
 };
+
+export type ThesisFilingTarget = {
+  id: string;
+  ticker: string;
+  companyCik: string;
+};

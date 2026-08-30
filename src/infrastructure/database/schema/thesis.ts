@@ -140,6 +140,11 @@ export const companyEvents = pgTable(
   (table) => ({
     tickerOccurredIdx: index("company_events_ticker_occurred_idx").on(table.ticker, table.occurredAt),
     sourceIdx: index("company_events_source_idx").on(table.sourceId),
+    sourceTickerTypeUnique: uniqueIndex("company_events_source_ticker_type_unique").on(
+      table.sourceId,
+      table.ticker,
+      table.type,
+    ),
   }),
 );
 

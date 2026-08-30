@@ -4,6 +4,7 @@ import type {
   CreateThesisInput,
   ThesisAssumptionUpdateInput,
   ThesisDetail,
+  ThesisFilingTarget,
   ThesisListItem,
   UpdateThesisInput,
 } from "../types";
@@ -309,6 +310,24 @@ export const thesisRepository = {
       .returning({ id: theses.id });
 
     return archivedThesis ?? null;
+  },
+
+  async findActiveFilingTargetForUser(thesisId: string, userId: string): Promise<ThesisFilingTarget | null> {
+    const [target] = await db
+      .select({
+        id: theses.id,
+        ticker: theses.ticker,
+        companyCik: theses.companyCik,
+      })
+      .from(theses)
+      .where(and(eq(theses.id, thesisId), eq(theses.userId, userId), eq(theses.status, "active")));
+
+    const companyCik = target?.companyCik;
+    if (!target || !companyCik) {
+      return null;
+    }
+
+    return { id: target.id, ticker: target.ticker, companyCik };
   },
 
   async findManyForUser(userId: string): Promise<ThesisListItem[]> {

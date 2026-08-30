@@ -1,8 +1,8 @@
 import { unstable_cache } from "next/cache";
+import { fetchSec, SecRequestError } from "./sec-request";
 
 const SEC_COMPANY_TICKERS_URL = "https://www.sec.gov/files/company_tickers.json";
 const DIRECTORY_REVALIDATE_SECONDS = 60 * 60 * 24;
-const SEC_REQUEST_TIMEOUT_MS = 8_000;
 
 export type SecCompanyDirectoryEntry = {
   ticker: string;
@@ -15,15 +15,6 @@ export class SecCompanyDirectoryUnavailableError extends Error {
     super(message);
     this.name = "SecCompanyDirectoryUnavailableError";
   }
-}
-
-function getSecUserAgent() {
-  const userAgent = process.env.SEC_USER_AGENT?.trim();
-  if (!userAgent) {
-    throw new SecCompanyDirectoryUnavailableError("SEC_USER_AGENT is not configured.");
-  }
-
-  return userAgent;
 }
 
 function isRecord(value: unknown): value is Record<string, unknown> {
@@ -41,29 +32,16 @@ function toCik(value: unknown) {
 
 async function fetchSecCompanyDirectory(): Promise<SecCompanyDirectoryEntry[]> {
   let response: Response;
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), SEC_REQUEST_TIMEOUT_MS);
 
   try {
-    response = await fetch(SEC_COMPANY_TICKERS_URL, {
-      headers: {
-        Accept: "application/json",
-        "User-Agent": getSecUserAgent(),
-      },
-      cache: "no-store",
-      signal: controller.signal,
+    response = await fetchSec(SEC_COMPANY_TICKERS_URL, {
+      headers: { Accept: "application/json" },
     });
   } catch (error) {
-    if (error instanceof SecCompanyDirectoryUnavailableError) {
-      throw error;
+    if (error instanceof SecRequestError) {
+      throw new SecCompanyDirectoryUnavailableError(error.message);
     }
 
-    throw new SecCompanyDirectoryUnavailableError();
-  } finally {
-    clearTimeout(timeout);
-  }
-
-  if (!response.ok) {
     throw new SecCompanyDirectoryUnavailableError();
   }
 

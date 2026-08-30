@@ -1,0 +1,1 @@
+CREATE UNIQUE INDEX "company_events_source_ticker_type_unique" ON "company_events" USING btree ("source_id","ticker","type");

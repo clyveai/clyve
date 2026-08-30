@@ -9,6 +9,7 @@
 | Drift monitoring engine (per-assumption, not binary) | 🔲 In progress |
 | Status dashboard (bubble/card, color-coded) | 🔲 In progress |
 | Curated document history (periodic narrative, not raw feed) | 🔲 In progress |
+| Direct SEC filing ingestion (10-K, 10-Q, 8-K) | 🔲 In progress |
 | Halal ETF screening (standalone feature) | 🔲 Planned |
 | PDF export (Pro tier) | 🔲 Planned |
 | Freemium + Pro subscription via Polar sh | 🔲 Planned |
@@ -29,7 +30,7 @@
 **Trigger:** V1 live + first revenue + validated retention signal
 
 - [ ] Broker connect / auto-sync holdings (differentiator vs. MyThesis's non-functional version — build this properly, not as vaporware)
-- [ ] SEC filing deep-dive (10-K/10-Q full parsing via direct EDGAR)
+- [ ] SEC filing expansion (historical backfill and exhibit parsing)
 - [ ] Competitor comparison (structured, per-assumption)
 - [ ] Portfolio-level cross-thesis reasoning (not just per-ticker)
 - [ ] International markets (LSE, SGX, IDX)

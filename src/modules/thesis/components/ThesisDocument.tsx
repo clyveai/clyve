@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { SecFilingSyncControl } from "@/modules/filing/components/SecFilingSyncControl";
 import { ThesisArchiveControl } from "./ThesisArchiveControl";
 import type { ThesisDetail } from "../types";
 
@@ -12,6 +13,7 @@ const importanceLabel: Record<ThesisDetail["assumptions"][number]["importance"],
 /** Domain UI for a saved thesis. Evidence and alerts will be composed here in the next slice. */
 export function ThesisDocument({ thesis }: { thesis: ThesisDetail }) {
   const canManage = thesis.status === "active";
+  const canSyncSecFilings = canManage && Boolean(thesis.companyCik);
 
   return (
     <div className="mx-auto w-full max-w-4xl space-y-6">
@@ -30,10 +32,15 @@ export function ThesisDocument({ thesis }: { thesis: ThesisDetail }) {
           </div>
           <div className="flex flex-col gap-3 sm:items-end">
             <div className="rounded-2xl border border-amber-300/15 bg-amber-200/[0.04] px-4 py-3 text-sm text-amber-100/85">
-              {thesis.status === "archived" ? "This thesis is archived. Its history remains available." : "Monitoring is awaiting source ingestion."}
+              {thesis.status === "archived"
+                ? "This thesis is archived. Its history remains available."
+                : thesis.companyCik
+                  ? "SEC filing monitoring is ready to sync."
+                  : "A verified SEC identity is required before monitoring can begin."}
             </div>
             {canManage ? (
               <div className="flex flex-wrap gap-2 sm:justify-end">
+                {canSyncSecFilings ? <SecFilingSyncControl thesisId={thesis.id} /> : null}
                 <Link
                   href={`/thesis/${thesis.id}/edit`}
                   className="inline-flex h-9 items-center rounded-xl border border-white/15 px-3 text-sm font-medium text-zinc-100 transition hover:bg-white/[0.07]"

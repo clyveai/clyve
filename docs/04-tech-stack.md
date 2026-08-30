@@ -73,9 +73,9 @@
 
 | Tool | Role |
 |---|---|
-| [Financial Modeling Prep](https://financialmodelingprep.com) | Financial data, company profiles, analyst consensus, SEC filings access |
+| [Financial Modeling Prep](https://financialmodelingprep.com) | Financial data, company profiles, analyst consensus |
 | [GNews API](https://gnews.io) | News aggregation — see [07-pricing.md](./07-pricing.md), NOT NewsAPI Developer plan |
-| [SEC EDGAR](https://www.sec.gov/cgi-bin/browse-edgar) | Primary regulatory filing source — via FMP in V1, direct in V2 |
+| [SEC EDGAR](https://www.sec.gov/cgi-bin/browse-edgar) | Primary regulatory filing source — direct ingestion for 10-K, 10-Q, and 8-K |
 
 ---
 
