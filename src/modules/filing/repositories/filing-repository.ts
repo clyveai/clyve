@@ -1,6 +1,6 @@
-import { and, eq, inArray } from "drizzle-orm";
-import { companyEvents, db, evidence, sources } from "@/infrastructure/database";
-import type { SecFilingEvidence } from "../types";
+import { and, desc, eq, inArray, sql } from "drizzle-orm";
+import { companyEvents, db, evidence, sources, theses } from "@/infrastructure/database";
+import type { SecFilingEvidence, SecFilingListItem } from "../types";
 
 type StoredSecFilingSource = {
   id: string;
@@ -34,6 +34,11 @@ type PersistSecFilingResult = {
   evidenceInserted: number;
   sourceHashMismatch: boolean;
 };
+
+function metadataString(metadata: Record<string, unknown>, key: string) {
+  const value = metadata[key];
+  return typeof value === "string" && value.trim() ? value : null;
+}
 
 export const filingRepository = {
   async findProcessedSourceKeysForTicker(ticker: string, sourceKeys: string[]) {
@@ -72,6 +77,48 @@ export const filingRepository = {
       .where(inArray(sources.sourceKey, sourceKeys));
 
     return new Map(rows.map((row) => [row.sourceKey, row]));
+  },
+
+  async findSecFilingsForThesis(userId: string, thesisId: string, limit = 20): Promise<SecFilingListItem[]> {
+    const rows = await db
+      .select({
+        id: companyEvents.id,
+        title: companyEvents.title,
+        summary: companyEvents.summary,
+        occurredAt: companyEvents.occurredAt,
+        sourceUrl: sources.url,
+        metadata: sources.metadata,
+      })
+      .from(theses)
+      .innerJoin(
+        companyEvents,
+        and(eq(companyEvents.ticker, theses.ticker), eq(companyEvents.type, "filing")),
+      )
+      .innerJoin(sources, eq(sources.id, companyEvents.sourceId))
+      .where(
+        and(
+          eq(theses.id, thesisId),
+          eq(theses.userId, userId),
+          eq(sources.provider, "sec-edgar"),
+          eq(sources.type, "sec_filing"),
+          sql`${sources.metadata}->>'cik' = ${theses.companyCik}`,
+        ),
+      )
+      .orderBy(desc(companyEvents.occurredAt), desc(companyEvents.createdAt))
+      .limit(limit);
+
+    return rows.map((row) => ({
+      id: row.id,
+      title: row.title,
+      summary: row.summary,
+      form: metadataString(row.metadata, "form"),
+      accessionNumber: metadataString(row.metadata, "accessionNumber"),
+      filingDate: metadataString(row.metadata, "filingDate"),
+      reportDate: metadataString(row.metadata, "reportDate"),
+      occurredAt: row.occurredAt,
+      sourceUrl: row.sourceUrl,
+      indexUrl: metadataString(row.metadata, "indexUrl"),
+    }));
   },
 
   async persistSecFiling(input: PersistSecFilingInput): Promise<PersistSecFilingResult> {

@@ -20,3 +20,16 @@ export type SecFilingSyncResult = {
   failedFilingCount: number;
   remainingFilingCount: number;
 };
+
+export type SecFilingListItem = {
+  id: string;
+  title: string;
+  summary: string | null;
+  form: string | null;
+  accessionNumber: string | null;
+  filingDate: string | null;
+  reportDate: string | null;
+  occurredAt: Date | null;
+  sourceUrl: string;
+  indexUrl: string | null;
+};

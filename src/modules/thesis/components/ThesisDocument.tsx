@@ -1,3 +1,4 @@
+import type { ReactNode } from "react";
 import Link from "next/link";
 import { SecFilingSyncControl } from "@/modules/filing/components/SecFilingSyncControl";
 import { ThesisArchiveControl } from "./ThesisArchiveControl";
@@ -10,8 +11,7 @@ const importanceLabel: Record<ThesisDetail["assumptions"][number]["importance"],
   low: "Low",
 };
 
-/** Domain UI for a saved thesis. Evidence and alerts will be composed here in the next slice. */
-export function ThesisDocument({ thesis }: { thesis: ThesisDetail }) {
+export function ThesisDocument({ thesis, filingHistory }: { thesis: ThesisDetail; filingHistory?: ReactNode }) {
   const canManage = thesis.status === "active";
   const canSyncSecFilings = canManage && Boolean(thesis.companyCik);
 
@@ -56,6 +56,8 @@ export function ThesisDocument({ thesis }: { thesis: ThesisDetail }) {
         {thesis.companyName ? <p className="mt-6 text-sm text-zinc-400">{thesis.companyName}</p> : null}
         <p className="mt-4 whitespace-pre-wrap text-base leading-7 text-zinc-200">{thesis.thesis}</p>
       </section>
+
+      {filingHistory}
 
       <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl sm:p-8">
         <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-amber-200/80">

@@ -110,6 +110,35 @@ export function ThesisDetailWorkspaceSkeleton() {
       </section>
 
       <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl sm:p-8">
+        <div className="h-3 w-20 rounded-full bg-amber-100/[0.12]" />
+        <div className="mt-3 h-7 w-40 rounded-xl bg-white/[0.1]" />
+        <div className="mt-4 h-3 w-full max-w-2xl rounded-full bg-white/[0.07]" />
+        <div className="mt-2 h-3 w-4/5 max-w-xl rounded-full bg-white/[0.07]" />
+        <div className="mt-6 space-y-3">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <div className="h-6 w-14 rounded-full bg-amber-100/[0.1]" />
+                <div className="mt-3 h-4 w-4/5 rounded-full bg-white/[0.08]" />
+                <div className="mt-3 h-3 w-3/5 rounded-full bg-white/[0.06]" />
+              </div>
+              <div className="h-9 w-32 rounded-xl bg-white/[0.08]" />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="flex items-start justify-between gap-4">
+              <div className="min-w-0 flex-1">
+                <div className="h-6 w-12 rounded-full bg-amber-100/[0.1]" />
+                <div className="mt-3 h-4 w-3/4 rounded-full bg-white/[0.08]" />
+                <div className="mt-3 h-3 w-1/2 rounded-full bg-white/[0.06]" />
+              </div>
+              <div className="h-9 w-32 rounded-xl bg-white/[0.08]" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl sm:p-8">
         <div className="h-3 w-36 rounded-full bg-amber-100/[0.12]" />
         <div className="mt-3 h-7 w-48 rounded-xl bg-white/[0.1]" />
         <div className="mt-6 space-y-3">
