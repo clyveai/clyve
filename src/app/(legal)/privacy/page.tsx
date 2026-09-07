@@ -18,7 +18,7 @@ export default function PrivacyPage() {
                             Privacy Policy
                         </h1>
                         <p className="text-zinc-400 text-base leading-relaxed max-w-2xl">
-                            Your research is your own. <span className="text-white font-medium">Clyve AI</span> is built to structure public data, not to collect, monitor, or profit from yours. Here's exactly how we handle your information.
+                            Your thesis is your own. <span className="text-white font-medium">ClyveAI</span> exists to remember it, not to mine it. Here is exactly how we handle your data.
                         </p>
 
                         {/* Effective Date with Icon */}
@@ -34,41 +34,41 @@ export default function PrivacyPage() {
                         <section>
                             <h2 className="text-base font-semibold text-white mb-1 tracking-tight">1. What Data We Use</h2>
                             <p>
-                                Clyve AI only works with publicly available information: regulatory filings, earnings releases, financial news, and public market metrics. We do not ingest, process, or store non-public, insider, or proprietary data of any kind. If it's not already public, it's not part of our pipeline.
+                                To track your positions, ClyveAI draws only on publicly available information: regulatory filings, earnings releases, financial news, and public market data. We never ingest non-public, insider, or proprietary data of any kind. If it is not already public, it never enters our pipeline.
                             </p>
                         </section>
 
                         <section>
-                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Your Queries Are Private</h2>
+                            <h2 className="text-base font-semibold text-white mb-1 tracking-tight">2. Your Thesis Stays Yours</h2>
                             <p>
-                                What you research on Clyve stays yours. We do not monitor your search history for commercial purposes, sell your usage patterns to third parties, or use your queries to train any AI model, ours or anyone else's. Your research process is private by design.
+                                Everything you record, your reasoning, your assumptions, your positions, belongs to you alone. We do not read your thesis entries for commercial purposes, sell your holdings or activity to third parties, or use your data to train any AI model, ours or anyone else's. Your thesis is private by design, not by policy.
                             </p>
                         </section>
 
                         <section>
                             <h2 className="text-base font-semibold text-white mb-1 tracking-tight">3. How We Protect Your Data</h2>
                             <p>
-                                Your account data, research history, and session information are encrypted using AES-256, the same standard used by financial institutions. Access is strictly authenticated, and your data is never exposed to unauthorized parties.
+                                Your account, thesis entries, and session data are encrypted with AES-256, the same standard used by financial institutions. Access is strictly authenticated, and your data is never exposed to unauthorized parties.
                             </p>
                         </section>
 
                         <section>
                             <h2 className="text-base font-semibold text-white mb-1 tracking-tight">4. Third-Party AI Providers</h2>
                             <p>
-                                To structure and format research briefs, Clyve AI routes queries through third-party AI providers via secure, enterprise-grade APIs. These providers are contractually prohibited from retaining or using your queries for model training. Your inputs are processed in real time and not stored on their end.
+                                To check filings and news against your thesis, ClyveAI routes data through third-party AI providers via secure, enterprise-grade APIs. These providers are contractually prohibited from retaining or using your data for model training. Your inputs are processed in real time and not stored on their end.
                             </p>
                         </section>
 
                         <section>
                             <h2 className="text-base font-semibold text-white mb-1 tracking-tight">5. Your Right to Delete</h2>
                             <p>
-                                You're in full control of your data. You can clear your research history or request permanent account deletion at any time from your account dashboard. Once submitted, all associated data will be permanently removed from our systems within 30 days.
+                                You are in full control of your data. You can request permanent account deletion at any time from your account dashboard. Once submitted, all associated data, including every thesis entry and its history, will be permanently removed from our systems within 30 days.
                             </p>
                         </section>
 
                         {/* Footer Section */}
                         <footer className="pt-8 border-t border-white/5 flex flex-col md:flex-row justify-between gap-4 text-[10px] text-zinc-600 uppercase tracking-widest font-medium">
-                            <p>© 2026 Clyve AI</p>
+                            <p>© 2026 ClyveAI</p>
                             <p>
                                 Contact:{" "}
                                 <a

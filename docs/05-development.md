@@ -69,11 +69,26 @@ BETTER_AUTH_URL=http://localhost:3000
 DATABASE_URL=                        # postgres://... (Transaction pooler URL from Supabase)
 
 # ─────────────────────────────────────────
-# AI — Anthropic
+# AI — Anthropic (Claude) and Google (Gemini Flash)
 # https://console.anthropic.com/
+# https://aistudio.google.com/apikey
+# Keys are validated when the matching client module is imported.
 # ─────────────────────────────────────────
 ANTHROPIC_API_KEY=                   # sk-ant-...
                                      # ⚠️ Set a hard spend cap in Anthropic console before launch
+GEMINI_API_KEY=                      # Google AI Studio key (GOOGLE_GENERATIVE_AI_API_KEY also accepted)
+
+# Optional overrides (defaults in infrastructure/env)
+# ANTHROPIC_MODEL=claude-sonnet-4-6
+# GEMINI_MODEL=gemini-2.5-flash
+# ANTHROPIC_MAX_OUTPUT_TOKENS=4096
+# GEMINI_MAX_OUTPUT_TOKENS=4096
+# ANTHROPIC_TIMEOUT_MS=30000
+# GEMINI_TIMEOUT_MS=30000
+# AI_RETRY_MAX_ATTEMPTS=3
+# AI_RETRY_INITIAL_BACKOFF_MS=500
+# AI_RETRY_MAX_BACKOFF_MS=8000
+# AI_RETRY_BACKOFF_MULTIPLIER=2
 
 # ─────────────────────────────────────────
 # Financial Data — Financial Modeling Prep

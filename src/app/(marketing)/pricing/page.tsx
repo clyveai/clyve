@@ -1,308 +1,791 @@
 'use client';
 
-import React, { useState } from 'react';
+import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Check, Sparkles } from 'lucide-react';
+import { Check, X, Clock, Sparkles } from 'lucide-react';
 
-// ─── CONFIG ───────────────────────────────────────────────────────────────────
-// Single source of truth. Keep in sync with SupportSection FAQ #5.
+const ANNUAL_MONTHS_FREE = 2;
 
-const TIERS = [
+// COGS guardrail formula, dikunci: floor(Price * 0.25 / 1.40)
+// 1.40 = estimasi biaya infra + LLM per active thesis per bulan
+// 0.25 = ceiling cost ratio, target gross margin 75 sampai 80 persen
+const COST_PER_THESIS = 1.4;
+const COST_RATIO_CAP = 0.25;
+
+function formulaSafeCap(price: number) {
+    return Math.floor((price * COST_RATIO_CAP) / COST_PER_THESIS);
+}
+
+const INDIVIDUAL_PLANS = [
     {
         name: 'Free',
-        id: 'tier-free',
-        description: 'Try Clyve with no commitment. See exactly what structured research looks like before you subscribe.',
-        monthlyPrice: null,
-        annualTotal: null,
-        annualMonthlyEquiv: null,
-        limitNote: '3 lifetime queries · No credit card required',
+        id: 'plan-free',
+        description:
+            'One complete thesis, fully monitored. See how Clyve tracks a belief before you commit to more.',
+        price: 0,
+        limitNote: '1 active thesis, 1 tracked instrument',
         features: [
-            '3 lifetime research queries',
-            'Full structured brief per query',
-            'Executive summary, financials, news',
-            'Sentiment analysis included',
+            '1 active investment thesis',
+            'Continuous, event driven monitoring',
+            'Full evidence chain, claim to source to impact',
+            '30 day thesis history',
             'No credit card required',
         ],
-        mostPopular: false,
         ctaText: 'Start for Free',
+        highlight: false,
     },
     {
-        name: 'Pro',
-        id: 'tier-pro',
-        // FIX: differentiated from section headline, not redundant
-        description: 'Full access to every research tool Clyve offers. Built for analysts who move fast and think independently.',
-        monthlyPrice: 19,
-        annualTotal: 149,
-        // FIX: rounded to $12, not $12.42 — cleaner, more premium
-        annualMonthlyEquiv: 12,
-        limitNote: '50 queries / mo · Resets every billing cycle',
+        name: 'Investor',
+        id: 'plan-investor',
+        description:
+            'For self directed investors tracking a handful of core convictions, not a whole watchlist.',
+        price: 19,
+        limitNote: '3 active theses, up to 3 instruments each',
         features: [
-            '50 institutional-grade queries per month',
-            'Full structured briefs — financials, SEC filings, risk factors, news',
-            'Research history, saved and searchable',
-            'PDF export for every analysis',
-            'Sentiment analysis on all news',
-            'Priority processing speed',
+            '3 active theses included',
+            'Up to 3 tracked instruments per thesis',
+            'Continuous monitoring, filings, earnings, news',
+            '90 day thesis history',
+            'Add 5 theses anytime for $35/mo',
         ],
-        mostPopular: true,
-        ctaText: 'Get Pro Access',
+        ctaText: 'Get Investor Access',
+        highlight: true,
+    },
+    {
+        name: 'Professional',
+        id: 'plan-professional',
+        description:
+            'Built for analysts and PMs running a large, active research book that needs to stay current.',
+        price: 79,
+        limitNote: '14 active theses, up to 3 instruments each',
+        features: [
+            '14 active theses included',
+            'Everything in Investor, plus',
+            'Portfolio level intelligence across theses',
+            'Data export (CSV)',
+            'API access, coming soon',
+            'Unlimited thesis history',
+            'Add 5 theses anytime for $35/mo',
+        ],
+        ctaText: 'Get Professional Access',
+        highlight: false,
     },
 ] as const;
 
-// ─── BILLING TOGGLE ───────────────────────────────────────────────────────────
+const COMPARE_ROWS: {
+    label: string;
+    values: [string, string, string];
+}[] = [
+        {
+            label: 'Active theses included',
+            values: ['1', '3', '14'],
+        },
+        {
+            label: 'Instruments per thesis',
+            values: ['1', 'Up to 3', 'Up to 3'],
+        },
+        {
+            label: 'Continuous monitoring',
+            values: ['Yes', 'Yes', 'Yes'],
+        },
+        {
+            label: 'Thesis history',
+            values: ['30 days', '90 days', 'Unlimited'],
+        },
+        {
+            label: 'Portfolio level intelligence',
+            values: ['No', 'No', 'Yes'],
+        },
+        {
+            label: 'Data export (CSV)',
+            values: ['No', 'No', 'Yes'],
+        },
+        {
+            label: 'API access',
+            values: ['No', 'No', 'Coming soon'],
+        },
+        {
+            label: 'Add on packs',
+            values: ['No', '$35 per 5', '$35 per 5'],
+        },
+        {
+            label: 'Priority support',
+            values: ['No', 'Yes', 'Yes'],
+        },
+    ];
+
+const PANEL_CONTENT = {
+    team: {
+        title: 'Fund Office',
+        description:
+            'For investment teams, family offices, and small funds who need shared visibility over conviction. Custom capacity, shared intelligence, and dedicated onboarding.',
+        features: [
+            'Custom thesis capacity',
+            'Shared visibility across team members',
+            'Dedicated onboarding',
+            'Annual billing',
+        ],
+    },
+    api: {
+        title: 'API',
+        description:
+            "Build on top of Clyve's thesis monitoring and evidence graph. API access is planned for a future release, Professional customers get priority access at launch.",
+        features: [
+            'Thesis monitoring infrastructure',
+            'Evidence graph access',
+            'Programmatic intelligence',
+            'Built for research workflows',
+        ],
+    },
+} as const;
+
+type Tab = 'individual' | 'team' | 'api';
+
+function annualEquivMonthly(price: number) {
+    if (price === 0) return 0;
+
+    return Math.round(
+        (price * (12 - ANNUAL_MONTHS_FREE)) / 12
+    );
+}
+
+function annualTotal(price: number) {
+    return price * (12 - ANNUAL_MONTHS_FREE);
+}
+
+function AudienceSwitcher({
+    tab,
+    onChange,
+}: {
+    tab: Tab;
+    onChange: (tab: Tab) => void;
+}) {
+    const tabs: { id: Tab; label: string }[] = [
+        { id: 'individual', label: 'Individual' },
+        { id: 'team', label: 'Team & Fund' },
+        { id: 'api', label: 'API' },
+    ];
+
+    return (
+        <div
+            className="
+                mx-auto mt-8 inline-flex items-center
+                rounded-full
+                border border-white/[0.08]
+                bg-white/[0.035]
+                p-1
+                shadow-[0_8px_30px_rgba(0,0,0,0.18)]
+                backdrop-blur-xl
+            "
+        >
+            {tabs.map(({ id, label }) => {
+                const active = tab === id;
+
+                return (
+                    <button
+                        key={id}
+                        type="button"
+                        onClick={() => onChange(id)}
+                        className={`
+                            relative rounded-full
+                            px-5 py-2
+                            text-sm font-medium
+                            transition-colors duration-200
+                            focus:outline-none
+                            ${active
+                                ? 'text-white'
+                                : 'text-white/45 hover:text-white/80'
+                            }
+                        `}
+                    >
+                        {active && (
+                            <motion.div
+                                layoutId="audience-pill"
+                                className="
+                                    absolute inset-0 -z-10
+                                    rounded-full
+                                    border border-white/[0.08]
+                                    bg-white/[0.10]
+                                    shadow-[0_2px_12px_rgba(0,0,0,0.2)]
+                                "
+                                transition={{
+                                    type: 'spring',
+                                    stiffness: 350,
+                                    damping: 30,
+                                }}
+                            />
+                        )}
+
+                        <span className="relative z-10 whitespace-nowrap">
+                            {label}
+                        </span>
+                    </button>
+                );
+            })}
+        </div>
+    );
+}
 
 function BillingToggle({
     isAnnual,
     onToggle,
 }: {
     isAnnual: boolean;
-    onToggle: (v: boolean) => void;
+    onToggle: (value: boolean) => void;
 }) {
     return (
-        <div className="flex flex-col items-center gap-3 mt-8">
-            <motion.div
-                initial={{ opacity: 0, scale: 0.95 }}
-                whileInView={{ opacity: 1, scale: 1 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.2 }}
-                className="relative flex items-center p-1 bg-[var(--bg-secondary)] border border-[var(--border-color)] rounded-full w-fit mx-auto"
+        <div className="mt-8 flex items-center justify-center gap-3">
+            <div
+                className="
+                    inline-flex items-center
+                    rounded-full
+                    border border-white/[0.08]
+                    bg-white/[0.025]
+                    p-1
+                    backdrop-blur-xl
+                "
             >
                 {(['Monthly', 'Annually'] as const).map((label) => {
-                    const active = label === 'Annually' ? isAnnual : !isAnnual;
+                    const active =
+                        label === 'Annually'
+                            ? isAnnual
+                            : !isAnnual;
+
                     return (
                         <button
                             key={label}
-                            onClick={() => onToggle(label === 'Annually')}
-                            className={`relative px-6 py-2 text-sm font-semibold rounded-full z-10 transition-colors duration-200 ${active
-                                ? 'text-[var(--bg-primary)]'
-                                : 'text-[var(--fg-secondary)] hover:text-[var(--fg-primary)]'
-                                }`}
+                            type="button"
+                            onClick={() =>
+                                onToggle(label === 'Annually')
+                            }
+                            className={`
+                                rounded-full
+                                px-4 py-1.5
+                                text-xs font-medium
+                                transition-all duration-200
+                                ${active
+                                    ? 'bg-white/[0.10] text-white shadow-sm'
+                                    : 'text-white/40 hover:text-white/70'
+                                }
+                            `}
                         >
                             {label}
                         </button>
                     );
                 })}
-                <div className="absolute inset-1 pointer-events-none">
-                    <motion.div
-                        className="w-1/2 h-full bg-[var(--fg-primary)] rounded-full shadow-sm"
-                        layout
-                        transition={{ type: 'spring', stiffness: 300, damping: 30 }}
-                        animate={{ x: isAnnual ? '100%' : '0%' }}
-                    />
-                </div>
-            </motion.div>
-
-            <div className="h-7 flex items-center">
-                <AnimatePresence mode="wait">
-                    {isAnnual && (
-                        <motion.div
-                            key="promo-badge"
-                            initial={{ opacity: 0, y: -8 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            exit={{ opacity: 0, y: -8 }}
-                            transition={{ duration: 0.18 }}
-                            className="text-[10px] font-bold tracking-widest uppercase text-white/80 bg-white/5 border border-white/10 px-4 py-1.5 rounded-full shadow-[0_0_15px_rgba(255,255,255,0.05)]"
-                        >
-                            Save $79 a year
-                        </motion.div>
-                    )}
-                </AnimatePresence>
-            </div>
-        </div>
-    );
-}
-
-// ─── PRICE BLOCK ──────────────────────────────────────────────────────────────
-
-function PriceBlock({
-    tier,
-    isAnnual,
-}: {
-    tier: (typeof TIERS)[number];
-    isAnnual: boolean;
-}) {
-    const price =
-        isAnnual && tier.annualMonthlyEquiv
-            ? tier.annualMonthlyEquiv
-            : tier.monthlyPrice;
-
-    return (
-        <div className="mb-8 flex flex-col gap-1.5">
-            <div className="flex items-baseline text-[var(--fg-primary)] tabular-nums">
-                {price === null ? (
-                    <span className="text-4xl font-bold tracking-tighter">Free</span>
-                ) : (
-                    <>
-                        {/* Always whole number — no decimals */}
-                        <span className="text-4xl font-bold tracking-tighter">
-                            ${price}
-                        </span>
-                        <span className="text-sm text-[var(--fg-secondary)] ml-2 font-medium">/mo</span>
-                    </>
-                )}
             </div>
 
-            {/* text-xs = 12px — readable but secondary, opacity-75 not 60 */}
-            <span className="text-xs text-[var(--fg-secondary)] opacity-75 font-medium">
-                {tier.limitNote}
+            <span
+                className="
+                    rounded-full
+                    border border-white/[0.08]
+                    bg-white/[0.04]
+                    px-3 py-1.5
+                    text-[11px] font-medium
+                    text-white/55
+                "
+            >
+                Save up to 17%
             </span>
-
-            <AnimatePresence mode="wait">
-                {tier.id === 'tier-pro' && (
-                    <motion.span
-                        key={isAnnual ? 'annual-line' : 'monthly-line'}
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 0.65 }}
-                        exit={{ opacity: 0 }}
-                        transition={{ duration: 0.2 }}
-                        // removed italic — cleaner, easier to scan
-                        className="text-xs text-[var(--fg-secondary)]"
-                    >
-                        {isAnnual
-                            ? `Billed annually at $${tier.annualTotal}`
-                            : `Switch to annual and save $79/year`}
-                    </motion.span>
-                )}
-            </AnimatePresence>
         </div>
     );
 }
 
-// ─── TIER CARD ────────────────────────────────────────────────────────────────
-
-function TierCard({
-    tier,
+function PlanCard({
+    plan,
     isAnnual,
     index,
 }: {
-    tier: (typeof TIERS)[number];
+    plan: (typeof INDIVIDUAL_PLANS)[number];
     isAnnual: boolean;
     index: number;
 }) {
+    const isFree = plan.price === 0;
+
+    const displayPrice = isAnnual
+        ? annualEquivMonthly(plan.price)
+        : plan.price;
+
     return (
         <motion.div
-            initial={{ opacity: 0, y: 30 }}
+            initial={{ opacity: 0, y: 18 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
-            transition={{ delay: 0.2 + index * 0.1 }}
-            className={`relative flex flex-col rounded-[2rem] glass transition-all duration-500 ${tier.mostPopular
-                ? 'border-white/20 ring-1 ring-white/10 md:-mt-8 px-8 py-12'
-                : 'p-8'
-                }`}
+            transition={{
+                delay: 0.08 + index * 0.06,
+                duration: 0.45,
+            }}
+            className={`
+                group relative
+                flex h-full min-h-[500px] flex-col
+                rounded-[28px]
+                border
+                p-7
+                shadow-[0_20px_60px_rgba(0,0,0,0.12)]
+                backdrop-blur-xl
+                transition-all duration-300
+                ${plan.highlight
+                    ? 'border-[#FE4E00]/40 bg-white/[0.04] hover:border-[#FE4E00]/60'
+                    : 'border-white/[0.08] bg-white/[0.025] hover:border-white/[0.14] hover:bg-white/[0.035]'
+                }
+                hover:shadow-[0_24px_70px_rgba(0,0,0,0.18)]
+            `}
         >
-            {tier.mostPopular && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-[var(--fg-primary)] text-[var(--bg-primary)] text-[10px] font-bold uppercase tracking-[0.1em] rounded-full flex items-center gap-1.5 shadow-xl whitespace-nowrap">
-                    <Sparkles className="w-3 h-3" />
+            {plan.highlight && (
+                <span
+                    className="
+                        absolute -top-3 left-7
+                        inline-flex items-center gap-1.5
+                        rounded-full
+                        bg-[#FE4E00]
+                        px-3 py-1
+                        text-[11px] font-semibold
+                        tracking-wide text-white
+                        shadow-[0_4px_16px_rgba(254,78,0,0.35)]
+                    "
+                >
+                    <Sparkles className="h-3 w-3" />
                     Most Popular
-                </div>
+                </span>
             )}
 
             <div className="mb-7">
-                <h3 className="text-xl font-bold text-[var(--fg-primary)] mb-2 tracking-tight">
-                    {tier.name}
+                <h3 className="mb-2 text-xl font-semibold tracking-tight text-white">
+                    {plan.name}
                 </h3>
-                <p className="text-sm text-[var(--fg-secondary)] leading-relaxed">
-                    {tier.description}
+
+                <p className="text-sm leading-6 text-white/50">
+                    {plan.description}
                 </p>
             </div>
 
-            <PriceBlock tier={tier} isAnnual={isAnnual} />
+            <div className="mb-7">
+                <div className="flex items-baseline tabular-nums text-white">
+                    {isFree ? (
+                        <span className="text-4xl font-semibold tracking-[-0.04em]">
+                            Free
+                        </span>
+                    ) : (
+                        <>
+                            <span className="text-4xl font-semibold tracking-[-0.04em]">
+                                ${displayPrice}
+                            </span>
 
-            <div className="w-full h-px bg-white/5 mb-7" />
+                            <span className="ml-2 text-sm font-medium text-white/35">
+                                /mo
+                            </span>
+                        </>
+                    )}
+                </div>
 
-            <ul className="flex-1 space-y-4 mb-10">
-                {tier.features.map((feature) => (
+                <span className="mt-1 block text-xs text-white/35">
+                    {plan.limitNote}
+                </span>
+
+                {!isFree && (
+                    <AnimatePresence mode="wait">
+                        <motion.span
+                            key={isAnnual ? 'annual' : 'monthly'}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.15 }}
+                            className="mt-1 block text-xs text-white/35"
+                        >
+                            {isAnnual
+                                ? `billed as $${annualTotal(
+                                    plan.price
+                                )}/yr`
+                                : 'billed monthly'}
+                        </motion.span>
+                    </AnimatePresence>
+                )}
+            </div>
+
+            <div className="mb-7 h-px w-full bg-white/[0.07]" />
+
+            <ul className="flex-1 space-y-3.5">
+                {plan.features.map((feature) => (
                     <li
                         key={feature}
-                        className="flex items-start gap-3 text-sm text-[var(--fg-secondary)]"
+                        className="flex items-start gap-3 text-sm text-white/55"
                     >
-                        <div className="mt-0.5 bg-white/10 rounded-full p-0.5 flex-shrink-0">
-                            <Check className="w-3.5 h-3.5 text-[var(--fg-primary)]" />
-                        </div>
-                        <span className="leading-snug">{feature}</span>
+                        <span
+                            className="
+                                mt-0.5 flex shrink-0
+                                rounded-full
+                                bg-white/[0.07]
+                                p-0.5
+                            "
+                        >
+                            <Check className="h-3.5 w-3.5 text-white/75" />
+                        </span>
+
+                        <span className="leading-5">
+                            {feature}
+                        </span>
                     </li>
                 ))}
             </ul>
 
-            <div className="relative group overflow-hidden rounded-full mt-auto">
-                <button
-                    type="button"
-                    aria-label={`${tier.ctaText} — join waitlist`}
-                    className={`w-full py-4 font-bold text-sm tracking-wide transition-all opacity-40 cursor-default ${tier.mostPopular ? 'btn-primary' : 'btn-secondary'
-                        }`}
-                >
-                    {tier.ctaText}
-                </button>
-                <div className="absolute inset-0 flex items-center justify-center bg-black/80 backdrop-blur-[2px] opacity-0 group-hover:opacity-100 transition-all duration-300 pointer-events-none">
-                    <span className="text-[10px] font-black uppercase tracking-[0.2em] text-white bg-white/10 border border-white/20 px-4 py-1.5 rounded-full shadow-2xl">
-                        Join Waitlist
-                    </span>
+            <button
+                type="button"
+                aria-label={plan.ctaText}
+                className={`
+                    mt-8 flex w-full items-center justify-center
+                    rounded-full
+                    px-6 py-3.5
+                    text-sm font-medium
+                    tracking-tight
+                    shadow-[0_1px_2px_rgba(0,0,0,0.15)]
+                    transition-all duration-200
+                    active:scale-[0.985]
+                    focus:outline-none
+                    focus:ring-2 focus:ring-white/20
+                    ${plan.highlight
+                        ? 'border border-[#FE4E00] bg-[#FE4E00] text-white hover:bg-[#e64600] hover:shadow-[0_4px_16px_rgba(254,78,0,0.3)]'
+                        : 'border border-white bg-white text-black hover:bg-white/90 hover:shadow-[0_4px_16px_rgba(255,255,255,0.12)]'
+                    }
+                `}
+            >
+                {plan.ctaText}
+            </button>
+        </motion.div>
+    );
+}
+
+function CompareTable() {
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+                delay: 0.25,
+                duration: 0.45,
+            }}
+            className="
+                mx-auto mt-16 max-w-4xl
+                overflow-x-auto
+                rounded-[28px]
+                border border-white/[0.08]
+                bg-white/[0.025]
+                p-7
+                shadow-[0_20px_60px_rgba(0,0,0,0.10)]
+                backdrop-blur-xl
+                md:p-8
+            "
+        >
+            <h3 className="mb-6 text-lg font-semibold tracking-tight text-white">
+                Compare features across plans
+            </h3>
+
+            <table className="w-full min-w-[520px] text-sm">
+                <thead>
+                    <tr className="border-b border-white/[0.07]">
+                        <th className="py-3 text-left font-medium text-white/40">
+                            Feature
+                        </th>
+
+                        {['Free', 'Investor', 'Professional'].map(
+                            (name) => (
+                                <th
+                                    key={name}
+                                    className="py-3 text-center font-medium text-white"
+                                >
+                                    {name}
+                                </th>
+                            )
+                        )}
+                    </tr>
+                </thead>
+
+                <tbody>
+                    {COMPARE_ROWS.map((row) => (
+                        <tr
+                            key={row.label}
+                            className="border-b border-white/[0.045] last:border-0"
+                        >
+                            <td className="py-3.5 text-white/45">
+                                {row.label}
+                            </td>
+
+                            {row.values.map((value, index) => (
+                                <td
+                                    key={`${row.label}-${index}`}
+                                    className="py-3.5 text-center"
+                                >
+                                    {value === 'Yes' ? (
+                                        <Check className="mx-auto h-4 w-4 text-white/80" />
+                                    ) : value === 'No' ? (
+                                        <X className="mx-auto h-4 w-4 text-white/20" />
+                                    ) : (
+                                        <span className="text-white/75">
+                                            {value}
+                                        </span>
+                                    )}
+                                </td>
+                            ))}
+                        </tr>
+                    ))}
+                </tbody>
+            </table>
+
+            <p className="mt-6 text-xs leading-5 text-white/30">
+                Cancelling an add on pack archives your extra active theses
+                as read only, nothing is deleted. Reactivate a pack or
+                upgrade anytime to restore full monitoring.
+            </p>
+        </motion.div>
+    );
+}
+
+function PricingPanel({
+    type,
+}: {
+    type: 'team' | 'api';
+}) {
+    const content = PANEL_CONTENT[type];
+
+    return (
+        <motion.div
+            initial={{ opacity: 0, y: 18 }}
+            whileInView={{ opacity: 1, y: 0 }}
+            viewport={{ once: true }}
+            transition={{
+                delay: 0.1,
+                duration: 0.45,
+            }}
+            className="mx-auto max-w-4xl"
+        >
+            <div
+                className="
+                    rounded-[28px]
+                    border border-white/[0.08]
+                    bg-white/[0.025]
+                    px-7 py-8
+                    shadow-[0_20px_60px_rgba(0,0,0,0.12)]
+                    backdrop-blur-xl
+                    md:px-9 md:py-9
+                "
+            >
+                <div className="flex flex-col gap-8 md:flex-row md:items-center md:justify-between">
+                    <div className="min-w-0 max-w-2xl">
+                        <div className="mb-3 flex flex-wrap items-center gap-3">
+                            <h3 className="text-xl font-semibold tracking-tight text-white">
+                                {content.title}
+                            </h3>
+
+                            <span
+                                className="
+                                    inline-flex shrink-0
+                                    items-center gap-1.5
+                                    rounded-full
+                                    border border-white/[0.08]
+                                    bg-white/[0.045]
+                                    px-2.5 py-1
+                                    text-[10px] font-medium
+                                    tracking-wide
+                                    text-white/45
+                                "
+                            >
+                                <Clock className="h-3 w-3" />
+                                Coming Soon
+                            </span>
+                        </div>
+
+                        <p className="max-w-xl text-sm leading-6 text-white/50">
+                            {content.description}
+                        </p>
+
+                        {content.features.length > 0 && (
+                            <ul className="mt-6 grid gap-3 sm:grid-cols-2">
+                                {content.features.map((feature) => (
+                                    <li
+                                        key={feature}
+                                        className="flex items-start gap-2.5 text-sm text-white/50"
+                                    >
+                                        <Check className="mt-0.5 h-4 w-4 shrink-0 text-white/55" />
+
+                                        <span className="leading-5">
+                                            {feature}
+                                        </span>
+                                    </li>
+                                ))}
+                            </ul>
+                        )}
+                    </div>
+
+                    <button
+                        type="button"
+                        disabled
+                        aria-label={`${content.title} coming soon`}
+                        className="
+                            inline-flex shrink-0
+                            cursor-not-allowed
+                            items-center justify-center
+                            gap-2
+                            rounded-full
+                            border border-white/[0.08]
+                            bg-white/[0.06]
+                            px-6 py-3.5
+                            text-sm font-medium
+                            tracking-tight text-white/40
+                        "
+                    >
+                        Coming Soon
+                    </button>
                 </div>
             </div>
         </motion.div>
     );
 }
 
-// ─── MAIN ─────────────────────────────────────────────────────────────────────
-
 export default function Pricing() {
-    const [isAnnual, setIsAnnual] = useState(true);
+    const [tab, setTab] = useState<Tab>('individual');
+    const [isAnnual, setIsAnnual] = useState(false);
 
     return (
         <section
             id="pricing"
-            className="relative pt-32 pb-24 bg-[var(--bg-primary)] overflow-hidden"
+            className="
+                relative overflow-hidden
+                bg-[var(--bg-primary)]
+                pb-24 pt-32
+            "
         >
-            <div className="absolute inset-0 w-full h-full pointer-events-none" aria-hidden>
-                <div className="absolute top-[-10%] left-1/2 -translate-x-1/2 w-[800px] h-[500px] bg-white/[0.02] blur-[120px] rounded-full" />
+            <div
+                className="pointer-events-none absolute inset-0"
+                aria-hidden
+            >
+                <div
+                    className="
+                        absolute left-1/2 top-[-10%]
+                        h-[500px] w-[800px]
+                        -translate-x-1/2
+                        rounded-full
+                        bg-white/[0.025]
+                        blur-[140px]
+                    "
+                />
             </div>
 
-            <div className="relative max-w-7xl mx-auto px-6 lg:px-8">
-                <div className="text-center max-w-2xl mx-auto mb-16">
+            <div className="relative mx-auto max-w-7xl px-6 lg:px-8">
+                <div className="mx-auto mb-4 max-w-2xl text-center">
                     <motion.h2
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 18 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        className="text-4xl md:text-5xl font-bold tracking-tight text-[var(--fg-primary)] mb-4 text-balance"
+                        transition={{ duration: 0.45 }}
+                        className="
+                            mb-4
+                            text-balance
+                            text-4xl
+                            font-semibold
+                            tracking-[-0.04em]
+                            text-white
+                            md:text-5xl
+                        "
                     >
-                        Simple, Transparent Pricing
+                        Plans for every level of conviction
                     </motion.h2>
 
                     <motion.div
-                        initial={{ opacity: 0, y: 20 }}
+                        initial={{ opacity: 0, y: 18 }}
                         whileInView={{ opacity: 1, y: 0 }}
                         viewport={{ once: true }}
-                        transition={{ delay: 0.1 }}
-                        className="text-lg text-[var(--fg-secondary)] mb-8 text-pretty space-y-1"
+                        transition={{ delay: 0.08, duration: 0.45 }}
+                        className="space-y-1 text-pretty text-lg text-white/55"
                     >
-                        <p>Research infrastructure for serious investors</p>
-                        <p className="text-sm opacity-90">No hidden fees · Cancel anytime</p>
+                        <p>
+                            Priced by active investment theses,
+                            not queries or tokens
+                        </p>
+
+                        <p className="text-sm text-white/30">
+                            No usage metering, no surprise bills,
+                            cancel anytime
+                        </p>
                     </motion.div>
 
-                    <BillingToggle isAnnual={isAnnual} onToggle={setIsAnnual} />
-                </div>
+                    <AudienceSwitcher tab={tab} onChange={setTab} />
 
-                <div className="grid md:grid-cols-2 gap-8 max-w-3xl mx-auto items-center">
-                    {TIERS.map((tier, index) => (
-                        <TierCard
-                            key={tier.id}
-                            tier={tier}
+                    {tab === 'individual' && (
+                        <BillingToggle
                             isAnnual={isAnnual}
-                            index={index}
+                            onToggle={setIsAnnual}
                         />
-                    ))}
+                    )}
                 </div>
 
-                <br />
+                <AnimatePresence mode="wait">
+                    {tab === 'individual' && (
+                        <motion.div
+                            key="individual"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-16"
+                        >
+                            <div className="grid items-stretch gap-6 md:grid-cols-3">
+                                {INDIVIDUAL_PLANS.map((plan, index) => (
+                                    <PlanCard
+                                        key={plan.id}
+                                        plan={plan}
+                                        isAnnual={isAnnual}
+                                        index={index}
+                                    />
+                                ))}
+                            </div>
+
+                            <CompareTable />
+                        </motion.div>
+                    )}
+
+                    {tab === 'team' && (
+                        <motion.div
+                            key="team"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-16"
+                        >
+                            <PricingPanel type="team" />
+                        </motion.div>
+                    )}
+
+                    {tab === 'api' && (
+                        <motion.div
+                            key="api"
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 1 }}
+                            exit={{ opacity: 0 }}
+                            transition={{ duration: 0.2 }}
+                            className="mt-16"
+                        >
+                            <PricingPanel type="api" />
+                        </motion.div>
+                    )}
+                </AnimatePresence>
 
                 <motion.p
                     initial={{ opacity: 0 }}
                     whileInView={{ opacity: 1 }}
                     viewport={{ once: true }}
-                    transition={{ delay: 0.5 }}
-                    className="text-center text-sm md:text-[15px] text-[var(--fg-secondary)] opacity-40 mt-10 max-w-md mx-auto leading-relaxed"
+                    transition={{ delay: 0.35 }}
+                    className="
+                        mx-auto mt-16 max-w-md
+                        text-center
+                        text-sm leading-relaxed
+                        text-white/30
+                        md:text-[15px]
+                    "
                 >
-                    All outputs are structured public data for research purposes only. Not financial advice.
+                    Clyve monitors public filings, earnings,
+                    and news to test the reasoning behind your
+                    own positions. Not financial advice.
                 </motion.p>
             </div>
         </section>

@@ -7,39 +7,39 @@ import { LiquidMetalButton } from "@/shared/ui/liquid-metal-button";
 
 const CARDS = [
     {
-        id: "brief",
-        tag: "Research Brief",
-        title: "From question to brief.",
-        subtitle: "Type a ticker. Get the full picture.",
+        id: "thesis",
+        tag: "Your Thesis",
+        title: "Record why you hold.",
+        subtitle: "One entry per position, in your own words.",
         accent: "#ffffff",
         rows: [
-            { label: "Financials & valuation", status: "structured", color: "#22c55e" },
-            { label: "Analyst consensus", status: "synthesized", color: "#22c55e" },
-            { label: "Risk factors", status: "surfaced", color: "#a1a1aa" },
+            { label: "Core assumptions", status: "recorded", color: "#22c55e" },
+            { label: "Entry reasoning", status: "saved", color: "#22c55e" },
+            { label: "Position status", status: "tracked", color: "#a1a1aa" },
         ],
     },
     {
-        id: "signal",
+        id: "drift",
+        tag: "Drift Detection",
+        title: "We flag what changes.",
+        subtitle: "Filings and news, checked against your reasoning.",
+        accent: "#ffffff",
+        rows: [
+            { label: "Thesis alignment", status: "green", color: "#22c55e" },
+            { label: "Early warning", status: "yellow", color: "#eab308" },
+            { label: "Broken assumption", status: "red", color: "#ef4444" },
+        ],
+    },
+    {
+        id: "memory",
         tag: "No Noise",
-        title: "Signal, not opinion.",
-        subtitle: "No forecasts. No buy signals. No advice.",
+        title: "One summary, not 100 alerts.",
+        subtitle: "A curated history you can actually read back.",
         accent: "#ffffff",
         rows: [
             { label: "Public data only", status: "verified", color: "#22c55e" },
             { label: "Sourced & cited", status: "always", color: "#a1a1aa" },
             { label: "Your call to make", status: "not ours", color: "#a1a1aa" },
-        ],
-    },
-    {
-        id: "speed",
-        tag: "Time to Insight",
-        title: "3 hours \u2192 3 minutes.",
-        subtitle: "Spend your time on the analysis, not the assembly.",
-        accent: "#ffffff",
-        rows: [
-            { label: "News sentiment", status: "scored", color: "#2196F3" },
-            { label: "Research history", status: "saved", color: "#a1a1aa" },
-            { label: "PDF export", status: "one click", color: "#a1a1aa" },
         ],
     },
 ];
@@ -69,7 +69,7 @@ export default function Hero() {
                 <DottedSurface />
             </div>
 
-            {/* Radial top glow — single, centered */}
+            {/* Radial top glow, single, centered */}
             <div
                 className="absolute inset-0 z-0 pointer-events-none"
                 style={{
@@ -88,8 +88,8 @@ export default function Hero() {
                     transition={{ duration: 0.65, ease: [0.22, 1, 0.36, 1], delay: 0.1 }}
                     className="text-5xl md:text-7xl lg:text-[80px] font-medium text-center leading-[1.05] tracking-tight max-w-3xl"
                 >
-                    Own your <br />
-                    <span className="text-zinc-400">equity research</span>
+                    Remember why <br />
+                    <span className="text-zinc-400">you invested</span>
                 </motion.h1>
 
                 {/* Subline */}
@@ -97,10 +97,10 @@ export default function Hero() {
                     initial={{ opacity: 0, y: 16 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.5, delay: 0.25 }}
-                    className="mt-6 text-sm md:text-base text-zinc-500 text-center max-w-md leading-relaxed"
+                    className="mt-6 text-sm md:text-base text-zinc-400 text-center max-w-md leading-relaxed"
                 >
-                    You already know how to read a balance sheet.
-                    Stop spending 3 hours gathering the data before you can start
+                    Record your thesis for every position. Clyve tracks filings and news
+                    against it, and tells you the moment your reasoning stops holding.
                 </motion.p>
 
                 {/* CTA */}
@@ -134,9 +134,9 @@ export default function Hero() {
                     initial={{ opacity: 0 }}
                     animate={{ opacity: 1 }}
                     transition={{ delay: 1.2, duration: 0.6 }}
-                    className="mt-10 text-[11px] font-mono text-zinc-500 tracking-wider uppercase"
+                    className="mt-10 text-[11px] font-mono text-zinc-400 tracking-wider uppercase"
                 >
-                    Public data only &mdash; not financial advice &mdash; not a licensed advisor
+                    Public data, not investment advice
                 </motion.p>
             </div>
         </section>
@@ -196,7 +196,7 @@ function DataCard({ card }: { card: CardData }) {
             <div className="space-y-3">
                 {card.rows.map((row, i) => (
                     <div key={i} className="flex items-center justify-between">
-                        <span className="text-xs text-zinc-500 font-mono">{row.label}</span>
+                        <span className="text-xs text-zinc-400 font-mono">{row.label}</span>
                         <div className="flex items-center gap-1.5">
                             <span
                                 className="inline-block w-1 h-1 rounded-full"
@@ -213,10 +213,10 @@ function DataCard({ card }: { card: CardData }) {
                 ))}
             </div>
 
-            {/* Bottom mono line — signature terminal feel */}
+            {/* Bottom mono line, signature terminal feel */}
             <div className="mt-5 pt-4 border-t border-white/[0.04]">
-                <p className="text-[10px] font-mono text-zinc-600 leading-relaxed">
-                    clyve / <span className="text-zinc-600">layer.{card.id}</span>
+                <p className="text-[10px] font-mono text-zinc-500 leading-relaxed">
+                    clyve / <span className="text-zinc-500">layer.{card.id}</span>
                 </p>
             </div>
         </motion.div>

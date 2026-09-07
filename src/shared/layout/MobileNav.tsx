@@ -51,10 +51,10 @@ export default function MobileNav({ isOpen, setIsOpen, navLinks }: MobileNavProp
                                     <Link
                                         href={link.href}
                                         onClick={() => setIsOpen(false)}
-                                        className="flex items-center justify-between py-3 px-4 text-[13.5px] font-medium text-white/50 hover:text-white/90 active:bg-white/[0.06] rounded-full transition-all duration-200"
+                                        className="flex items-center justify-between py-3 px-4 text-[13.5px] font-medium text-white/70 hover:text-white active:bg-white/[0.06] rounded-full transition-all duration-200"
                                     >
                                         <span>{link.name}</span>
-                                        <ChevronRight className="w-3.5 h-3.5 opacity-30" />
+                                        <ChevronRight className="w-3.5 h-3.5 opacity-40" />
                                     </Link>
                                 </motion.div>
                             ))}
@@ -73,7 +73,7 @@ export default function MobileNav({ isOpen, setIsOpen, navLinks }: MobileNavProp
                                 className="flex w-full h-11 items-center justify-center gap-1.5 text-[13px] font-semibold bg-white text-black rounded-full active:scale-95 transition-all duration-200"
                             >
                                 Get Started
-                                <ChevronRight className="w-3.5 h-3.5 opacity-50" />
+                                <ChevronRight className="w-3.5 h-3.5 opacity-60" />
                             </Link>
                         </motion.div>
                     </motion.div>

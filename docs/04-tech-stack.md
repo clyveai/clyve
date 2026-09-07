@@ -23,10 +23,11 @@
 
 | Tool | Role |
 |---|---|
-| [Vercel AI SDK](https://sdk.vercel.ai) | Streaming responses |
-| [Anthropic Claude API](https://www.anthropic.com) | Thesis-vs-evidence synthesis, curated history narrative generation |
+| [Vercel AI SDK](https://sdk.vercel.ai) (`ai`, `@ai-sdk/anthropic`, `@ai-sdk/google`) | LLM client surface, streaming, provider adapters |
+| [Anthropic Claude API](https://www.anthropic.com) | Narrative synthesis |
+| [Google Gemini API](https://ai.google.dev) | Fast classification via Gemini Flash |
 
-**Model in use:** `claude-sonnet-4-6`
+**Models in use:** Claude `claude-sonnet-4-6`, Gemini `gemini-2.5-flash` (overridable via env)
 
 > **Revision from V0 plan:** Multi-LLM abstraction (Gemini Flash for fast/cheap drift classification, Claude for narrative synthesis) is reconsidered as **earlier-priority than originally planned**, not deferred to V2 — analysis speed is an explicit V1 differentiator against MyThesis.ai's slow, email-notified completion flow. Single-LLM-only (ADR-004) should be revisited if Claude-only latency can't beat MyThesis's turnaround time.
 

@@ -6,7 +6,7 @@ import { motion, AnimatePresence } from "framer-motion";
 import { DropdownMenu as DropdownMenuPrimitive } from "radix-ui";
 import { Loader2, LogOut, Settings } from "lucide-react";
 import { useState } from "react";
-import { authClient } from "@/lib/auth-client";
+import { authClient } from "@/infrastructure/auth/auth-client";
 
 type AvatarDropdownProps = {
   name: string | null;

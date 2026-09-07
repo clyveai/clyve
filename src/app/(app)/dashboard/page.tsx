@@ -1,15 +1,13 @@
 "use client";
 
 import Link from "next/link";
-import { useCallback, useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { motion } from "framer-motion";
 import { ArrowUp } from "lucide-react";
 import AmbientGlow from "@/app/(app)/_components/AmbientGlow";
 import AvatarDropdown from "@/app/(app)/_components/AvatarDropdown";
 import { MobileTopNav } from "@/app/(app)/_components/sidebar/MobileTopNav";
-import { ResearchSidebar } from "@/app/(app)/_components/sidebar/ResearchSidebar";
 import { useSidebar } from "@/context/SidebarContext";
-import { generateResearchTitle } from "@/lib/generateResearchTitle";
 
 type DashboardUser = {
   id: string;
@@ -23,81 +21,69 @@ export default function DashboardPage() {
   const [user, setUser] = useState<DashboardUser | null>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
-  const { isMobile, isCollapsed } = useSidebar();
+  const { isMobile } = useSidebar();
 
   useEffect(() => {
     let ignore = false;
+
     const loadUser = async () => {
       const response = await fetch("/api/account", { cache: "no-store" });
+
       if (!response.ok || ignore) return;
-      const payload = (await response.json()) as { user: DashboardUser };
+
+      const payload = (await response.json()) as {
+        user: DashboardUser;
+      };
+
       setUser(payload.user);
     };
+
     void loadUser();
+
     return () => {
       ignore = true;
     };
   }, []);
 
-  const handleHistoryItemClick = useCallback((query: string) => {
-    setPromptInput(query);
-    inputRef.current?.focus();
-  }, []);
+  const handleSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
 
-  const handleNewResearch = useCallback(() => {
+    if (!promptInput.trim()) return;
+
     setPromptInput("");
-    inputRef.current?.focus();
-  }, []);
+  };
 
-  const handleSubmit = useCallback(
-    async (e: React.FormEvent) => {
-      e.preventDefault();
-      if (!promptInput.trim()) return;
-
-      const title = generateResearchTitle(promptInput);
-
-      try {
-        await fetch("/api/research-history", {
-          method: "POST",
-          headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({ query: promptInput, title }),
-        });
-        setPromptInput("");
-      } catch (error) {
-        console.error("Failed to save research history:", error);
-      }
-    },
-    [promptInput],
-  );
-
-  const sidebarWidth = isCollapsed ? 56 : 260;
   const topOffset = isMobile ? 52 : 80;
 
   return (
     <div className="relative min-h-screen overflow-hidden bg-[var(--bg-primary)] text-white">
       <AmbientGlow />
-      <ResearchSidebar
-        user={user}
-        onHistoryItemClick={handleHistoryItemClick}
-        onNewResearch={handleNewResearch}
-      />
 
       {isMobile && <MobileTopNav user={user} />}
 
       {!isMobile && (
-        <header className="fixed inset-x-0 top-0 z-30" style={{ marginLeft: sidebarWidth }}>
+        <header className="fixed inset-x-0 top-0 z-30">
           <div className="mx-auto flex h-20 w-full max-w-7xl items-center justify-between px-4 sm:px-6">
-            <Link href="/dashboard" className="text-sm font-semibold uppercase tracking-[0.26em] text-zinc-100">
+            <Link
+              href="/dashboard"
+              className="text-sm font-semibold uppercase tracking-[0.26em] text-zinc-100"
+            >
               Clyve
             </Link>
-            <AvatarDropdown name={user?.name || null} email={user?.email || null} />
+
+            <AvatarDropdown
+              name={user?.name || null}
+              email={user?.email || null}
+            />
           </div>
         </header>
       )}
 
       <main
         className="relative z-10 flex min-h-screen flex-col px-4 pb-8 transition-all duration-200 sm:px-6"
-        style={{ marginLeft: isMobile ? 0 : sidebarWidth, paddingTop: topOffset }}
+        style={{
+          paddingTop: topOffset,
+        }}
       >
         <div className="mx-auto flex w-full max-w-7xl flex-1 flex-col">
           <div className="flex flex-1 items-center justify-center">
@@ -114,6 +100,7 @@ export default function DashboardPage() {
               }}
             >
               CLYVE AI
+
               <span className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_65%_50%,rgba(255,200,130,0.26),transparent_52%)] blur-xl" />
             </motion.h1>
           </div>
@@ -128,6 +115,7 @@ export default function DashboardPage() {
                   placeholder="Research a stock, company, or SEC filing..."
                   className="h-10 w-full bg-transparent px-3 text-sm text-zinc-100 outline-none placeholder:text-zinc-500"
                 />
+
                 <button
                   type="submit"
                   className="grid h-10 w-10 place-items-center rounded-full bg-white text-black transition hover:bg-zinc-200"
