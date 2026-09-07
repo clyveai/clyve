@@ -18,10 +18,43 @@ export interface ChangelogEntry {
 
 export const changelog: ChangelogEntry[] = [
     {
+        version: "v0.4.0",
+        date: "Sep 1, 2026",
+        slug: "thesis-capture-engine",
+        label: "latest",
+        title: "Thesis Capture & Monitoring Engine",
+        subtitle: "Write a thesis, track its assumptions, and pull the SEC filings that test them.",
+        description:
+            "The core thesis loop is live. Record a thesis in the workspace sidebar, edit or archive it as your view changes, and every revision keeps its assumption history. Tickers are validated and canonicalized against SEC EDGAR so filings map to the right entity, and the filing list surfaces the 10-Q, 10-K, and 8-K evidence your assumptions get checked against.",
+        changes: [
+            { type: "added", description: "Thesis capture and monitoring schema" },
+            { type: "added", description: "Thesis workspace sidebar layout with loading states" },
+            { type: "added", description: "Thesis editing, archival, and assumption versioning" },
+            { type: "added", description: "SEC ticker validation and canonicalization" },
+            { type: "added", description: "SEC filing retrieval" },
+            { type: "added", description: "SEC filing list view" },
+        ],
+    },
+    {
+        version: "v0.3.0",
+        date: "Sep 3, 2026",
+        slug: "thesis-dashboard",
+        title: "Thesis Dashboard",
+        subtitle: "A dashboard for tracking thesis evidence over time, with research history and updated pricing.",
+        description:
+            "Record why you hold a position, and track the evidence against it over time. This release ships the dashboard layout and research history view, alongside a synced pricing page and a fix to the authentication flow.",
+        changes: [
+            { type: "added", description: "Dashboard layout and research history view for tracking thesis evidence over time" },
+            { type: "improved", description: "Use cases page redesign with UI refinements across the marketing site" },
+            { type: "improved", description: "Pricing page and documentation synced with the finalized V1 pricing model" },
+            { type: "fixed", description: "Async params type error in the research history API route" },
+            { type: "fixed", description: "Authentication flow issue" },
+        ],
+    },
+    {
         version: "v0.2.0",
         date: "Jun 9, 2026",
         slug: "auth-system",
-        label: "latest",
         title: "Authentication System",
         subtitle: "Users can now create accounts and sign in securely.",
         description:
