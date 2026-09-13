@@ -139,6 +139,49 @@ export function ThesisDetailWorkspaceSkeleton() {
       </section>
 
       <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl sm:p-8">
+        <div className="flex flex-col gap-5 sm:flex-row sm:items-start sm:justify-between">
+          <div className="min-w-0 flex-1">
+            <div className="h-3 w-32 rounded-full bg-amber-100/[0.12]" />
+            <div className="mt-3 h-7 w-40 rounded-xl bg-white/[0.1]" />
+            <div className="mt-4 h-3 w-full max-w-xl rounded-full bg-white/[0.07]" />
+            <div className="mt-2 h-3 w-4/5 max-w-lg rounded-full bg-white/[0.07]" />
+          </div>
+          <div className="h-9 w-28 shrink-0 rounded-xl bg-amber-100/[0.1]" />
+        </div>
+        <div className="mt-3 h-3 w-52 rounded-full bg-white/[0.05]" />
+        <div className="mt-6 space-y-3">
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap gap-3">
+                  <div className="h-3 w-20 rounded-full bg-amber-100/[0.1]" />
+                  <div className="h-3 w-32 rounded-full bg-white/[0.05]" />
+                </div>
+                <div className="mt-4 h-4 w-4/5 rounded-full bg-white/[0.08]" />
+                <div className="mt-3 h-3 w-full rounded-full bg-white/[0.06]" />
+                <div className="mt-2 h-3 w-3/4 rounded-full bg-white/[0.06]" />
+              </div>
+              <div className="h-9 w-full shrink-0 rounded-xl bg-white/[0.08] sm:w-28" />
+            </div>
+          </div>
+          <div className="rounded-2xl border border-white/10 bg-black/20 p-4">
+            <div className="flex flex-col gap-4 sm:flex-row sm:items-start sm:justify-between">
+              <div className="min-w-0 flex-1">
+                <div className="flex flex-wrap gap-3">
+                  <div className="h-3 w-24 rounded-full bg-amber-100/[0.1]" />
+                  <div className="h-3 w-32 rounded-full bg-white/[0.05]" />
+                </div>
+                <div className="mt-4 h-4 w-3/4 rounded-full bg-white/[0.08]" />
+                <div className="mt-3 h-3 w-full rounded-full bg-white/[0.06]" />
+                <div className="mt-2 h-3 w-2/3 rounded-full bg-white/[0.06]" />
+              </div>
+              <div className="h-9 w-full shrink-0 rounded-xl bg-white/[0.08] sm:w-28" />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl sm:p-8">
         <div className="h-3 w-36 rounded-full bg-amber-100/[0.12]" />
         <div className="mt-3 h-7 w-48 rounded-xl bg-white/[0.1]" />
         <div className="mt-6 space-y-3">

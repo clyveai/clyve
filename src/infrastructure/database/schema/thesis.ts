@@ -106,6 +106,7 @@ export const sources = pgTable(
     id: uuid("id").defaultRandom().primaryKey(),
     sourceKey: text("source_key").notNull(),
     provider: text("provider").notNull(),
+    providerArticleId: text("provider_article_id"),
     type: sourceType("type").notNull(),
     title: text("title").notNull(),
     publisher: text("publisher"),
@@ -119,6 +120,7 @@ export const sources = pgTable(
   },
   (table) => ({
     sourceKeyUnique: uniqueIndex("sources_source_key_unique").on(table.sourceKey),
+    providerArticleUnique: uniqueIndex("sources_provider_article_unique").on(table.provider, table.providerArticleId),
   }),
 );
 
@@ -128,6 +130,7 @@ export const companyEvents = pgTable(
   {
     id: uuid("id").defaultRandom().primaryKey(),
     ticker: varchar("ticker", { length: 16 }).notNull(),
+    companyCik: varchar("company_cik", { length: 10 }),
     sourceId: uuid("source_id")
       .notNull()
       .references(() => sources.id),
@@ -139,6 +142,7 @@ export const companyEvents = pgTable(
   },
   (table) => ({
     tickerOccurredIdx: index("company_events_ticker_occurred_idx").on(table.ticker, table.occurredAt),
+    companyTypeOccurredIdx: index("company_events_company_type_occurred_idx").on(table.companyCik, table.type, table.occurredAt),
     sourceIdx: index("company_events_source_idx").on(table.sourceId),
     sourceTickerTypeUnique: uniqueIndex("company_events_source_ticker_type_unique").on(
       table.sourceId,

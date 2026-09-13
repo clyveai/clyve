@@ -11,7 +11,7 @@ const importanceLabel: Record<ThesisDetail["assumptions"][number]["importance"],
   low: "Low",
 };
 
-export function ThesisDocument({ thesis, filingHistory }: { thesis: ThesisDetail; filingHistory?: ReactNode }) {
+export function ThesisDocument({ thesis, filingHistory, newsHistory }: { thesis: ThesisDetail; filingHistory?: ReactNode; newsHistory?: ReactNode }) {
   const canManage = thesis.status === "active";
   const canSyncSecFilings = canManage && Boolean(thesis.companyCik);
 
@@ -58,6 +58,8 @@ export function ThesisDocument({ thesis, filingHistory }: { thesis: ThesisDetail
       </section>
 
       {filingHistory}
+
+      {newsHistory}
 
       <section className="rounded-3xl border border-white/10 bg-white/[0.03] p-5 backdrop-blur-xl sm:p-8">
         <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-amber-200/80">
