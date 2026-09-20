@@ -82,17 +82,24 @@ export default function Footer() {
 
                 {/* Social Media Links - Naik ke urutan pertama pada mobile melalui 'order-1 md:order-2' */}
                 <div className="flex flex-wrap justify-center items-center gap-6 mb-6 md:mb-0 order-1 md:order-2">
+                    <Link href="https://x.com/clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
+                        X
+                    </Link>
+
                     <Link href="https://www.threads.com/@clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
                         Threads
                     </Link>
-                    <Link href="https://instagram.com/clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
-                        Instagram
-                    </Link>
+
                     <Link href="https://linkedin.com/company/clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
                         LinkedIn
                     </Link>
+
                     <Link href="https://youtube.com/@clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
                         YouTube
+                    </Link>
+
+                    <Link href="https://instagram.com/clyveai" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors duration-300">
+                        Instagram
                     </Link>
                 </div>
 
