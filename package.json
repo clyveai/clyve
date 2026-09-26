@@ -7,6 +7,8 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
+    "ai:check": "node scripts/check-ai-connection.mjs",
+    "ai:test": "node --test src/infrastructure/ai/groq.test.mjs src/modules/thesis/services/map-evidence-to-assumptions.test.mjs",
     "db:generate": "drizzle-kit generate",
     "db:baseline-legacy": "node scripts/baseline-legacy-migrations.mjs",
     "db:migrate": "node scripts/migrate.mjs",
