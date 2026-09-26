@@ -31,7 +31,7 @@ export function SecFilingHistory({ ticker, hasSecIdentity, isArchived, filings }
       <p className="text-[11px] font-medium uppercase tracking-[0.24em] text-amber-200/80">SEC EDGAR</p>
       <h2 className="mt-2 text-xl font-semibold tracking-tight text-white">Saved filings</h2>
       <p className="mt-3 max-w-2xl text-sm leading-6 text-zinc-400">
-        Primary filing documents imported for {ticker}. These are source records only; thesis assessment will be added later.
+        Primary filing documents imported for {ticker}. Saved excerpts can be mapped to your assumptions in Evidence analysis below.
       </p>
 
       {filings.length > 0 ? (

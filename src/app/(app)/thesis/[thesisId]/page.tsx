@@ -5,6 +5,8 @@ import { getSecFilingHistoryForThesis } from "@/modules/filing/services/get-sec-
 import { NewsHistory } from "@/modules/news/components/NewsHistory";
 import { getNewsHistoryForThesis } from "@/modules/news/services/get-news-history-for-thesis";
 import { ThesisDocument } from "@/modules/thesis/components/ThesisDocument";
+import { ThesisEvidenceAnalysis } from "@/modules/thesis/components/ThesisEvidenceAnalysis";
+import { getEvidenceAnalysisForThesis } from "@/modules/thesis/services/get-evidence-analysis";
 import { getThesisByIdForUser } from "@/modules/thesis/services/get-thesis-by-id";
 
 export default async function ThesisDetailPage({ params }: { params: Promise<{ thesisId: string }> }) {
@@ -14,10 +16,11 @@ export default async function ThesisDetailPage({ params }: { params: Promise<{ t
   }
 
   const { thesisId } = await params;
-  const [thesis, filings, newsHistory] = await Promise.all([
+  const [thesis, filings, newsHistory, evidenceAnalysis] = await Promise.all([
     getThesisByIdForUser(thesisId, user.id),
     getSecFilingHistoryForThesis(user.id, thesisId),
     getNewsHistoryForThesis(user.id, thesisId),
+    getEvidenceAnalysisForThesis(user.id, thesisId),
   ]);
 
   if (!thesis) {
@@ -27,6 +30,16 @@ export default async function ThesisDetailPage({ params }: { params: Promise<{ t
   return (
     <ThesisDocument
       thesis={thesis}
+      evidenceAnalysis={
+        <ThesisEvidenceAnalysis
+          key={`${thesis.id}:${thesis.version}`}
+          thesisId={thesis.id}
+          thesisVersion={thesis.version}
+          canAnalyze={thesis.status === "active" && Boolean(thesis.companyCik) && thesis.assumptions.length > 0}
+          isAiConfigured={evidenceAnalysis.isAiConfigured}
+          overview={evidenceAnalysis.overview}
+        />
+      }
       filingHistory={
         <SecFilingHistory
           ticker={thesis.ticker}

@@ -34,7 +34,7 @@ export type StructuredJsonResponse = {
 
 const endpoint = "https://api.groq.com/openai/v1/chat/completions";
 const defaultModel = "openai/gpt-oss-120b";
-const maxInputCharacters = 14_000;
+export const maxStructuredAiInputCharacters = 14_000;
 
 function isRecord(value: unknown): value is Record<string, unknown> {
   return typeof value === "object" && value !== null && !Array.isArray(value);
@@ -81,11 +81,20 @@ function validateRequest(request: StructuredJsonRequest) {
     throw new GroqClientError("config", "The structured AI schema must be JSON serializable.");
   }
 
-  if (request.systemPrompt.length + request.userPrompt.length + serializedSchema.length > maxInputCharacters) {
+  if (request.systemPrompt.length + request.userPrompt.length + serializedSchema.length > maxStructuredAiInputCharacters) {
     throw new GroqClientError("input_too_large", "The AI input is too large. Use a smaller evidence batch.");
   }
 
   return maxCompletionTokens;
+}
+
+export function isGroqConfigured(): boolean {
+  try {
+    getConfiguration();
+    return true;
+  } catch {
+    return false;
+  }
 }
 
 function statusError(status: number): GroqClientError {

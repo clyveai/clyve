@@ -41,7 +41,7 @@ export type EvidenceAssumptionMapping = {
 export type EvidenceMappingResult = {
   thesisId: string;
   thesisVersion: number;
-  provider: "groq";
+  provider: "gemini";
   model: string;
   promptVersion: string;
   mappings: (EvidenceAssumptionMapping & {

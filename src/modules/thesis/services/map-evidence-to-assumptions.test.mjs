@@ -23,7 +23,7 @@ function loadMapping(provider = async () => assert.fail("AI must not run")) {
       module,
       exports: module.exports,
       require(name) {
-        if (name === "@/infrastructure/ai/groq") return { generateStructuredJson: provider };
+        if (name === "@/infrastructure/ai/gemini") return { generateStructuredJson: provider };
         if (name.startsWith(".")) return load(resolve(dirname(filename), `${name}.ts`));
         return nativeRequire(name);
       },
@@ -253,13 +253,13 @@ test("the provider receives constrained IDs and an untrusted-data prompt without
     const payload = JSON.parse(request.userPrompt);
     assert.equal(payload.evidence[0].excerpt, input.evidence[0].excerpt);
     assert.equal(payload.assumptions[0].retiredAt, undefined);
-    return { data: outputFixture(input), provider: "groq", model: "trusted-provider-model" };
+    return { data: outputFixture(input), provider: "gemini", model: "gemini-3.8-flash" };
   });
   const result = await mapping.mapEvidenceToAssumptions(input);
   assert.equal(result.thesisId, input.thesis.id);
   assert.equal(result.thesisVersion, input.thesis.version);
-  assert.equal(result.provider, "groq");
-  assert.equal(result.model, "trusted-provider-model");
+  assert.equal(result.provider, "gemini");
+  assert.equal(result.model, "gemini-3.8-flash");
   assert.equal(result.promptVersion, "evidence-mapping-v1");
   assert.equal(result.mappings.length, input.assumptions.length * input.evidence.length);
   for (const row of result.mappings) {
@@ -277,7 +277,7 @@ test("the service never returns a valid-looking subset after an invalid provider
   let calls = 0;
   const mapping = loadMapping(async () => {
     calls += 1;
-    return { data: output, provider: "groq", model: "trusted-provider-model" };
+    return { data: output, provider: "gemini", model: "gemini-3.8-flash" };
   });
   await assert.rejects(mapping.mapEvidenceToAssumptions(input), mapping.EvidenceMappingValidationError);
   assert.equal(calls, 1);
@@ -299,7 +299,7 @@ test("extra sensitive thesis fields are excluded from the provider payload", asy
       timeHorizon: input.thesis.timeHorizon,
       version: input.thesis.version,
     });
-    return { data: outputFixture(input), provider: "groq", model: "trusted-provider-model" };
+    return { data: outputFixture(input), provider: "gemini", model: "gemini-3.8-flash" };
   });
   await mapping.mapEvidenceToAssumptions(input);
 });
@@ -335,7 +335,7 @@ test("post-dispatch caller mutations cannot change the snapshot IDs, sources, qu
   assert.equal(payload.evidence[0].excerpt, original.evidence[0].excerpt);
   assert.deepEqual(Array.from(request.jsonSchema.properties.mappings.items.properties.evidenceId.enum), original.evidence.map((item) => item.id));
   assert.deepEqual(Array.from(request.jsonSchema.properties.mappings.items.properties.assumptionId.enum), original.assumptions.map((item) => item.id));
-  completeProvider({ data: response, provider: "groq", model: "trusted-provider-model" });
+  completeProvider({ data: response, provider: "gemini", model: "gemini-3.8-flash" });
   const result = await pending;
   assert.equal(result.thesisId, original.thesis.id);
   assert.equal(result.thesisVersion, original.thesis.version);
@@ -357,6 +357,6 @@ test("a quote introduced by post-dispatch mutation is still rejected against the
   const pending = mapping.mapEvidenceToAssumptions(input);
   input.evidence[0].excerpt = "Fabricated revenue increased by 500%.";
   output.mappings[0].sourceQuote = input.evidence[0].excerpt;
-  completeProvider({ data: output, provider: "groq", model: "trusted-provider-model" });
+  completeProvider({ data: output, provider: "gemini", model: "gemini-3.8-flash" });
   await assert.rejects(pending, mapping.EvidenceMappingValidationError);
 });

@@ -43,6 +43,13 @@
       "when": 1789235569191,
       "tag": "0005_add_company_news",
       "breakpoints": true
+    },
+    {
+      "idx": 6,
+      "version": "7",
+      "when": 1790441041411,
+      "tag": "0006_add_evidence_analysis",
+      "breakpoints": true
     }
   ]
 }

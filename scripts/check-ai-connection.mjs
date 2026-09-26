@@ -27,7 +27,7 @@ function loadModule(filename) {
   return module.exports;
 }
 
-const { GroqClientError } = loadModule("src/infrastructure/ai/groq.ts");
+const { GeminiClientError } = loadModule("src/infrastructure/ai/gemini.ts");
 const { EvidenceMappingValidationError } = loadModule("src/modules/thesis/schemas/evidence-mapping.ts");
 const { mapEvidenceToAssumptions } = loadModule("src/modules/thesis/services/map-evidence-to-assumptions.ts");
 
@@ -61,7 +61,7 @@ try {
 
   const mapping = result.mappings[0];
   if (mapping.relationship !== "supporting") {
-    console.error("Groq responded, but the synthetic evidence was not classified as supporting. Review the model before using it.");
+    console.error("Gemini responded, but the synthetic evidence was not classified as supporting. Review the model before using it.");
     process.exitCode = 1;
   } else {
     console.log("AI connection and synthetic evidence mapping passed.");
@@ -76,7 +76,7 @@ try {
     console.log("Only synthetic data was sent. No database records were read or written.");
   }
 } catch (error) {
-  if (error instanceof GroqClientError || error instanceof EvidenceMappingValidationError) {
+  if (error instanceof GeminiClientError || error instanceof EvidenceMappingValidationError) {
     console.error(error.message);
   } else {
     console.error("The AI connection check failed unexpectedly. Run pnpm ai:test and review the local configuration.");

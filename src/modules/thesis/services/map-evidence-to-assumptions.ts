@@ -1,4 +1,4 @@
-import { generateStructuredJson } from "@/infrastructure/ai/groq";
+import { generateStructuredJson } from "@/infrastructure/ai/gemini";
 import type { EvidenceMappingInput, EvidenceMappingResult } from "../evidence-mapping-types";
 import {
   createEvidenceMappingUserPrompt,
@@ -11,7 +11,10 @@ import {
   validateEvidenceMappingInput,
 } from "../schemas/evidence-mapping";
 
-export async function mapEvidenceToAssumptions(input: EvidenceMappingInput): Promise<EvidenceMappingResult> {
+export async function mapEvidenceToAssumptions(
+  input: EvidenceMappingInput,
+  options: { maxCompletionTokens?: number } = {},
+): Promise<EvidenceMappingResult> {
   validateEvidenceMappingInput(input);
 
   const snapshot: EvidenceMappingInput = {
@@ -35,7 +38,7 @@ export async function mapEvidenceToAssumptions(input: EvidenceMappingInput): Pro
     userPrompt: createEvidenceMappingUserPrompt(snapshot),
     schemaName: "evidence_mapping",
     jsonSchema: createEvidenceMappingJsonSchema(snapshot),
-    maxCompletionTokens: 4096,
+    maxCompletionTokens: options.maxCompletionTokens ?? 4096,
   });
 
   const mappings = parseEvidenceMappingOutput(response.data, snapshot);

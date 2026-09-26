@@ -193,6 +193,11 @@ export const evidenceAssumptions = pgTable(
     materiality: materiality("materiality").notNull().default("low"),
     rationale: text("rationale").notNull(),
     confidence: integer("confidence"),
+    sourceQuote: text("source_quote"),
+    aiProvider: text("ai_provider"),
+    aiModel: text("ai_model"),
+    promptVersion: text("prompt_version"),
+    thesisVersion: integer("thesis_version"),
     createdAt: timestamp("created_at", { withTimezone: true, mode: "date" }).notNull().defaultNow(),
   },
   (table) => ({
@@ -206,6 +211,14 @@ export const evidenceAssumptions = pgTable(
     ),
   }),
 );
+
+export const thesisEvidenceAnalysisState = pgTable("thesis_evidence_analysis_state", {
+  thesisId: uuid("thesis_id")
+    .primaryKey()
+    .references(() => theses.id, { onDelete: "cascade" }),
+  lastAttemptAt: timestamp("last_attempt_at", { withTimezone: true, mode: "date" }).notNull(),
+  nextAnalysisAt: timestamp("next_analysis_at", { withTimezone: true, mode: "date" }).notNull(),
+});
 
 export const thesisAlerts = pgTable(
   "thesis_alerts",
