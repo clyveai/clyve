@@ -105,18 +105,18 @@ export default function Footer() {
 
                 {/* Legal Links - Berada di bawah Sosial Media pada mobile melalui 'order-2 md:order-1' */}
                 <div className="flex items-center gap-6 mb-4 md:mb-0 order-2 md:order-1">
-                    <Link href="/privacy" className="hover:text-white transition-colors duration-300">
-                        Privacy
-                    </Link>
-                    <span className="w-[1px] h-3 bg-[#27272a]" />
                     <Link href="/terms" className="hover:text-white transition-colors duration-300">
                         Terms
+                    </Link>
+                    <span className="w-[1px] h-3 bg-[#27272a]" />
+                    <Link href="/privacy" className="hover:text-white transition-colors duration-300">
+                        Privacy
                     </Link>
                 </div>
 
                 {/* Copyright - Paling bawah pada mobile melalui 'order-3' */}
                 <p className="tracking-wide order-3 text-xs md:text-sm text-center md:text-left opacity-80">
-                    © {new Date().getFullYear()} Clyve AI. All rights reserved.
+                    © {new Date().getFullYear()} ClyveAI. All rights reserved.
                 </p>
             </div>
         </footer>

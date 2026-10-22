@@ -21,8 +21,8 @@ const geistMono = Geist_Mono({
 export const metadata: Metadata = {
   metadataBase: new URL("https://clyve.ai"),
   title: {
-    default: "Clyve AI",
-    template: "%s | Clyve AI",
+    default: "ClyveAI",
+    template: "%s | ClyveAI",
   },
   description:
     "Clyve AI — Professional-grade AI agent platform for stock and crypto market intelligence.",
